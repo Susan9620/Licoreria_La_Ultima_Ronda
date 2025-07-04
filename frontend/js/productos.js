@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:5000';
+const API_BASE = 'https://licoreria-la-ultima-ronda.onrender.com/api';
 
 /**
  * Devuelve HTML con estrellas llenas, medias o vacías según la calificación (0–5).

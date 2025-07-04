@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ------------- Carga categorías para el formulario de Productos -------------
     async function cargarCategoriasAdmin() {
         try {
-            const resp = await fetch(`${baseUrl}/api/categorias`, {
+            const resp = await fetch(`${API_BASE}/categorias`, {
                 headers: authHeader()
             });
             const json = await resp.json();
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function renderPedidos() {
         content.innerHTML = '<p>Cargando pedidos…</p>';
         try {
-            const resp = await fetch(`${baseUrl}/api/admin/pedidos`, { headers: authHeader() });
+            const resp = await fetch(`${API_BASE}/admin/pedidos`, { headers: authHeader() });
             const json = await resp.json();
             if (!resp.ok || !json.éxito) throw new Error(json.mensaje);
             const table = document.createElement('table');
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Detalle Pedido
     window.viewPedido = async (id) => {
         try {
-            const resp = await fetch(`${baseUrl}/api/admin/pedidos/${id}`, { headers: authHeader() });
+            const resp = await fetch(`${API_BASE}/admin/pedidos/${id}`, { headers: authHeader() });
             const json = await resp.json();
             if (!resp.ok || !json.éxito) throw new Error(json.mensaje);
             const { pedido, items } = json.datos;
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const id = modalID.textContent;
         const nuevoEstado = detEstado.value;
         try {
-            const resp = await fetch(`${baseUrl}/api/admin/pedidos/${id}/estado`, {
+            const resp = await fetch(`${API_BASE}/admin/pedidos/${id}/estado`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json', ...authHeader() },
                 body: JSON.stringify({ nuevoEstado })
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function renderProductos() {
         content.innerHTML = '<p>Cargando productos…</p>';
         try {
-            const resp = await fetch(`${baseUrl}/api/admin/productos`, { headers: authHeader() });
+            const resp = await fetch(`${API_BASE}/admin/productos`, { headers: authHeader() });
             const json = await resp.json();
             if (!resp.ok || !json.éxito) throw new Error(json.mensaje);
             const table = document.createElement('table');
@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('ModalProductoTitulo').textContent = 'Editar';
         ResetearModalProducto();
         try {
-            const resp = await fetch(`${baseUrl}/api/productos/${id}`, { headers: authHeader() });
+            const resp = await fetch(`${API_BASE}/productos/${id}`, { headers: authHeader() });
             const { datos: prod } = await resp.json();
             document.getElementById('Prod_Nombre').value = prod.Nombre;
             document.getElementById('Prod_Precio').value = prod.Precio;
@@ -232,13 +232,13 @@ document.addEventListener('DOMContentLoaded', () => {
         let res, json;
         try {
             if (modoProducto === 'crear') {
-                res = await fetch(`${baseUrl}/api/admin/productos`, {
+                res = await fetch(`${API_BASE}/admin/productos`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeader() },
                     body: JSON.stringify(datos)
                 });
                 json = await res.json(); idProductoActual = json.datos.idProducto;
             } else {
-                await fetch(`${baseUrl}/api/admin/productos/${idProductoActual}`, {
+                await fetch(`${API_BASE}/admin/productos/${idProductoActual}`, {
                     method: 'PUT', headers: { 'Content-Type': 'application/json', ...authHeader() },
                     body: JSON.stringify(datos)
                 });
@@ -258,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.eliminarProducto = async (id) => {
         if (!confirm('¿Seguro que quieres eliminar este producto?')) return;
-        await fetch(`${baseUrl}/api/admin/productos/${id}`, { method: 'DELETE', headers: authHeader() });
+        await fetch(`${API_BASE}/admin/productos/${id}`, { method: 'DELETE', headers: authHeader() });
         await renderProductos();
     };
 
@@ -272,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Variantes
     async function cargarVariantes(idProd) {
-        const { datos } = await (await fetch(`${baseUrl}/api/variantes/producto/${idProd}`, { headers: authHeader() })).json();
+        const { datos } = await (await fetch(`${API_BASE}/variantes/producto/${idProd}`, { headers: authHeader() })).json();
         const tbody = document.getElementById('TablaVariantes'); tbody.innerHTML = '';
         datos.forEach(v => {
             const tr = document.createElement('tr');
@@ -310,21 +310,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 Activo: 1
             };
             if (idVar) {
-                await fetch(`${baseUrl}/api/admin/variantes/${idVar}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(datos) });
+                await fetch(`${API_BASE}/admin/variantes/${idVar}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(datos) });
             } else {
-                await fetch(`${baseUrl}/api/admin/variantes`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(datos) });
+                await fetch(`${API_BASE}/admin/variantes`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(datos) });
             }
         }
     }
     async function eliminarVariante(id) {
         if (!confirm('¿Eliminar variante?')) return;
-        await fetch(`${baseUrl}/api/admin/variantes/${id}`, { method: 'DELETE', headers: authHeader() });
+        await fetch(`${API_BASE}/admin/variantes/${id}`, { method: 'DELETE', headers: authHeader() });
         await cargarVariantes(idProductoActual);
     }
 
     // Imágenes (análogo a variantes)
     async function cargarImagenes(idProd) {
-        const { datos } = await (await fetch(`${baseUrl}/api/imagenes/producto/${idProd}`, { headers: authHeader() })).json();
+        const { datos } = await (await fetch(`${API_BASE}/imagenes/producto/${idProd}`, { headers: authHeader() })).json();
         const tbody = document.getElementById('TablaImagenes'); tbody.innerHTML = '';
         datos.forEach(img => {
             const tr = document.createElement('tr');
@@ -365,15 +365,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 Predeterminada: fila.querySelector('input[name="Predeterminada"]').checked ? 1 : 0
             };
             if (idImg) {
-                await fetch(`${baseUrl}/api/admin/imagenes/${idImg}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(datos) });
+                await fetch(`${API_BASE}/admin/imagenes/${idImg}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(datos) });
             } else {
-                await fetch(`${baseUrl}/api/admin/imagenes`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(datos) });
+                await fetch(`${API_BASE}/admin/imagenes`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(datos) });
             }
         }
     }
     async function eliminarImagen(id) {
         if (!confirm('¿Eliminar imagen?')) return;
-        await fetch(`${baseUrl}/api/admin/imagenes/${id}`, { method: 'DELETE', headers: authHeader() });
+        await fetch(`${API_BASE}/admin/imagenes/${id}`, { method: 'DELETE', headers: authHeader() });
         await cargarImagenes(idProductoActual);
     }
 

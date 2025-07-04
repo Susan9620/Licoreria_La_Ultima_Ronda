@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:5000';
+const API_BASE = 'https://licoreria-la-ultima-ronda.onrender.com/api';
 
 document.addEventListener('DOMContentLoaded', async function () {
     try {
