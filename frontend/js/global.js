@@ -1,5 +1,5 @@
 // global.js
-// const baseUrl = window.location.origin;
+const baseUrl = 'https://licoreria-la-ultima-ronda.onrender.com';
 
 // —————————————————————————————————————————————————————————
 // 1) INYECCIÓN DEL MODAL Y REGISTRO DE EVENTOS AL CARGAR EL DOM
@@ -689,7 +689,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (menuUsuario) menuUsuario.style.display = '';
         // 1) Cargar datos del perfil
         try {
-            const resp = await fetch(`${API_BASE}/usuarios/me`, {
+            const resp = await fetch(`${baseUrl}/api/usuarios/me`, {
                 headers: { 'Authorization': `Bearer ${tuJwt}` }
             });
             const json = await resp.json();
@@ -738,7 +738,7 @@ const Lista_Deseos = {
 
     Inicializar: async function () {
         try {
-            const resp = await fetch(`${API_BASE}/deseos`, {
+            const resp = await fetch(`${baseUrl}/api/deseos`, {
                 headers: { 'Authorization': 'Bearer ' + tuJwt }
             });
             const json = await resp.json();
@@ -795,7 +795,7 @@ const Lista_Deseos = {
 
             if (!existe) {
                 // Añadir a BD
-                await fetch(`${API_BASE}/deseos`, {
+                await fetch(`${baseUrl}/api/deseos`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -807,7 +807,7 @@ const Lista_Deseos = {
                 Lista_Deseos.Artículos.push({ ID: id, Nombre: nombre, Imagen: imagen, Precio: precio });
             } else {
                 // Eliminar de BD
-                await fetch(`${API_BASE}/deseos/${id}`, {
+                await fetch(`${baseUrl}/api/deseos/${id}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': 'Bearer ' + tuJwt
@@ -922,7 +922,7 @@ const Lista_Deseos = {
                     if (!isNaN(idx) && idx >= 0 && idx < Lista_Deseos.Artículos.length) {
                         const item = Lista_Deseos.Artículos[idx];          // aquí tus props: item.ID, item.Nombre, etc.
                         const token = localStorage.getItem('token');
-                        const url = `${API_BASE}/deseos/${item.ID}`;     // <— usa item.ID, no productoId
+                        const url = `${baseUrl}/api/deseos/${item.ID}`;     // <— usa item.ID, no productoId
                         console.log('🗑️ Llamando a DELETE en:', url);
 
                         try {
@@ -1699,7 +1699,7 @@ async function actualizarUsuarioLogueado() {
     if (menuUsuario) menuUsuario.style.display = '';
 
     try {
-        const resp = await fetch(`${API_BASE}/usuarios/me`, {
+        const resp = await fetch(`${baseUrl}/api/usuarios/me`, {
             headers: { 'Authorization': `Bearer ${tuJwt}` }
         });
         const json = await resp.json();
