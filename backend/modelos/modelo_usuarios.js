@@ -7,13 +7,13 @@ class ModeloUsuarios {
    * @returns {Promise<import('mysql2').ResultSetHeader>}
    */
   async crear({ Nombre_Completo, Correo_Electrónico, Contraseña }) {
-    const sql = `
-      INSERT INTO USUARIOS
-        (Nombre_Completo, Correo_Electrónico, Contraseña)
-      VALUES (?, ?, ?)
-    `;
-    const [result] = await pool.query(sql, [Nombre_Completo, Correo_Electrónico, Contraseña]);
-    return result;
+    const result = await pool.query(
+      `INSERT INTO USUARIOS (Nombre_Completo, Correo_Electrónico, Contraseña)
+       VALUES ($1, $2, $3)
+       RETURNING ID_Usuario`,
+      [Nombre_Completo, Correo_Electrónico, Contraseña]
+    );
+    return result.rows[0].ID_Usuario;
   }
 
   /**
@@ -22,15 +22,11 @@ class ModeloUsuarios {
    * @returns {Promise<Object|null>}
    */
   async obtenerPorCorreo(correo) {
-    const sql = `
-      SELECT *
-      FROM USUARIOS
-      WHERE Correo_Electrónico = ?
-        AND Activo = 1
-      LIMIT 1
-    `;
-    const [rows] = await pool.query(sql, [correo]);
-    return rows[0] || null;
+    const result = await pool.query(
+      `SELECT * FROM USUARIOS WHERE Correo_Electrónico = $1 AND Activo = 1 LIMIT 1`,
+      [correo]
+    );
+    return result.rows[0] || null;
   }
 
   /**
@@ -38,13 +34,11 @@ class ModeloUsuarios {
  * @returns {Promise<Object[]>}
  */
   async listarTodos() {
-    const sql = `
-    SELECT ID_Usuario, Nombre_Completo, Correo_Electrónico, Rol, Activo
-    FROM USUARIOS
-    WHERE Activo = 1
-  `;
-    const [rows] = await pool.query(sql);
-    return rows;
+    const result = await pool.query(
+      `SELECT ID_Usuario, Nombre_Completo, Correo_Electrónico, Rol, Activo
+       FROM USUARIOS WHERE Activo = 1`
+    );
+    return result.rows;
   }
 
   /**
@@ -60,11 +54,12 @@ class ModeloUsuarios {
         Correo_Electrónico,
         Teléfono
       FROM USUARIOS
-      WHERE ID_Usuario = ?
+      WHERE ID_Usuario = $1
         AND Activo = 1
       LIMIT 1
     `;
-    const [rows] = await pool.query(sql, [id]);
+    const result = await pool.query(sql, [id]);
+    const rows = result.rows;
     return rows[0] || null;
   }
 
@@ -86,13 +81,17 @@ class ModeloUsuarios {
     ];
 
     const keys = Object.keys(datos).filter(k => permitidos.includes(k));
-    const columns = keys.map(k => `\`${k}\``).join(', ');
-    const placeholders = keys.map(_ => '?').join(', ');
+    const columns = keys.map(k => `"${k}"`).join(', ');
+    const placeholders = keys.map((_, i) => `$${i + 1}`).join(', ');
     const values = keys.map(k => datos[k]);
 
-    const sql = `INSERT INTO USUARIOS (${columns}) VALUES (${placeholders})`;
-    const [res] = await pool.query(sql, values);
-    return res.insertId;
+    const sql = `
+      INSERT INTO USUARIOS (${columns})
+      VALUES (${placeholders})
+      RETURNING ID_Usuario
+    `;
+    const result = await pool.query(sql, values);
+    return result.rows[0].id_usuario;
   }
 
   /**
@@ -114,22 +113,23 @@ class ModeloUsuarios {
     const keys = Object.keys(cambios).filter(k => permitidos.includes(k));
     if (keys.length === 0) return 0;
 
-    const sets = keys.map(k => `\`${k}\` = ?`).join(', ');
+    const sets = keys.map((k, i) => `"${k}" = $${i + 1}`).join(', ');
     const values = keys.map(k => cambios[k]);
     values.push(idUsuario);
-
-    const sql = `UPDATE USUARIOS SET ${sets} WHERE ID_Usuario = ?`;
-    const [res] = await pool.query(sql, values);
-    return res.affectedRows;
+    const sql = `UPDATE USUARIOS SET ${sets} WHERE ID_Usuario = $${values.length}`;
+    const result = await pool.query(sql, values);
+    return result.rowCount;
   }
 
   /**
    * Elimina un usuario (se puede desactivar en lugar de borrar, si prefieres soft-delete).
    */
   async eliminar(idUsuario) {
-    const sql = `DELETE FROM USUARIOS WHERE ID_Usuario = ?`;
-    const [res] = await pool.query(sql, [idUsuario]);
-    return res.affectedRows;
+    const result = await pool.query(
+      `DELETE FROM USUARIOS WHERE ID_Usuario = $1`,
+      [idUsuario]
+    );
+    return result.rowCount;
   }
 }
 
