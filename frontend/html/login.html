@@ -1,0 +1,59 @@
+<link rel="stylesheet" href="/css/global.css">
+<link rel="stylesheet" href="/css/login.css">
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+<div class="Modal_Login" id="Modal_Login">
+    <div class="Contenido_Registro">
+        <input type="checkbox" id="Interruptor_Login">
+        <!-- Registro -->
+        <div class="Registro">
+            <form id="Formulario_Registro">
+                <label for="Interruptor_Login">Registro</label>
+                <input type="text" id="Nombre_Completo" placeholder="Nombre completo" autocomplete="on" required>
+                <input type="email" id="Correo_Electrónico" placeholder="Correo_Electrónico" autocomplete="on" required>
+                <div class="Fila_Formulario" id="Fila_Contraseña">
+                    <input type="password" id="Contraseña" placeholder="Contraseña" autocomplete="on" required
+                        pattern=".{8,}" title="La contraseña debe tener al menos 8 caracteres">
+                    <input type="password" id="Confirmar_Contraseña" placeholder="Confirmar contraseña"
+                        autocomplete="on" required pattern=".{8,}" title="Las contraseñas no coinciden"
+                        oninput="this.setCustomValidity(this.value != document.getElementById('Contraseña').value ? 'Las contraseñas no coinciden' : '');">
+                    <span id="Mensaje_Contraseña"></span>
+                </div>
+                <div class="Fila_Formulario">
+                    <input type="text" id="Fecha_Nacimiento" placeholder="Fecha nacimiento (dd/mm/aaaa)"
+                        pattern="^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/([0-9]{4})$"
+                        title="Formato válido: dd/mm/aaaa" autocomplete="on" required>
+                    <input type="tel" id="Telefono" placeholder="Número de Teléfono" pattern="^09\d{8}$"
+                        title="El teléfono debe contener 10 dígitos" maxlength="10" required>
+                </div>
+                <button type="submit" class="Botón_Registrarse">Registrarse</button>
+            </form>
+        </div>
+
+        <!-- Inicio de Sesión -->
+        <div class="Inicio_Sesión">
+            <form id="Formulario_Inicio_Sesión">
+                <label for="Interruptor_Login">Iniciar Sesión</label>
+                <input type="text" name="Usuario" placeholder="Usuario" autocomplete="on" required>
+                <input type="password" name="Contraseña" placeholder="Contraseña" autocomplete="on" required
+                    title="Contraseña incorrecta. Inténtelo de nuevo">
+                <button type="submit" class="Botón_Iniciar_Sesión">Iniciar Sesión</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Confirmación Cerrar Sesión -->
+<div class="Modal_Confirmación_Login" id="Modal_Confirmación_Logout">
+  <div class="Contenido_Modal_Login">
+    <h2>¿Estás seguro que deseas cerrar sesión?</h2>
+    <div class="Controles_Modal" style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
+      <button id="cancelLogout" class="Botón_Cancelar">Cancelar</button>
+      <button id="confirmLogout" class="Botón_Confirmar">Sí, cerrar sesión</button>
+    </div>
+  </div>
+</div>
+
+<script src="/js/global.js"></script>
+<script src="/js/login.js"></script>

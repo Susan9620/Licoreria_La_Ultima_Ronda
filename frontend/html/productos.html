@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos - La Última Ronda</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/productos.css">
+    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<!-- Inyectamos el fragmento de login -->
+<div id="Login_Container"></div>
+
+<script>
+  // Carga asíncrona del HTML de login
+  fetch('/html/login.html')
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('Login_Container').innerHTML = html;
+      // Una vez inyectado, dispara la inicialización de eventos
+      if (window.Configurar_Eventos_Modal) {
+        window.Configurar_Eventos_Modal();
+      }
+    })
+    .catch(console.error);
+</script>
+
+<body>
+    <header>
+        <nav class="Navbar">
+            <div class="Menú_Oculto" id="Menú_Oculto">
+                <div class="Barra"></div>
+                <div class="Barra"></div>
+                <div class="Barra"></div>
+            </div>
+            <ul class="Enlaces_Navegación Izquierda">
+                <li><a href="/html/index.html">Inicio</a></li>
+                <li><a href="#" class="Activo">Productos</a></li>
+                <li><a href="/html/index.html#Promociones">Promociones</a></li>
+            </ul>
+            <div class="Contenedor_Logo">
+                <img src="https://res.cloudinary.com/dq4yyycio/image/upload/v1745784729/Logo_ixx6lt.png" alt="La Última Ronda" class="Logo">
+            </div>
+            <ul class="Enlaces_Navegación Derecha">
+                <li><a href="/html/index.html#Delivery">Delivery</a></li>
+                <li><a href="/html/index.html#Contacto">Contacto</a></li>
+                <li class="Ícono_Carrito"><a href="/html/carrito.html"><i class="fas fa-shopping-cart"></i> <span
+                            id="Contador_Carrito">0</span></a></li>
+                <li class="Menu_Usuario">
+                    <div class="Icono_Usuario" id="iconoUsuario">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="Dropdown_Usuario" id="dropdownUsuario">
+                        <div class="Usuario_Info">
+                            <div class="Usuario_Nombre">Susan Aguilar</div>
+                            <div class="Usuario_Email">susan.aguilar@espoch.edu.ec</div>
+                        </div>
+                        <ul class="Menu_Items">
+                            <li class="Menu_Item">
+                                <a href="/html/carrito.html#Contenedor_Confirmación">
+                                    <i class="fas fa-box"></i>
+                                    Mis Pedidos
+                                </a>
+                            </li>
+                            <li class="Menu_Item logout">
+                                <a href="#" id="cerrarSesion">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    Cerrar Sesión
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="Banner_Página">
+        <video autoplay loop muted playsinline class="Video_Fondo">
+            <source src="https://res.cloudinary.com/dq4yyycio/video/upload/v1748312308/Productos_Destacados_uxdsqn.mp4" type="video/mp4">
+        </video>
+        <div class="Sombra_Banner"></div>
+        <div class="Contenido_Banner">
+            <h1>Nuestros Productos</h1>
+            <p>Descubra nuestra amplia selección de licores, granizados y más</p>
+        </div>
+    </section>
+
+    <section class="Filtros_Productos">
+        <div class="Contenedor_Filtros">
+            <div class="Búsqueda_Productos">
+                <input type="text" placeholder="Buscar productos..." id="Búsqueda_Campo">
+                <button type="button"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="Categorías_Filtro" id="Categorías">
+                <button class="Botón_Filtro Activo" data-filter="Todos">Todos</button>
+                <button class="Botón_Filtro" data-filter="Licores">Licores</button>
+                <button class="Botón_Filtro" data-filter="Cocteles">Cocteles</button>
+                <button class="Botón_Filtro" data-filter="Granizados y Frappés">Granizados y Frappés</button>
+                <button class="Botón_Filtro" data-filter="Postres">Postres</button>
+                <button class="Botón_Filtro" data-filter="Bebidas">Bebidas</button>
+                <button class="Botón_Filtro" data-filter="Snacks y Complementos">Snacks y Complementos</button>
+                <button class="Botón_Filtro" data-filter="Packs">Packs y Ofertas</button>
+            </div>
+            <div class="Ordenar_Productos">
+                <select id="Ordenar_Selección">
+                    <option value="Nombre-az">Nombre: A-Z</option>
+                    <option value="Nombre-za">Nombre: Z-A</option>
+                    <option value="Precio-bajo">Precio: Menor a Mayor</option>
+                    <option value="Precio-alto">Precio: Mayor a Menor</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <section class="Productos_Principal">
+        <div class="Contenedor_Productos">
+            <div class="Cuadrícula_Productos">
+                <!-- Aquí se inyectarán dinámicamente las tarjetas -->
+              </div>
+              
+              <!-- Plantilla para cada producto -->
+              <template id="template-producto">
+                <div class="Tarjeta_Producto" data-category="" data-id="">
+                  <div class="Imagen_Producto">
+                    <button class="Botón_Favorito" aria-label="Añadir a favoritos">
+                      <i class="fas fa-heart"></i>
+                    </button>
+                    <span class="Etiqueta"></span>
+                    <a class="Enlace_Detalle" href="#">
+                      <img src="" alt="">
+                    </a>
+                    <div class="Sombra_Producto">
+                      <button class="Botón_Vista_Rápida"><i class="fas fa-eye"></i></button>
+                      <button class="Botón_Añadir_Al_Carrito"><i class="fas fa-shopping-cart"></i> Agregar</button>
+                    </div>
+                  </div>
+                  <div class="Información_Producto">
+                    <a class="Enlace_Detalle" href="#"><h3></h3></a>
+                    <p class="Descripción"></p>
+                    <div class="Pie_Producto">
+                      <span class="Precio"></span>
+                      <div class="Clasificación"></div>
+                    </div>
+                  </div>
+                </div>
+              </template>              
+        </div>
+    </section>
+
+    <section class="Paginación">
+        <div class="Contenedor_Paginación">
+            <button class="Botón_Paginación"><i class="fas fa-chevron-left"></i></button>
+            <button class="Botón_Paginación Activo">1</button>
+            <button class="Botón_Paginación">2</button>
+            <button class="Botón_Paginación">3</button>
+            <span class="Puntos_Suspensivos">...</span>
+            <button class="Botón_Paginación">10</button>
+            <button class="Botón_Paginación"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </section>
+
+    <section class="Modal_Vista_Rápida" id="Modal_Vista_Rápida">
+        <div class="Contenido_Modal">
+            <button class="Cerrar_Modal"><i class="fas fa-times"></i></button>
+            <div class="Detalles_Producto">
+                <div class="Imagen_Modal">
+                    <img src="" alt="Producto">
+                </div>
+                <div class="Información_Modal">
+                    <h2 class="Título_Producto_Modal">Whisky Premium</h2>
+                    <div class="Clasificación_Modal">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                        <span>(1 calificación)</span>
+                    </div>
+                    <p class="Precio_Modal">$15.99</p>
+                    <p class="Descripción_Modal">Whisky añejado con notas de vainilla y roble. Envejecido en barricas de
+                        roble americano por un mínimo de 10 años, este whisky presenta un equilibrio perfecto entre
+                        dulzura y complejidad.</p>
+                    <div class="Características_Producto">
+                        <div class="Característica">
+                            <span class="Etiqueta_Característica">Volumen:</span>
+                            <span class="Valor_Característica">750ml</span>
+                        </div>
+                        <div class="Característica">
+                            <span class="Etiqueta_Característica">Graduación:</span>
+                            <span class="Valor_Característica">40%</span>
+                        </div>
+                    </div>
+                    <div class="Cantidad_Producto">
+                        <label for="Cantidad">Cantidad:</label>
+                        <div class="Control_Cantidad">
+                            <button class="Disminuir_Cantidad"><i class="fas fa-minus"></i></button>
+                            <input type="number" id="Cantidad" value="1" min="1" max="10">
+                            <button class="Aumentar_Cantidad"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                    <div class="Botones_Acción">
+                        <button class="Botones Botón_Primario Botón_Añadir"><i class="fas fa-shopping-cart"></i> Añadir
+                            al Carrito</button>
+                        <button class="Botones Botón_Secundario Botón_Comprar">Comprar Ahora</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="Whatsapp_Flotante">
+        <a href="https://wa.me/message/3A6H5X5BCRACL1" target="_blank">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
+
+    <section class="Sección_Lista_Deseos">
+        <button class="Botón_Lista_Deseos" aria-label="Ver lista de deseos">
+            <i class="fas fa-heart"></i>
+            <span class="Contador_Lista_Deseos">0</span>
+        </button>
+
+        <div class="Lista_Deseos">
+            <div class="Encabezado_Lista_Deseos">
+                <h2><i class="fas fa-heart"></i> Mi Lista de Deseos</h2>
+                <button class="Cerrar_Lista_Deseos" aria-label="Cerrar lista de deseos">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="Elementos_Lista_Deseos">
+                <!-- Los productos se agregarán dinámicamente -->
+            </div>
+        </div>
+
+        <template id="Plantilla_Elemento_Deseo">
+            <div class="Elemento_Lista_Deseos" data-index="">
+                <div class="Imagen_Lista_Deseos">
+                    <img src="" alt="">
+                </div>
+                <div class="Información_Lista_Deseos">
+                    <h3></h3>
+                    <div class="Precio_Lista_Deseos"></div>
+                    <div class="Acciones_Lista_Deseos">
+                        <button class="Agregar_Carrito">Añadir al Carrito</button>
+                        <button class="Eliminar_Deseo">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </section>
+
+    <section class="Historial_Productos">
+        <div class="Contenedor_Historial">
+            <h2 class="Título_Historial"><i class="fas fa-history"></i> Productos vistos recientemente</h2>
+            <div class="Carrusel_Historial">
+                <!-- Los productos se agregarán dinámicamente -->
+            </div>
+            <div class="Botones_Carrusel_Historial">
+                <button class="Botón_Carrusel Botón_Anterior" aria-label="Anterior">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="Botón_Carrusel Botón_Siguiente" aria-label="Siguiente">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="Contenedor_Footer">
+            <div class="Logo_Footer">
+                <img src="https://res.cloudinary.com/dq4yyycio/image/upload/v1745784729/Logo_ixx6lt.png" alt="La Última Ronda" class="Logo">
+                <p>Su destino para los mejores licores, granizados y más.</p>
+            </div>
+            <div class="Sección_Footer">
+                <h3>Enlaces Rápidos</h3>
+                <ul>
+                    <li><a href="/html/index.html">Inicio</a></li>
+                    <li><a href="/html/productos.html">Productos</a></li>
+                    <li><a href="/html/index.html#Promociones">Promociones</a></li>
+                    <li><a href="/html/carrito.html">Carrito de Compras</a></li>
+                    <li><a href="/html/index.html#Contacto">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="Sección_Footer">
+                <h3>Categorías</h3>
+                <ul>
+                    <li><a href="/html/productos.html?Filtro=Licores" class="Enlace_Filtro">Licores</a></li>
+                    <li><a href="/html/productos.html?Filtro=Granizados" class="Enlace_Filtro">Granizados</a>
+                    </li>
+                    <li><a href="/html/productos.html?Filtro=Postres">Postres</a></li>
+                    <li><a href="/html/productos.html?Filtro=Packs">Packs y Regalos</a></li>
+
+                </ul>
+            </div>
+            <div class="Sección_Footer">
+                <h3>Contacto</h3>
+                <ul>
+                    <li><a href="tel:+593984796539">+593 98 479 6539</a></li>
+                    <li><a href="laultimaronda1@gmail.com">laultimaronda1@gmail.com</a></li>
+                    <li class="Redes_Sociales">
+                        <a href="https://www.instagram.com/laultimarondar3?igsh=MXc2d2xtZDI3YmY5aQ=="
+                            class="Ícono_Redes_Sociales"><i class="fab fa-instagram"></i></a>
+                            <a href="https://www.tiktok.com/@ftoxicr3?_t=ZM-8vVvtySlFiP&_r=1"
+                            class="Ícono_Redes_Sociales"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://wa.me/message/3A6H5X5BCRACL1" class="Ícono_Redes_Sociales"><i
+                                class="fab fa-whatsapp"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="Footer_Inferior">
+            <p>&copy; 2025 La Última Ronda. Todos los derechos reservados.</p>
+            <p class="Restricción_Edad">Prohibida la venta a menores de 18 años. Beber con moderación.</p>
+        </div>
+    </footer>
+
+    <script src="/js/global.js"></script>
+    <script src="/js/productos.js"></script>
+    <script src="/js/login.js"></script>
+</body>
+
+</html>

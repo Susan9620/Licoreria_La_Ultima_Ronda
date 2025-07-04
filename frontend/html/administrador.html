@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel Administrador - La Última Ronda</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/administrador.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- Copia aquí tu header/nav tal como en index.html -->
+    <header>
+        <nav class="Navbar">
+            <div class="Menú_Oculto" id="Menú_Oculto">
+                <div class="Barra"></div>
+                <div class="Barra"></div>
+                <div class="Barra"></div>
+            </div>
+            <ul class="Enlaces_Navegación Izquierda">
+                <li><a href="#" class="Activo">Inicio</a></li>
+                <li><a href="#Promociones">Promociones</a></li>
+                <li><a href="/html/productos.html">Productos</a></li>
+            </ul>
+            <div class="Contenedor_Logo">
+                <img src="https://res.cloudinary.com/dq4yyycio/image/upload/v1745784729/Logo_ixx6lt.png"
+                    alt="La Última Ronda" class="Logo">
+            </div>
+            <ul class="Enlaces_Navegación Derecha">
+                <li><a href="/html/index.html#Delivery">Delivery</a></li>
+                <li><a href="/html/index.html#Contacto">Contacto</a></li>
+                <li class="Ícono_Carrito"><a href="/html/carrito.html"><i class="fas fa-shopping-cart"></i> <span
+                            id="Contador_Carrito">0</span></a></li>
+                <li class="Menu_Usuario">
+                    <div class="Icono_Usuario" id="iconoUsuario">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="Dropdown_Usuario" id="dropdownUsuario">
+                        <div class="Usuario_Info">
+                            <div class="Usuario_Nombre">Susan Aguilar</div>
+                            <div class="Usuario_Email">susan.aguilar@espoch.edu.ec</div>
+                        </div>
+                        <ul class="Menu_Items">
+                            <li class="Menu_Item">
+                                <a href="/html/carrito.html#Contenedor_Confirmación">
+                                    <i class="fas fa-box"></i>
+                                    Mis Pedidos
+                                </a>
+                            </li>
+                            <li class="Menu_Item logout">
+                                <a href="#" id="cerrarSesion">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    Cerrar Sesión
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="Admin_Container">
+        <section class="Admin_Header">
+            <h2>Panel de Administración</h2>
+            <select id="AdminSectionSelect" class="Admin_Select">
+                <option value="pedidos">Pedidos</option>
+                <option value="productos">Productos</option>
+                <option value="categorias">Categorías</option>
+                <option value="imagenesProducto">Imágenes Producto</option>
+                <option value="carrusel">Imágenes Carrusel</option>
+                <option value="usuarios">Usuarios</option>
+                <option value="promociones">Promociones</option>
+            </select>
+        </section>
+        <section id="AdminContent" class="Admin_Content">
+            <!-- Aquí se inyectará la UI de cada sección -->
+        </section>
+
+        <!-- Modal detalle/editar pedido -->
+        <div id="ModalPedido" class="Modal Oculto">
+            <div class="Modal_Contenido">
+                <header class="Modal_Header">
+                    <h3>Detalle Pedido <span id="ModalPedidoID"></span></h3>
+                    <button class="Modal_Cerrar" id="CerrarModalPedido">&times;</button>
+                </header>
+                <div class="Modal_Body">
+                    <p><strong>Usuario:</strong> <span id="DetUsuario"></span></p>
+                    <p><strong>Fecha:</strong> <span id="DetFecha"></span></p>
+                    <p><strong>Total:</strong> $<span id="DetTotal"></span></p>
+                    <p><strong>Estado:</strong>
+                        <select id="DetEstado">
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="Pagado">Pagado</option>
+                            <option value="Entregado">Entregado</option>
+                            <option value="Cancelado">Cancelado</option>
+                        </select>
+                    </p>
+                    <div>
+                        <h4>Productos:</h4>
+                        <table class="Tabla_Admin">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio</th>
+                                </tr>
+                            </thead>
+                            <tbody id="DetProductos"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <footer class="Modal_Footer">
+                    <button class="Botones Botón_Secundario" id="BtnCancelarPedido">Cancelar</button>
+                    <button class="Botones Botón_Primario" id="BtnGuardarPedido">Guardar Cambios</button>
+                </footer>
+            </div>
+        </div>
+
+        <!-- Modal Producto (crear/editar) -->
+        <div id="ModalProducto" class="Modal Oculto">
+            <div class="Modal_Contenido">
+                <header class="Modal_Header">
+                    <h3><span id="ModalProductoTitulo"></span> Producto</h3>
+                    <button id="CerrarModalProducto" class="Modal_Cerrar">&times;</button>
+                </header>
+                <div class="Modal_Body">
+                    <form id="FormProducto">
+                        <!-- Campos básicos -->
+                        <div class="Form_Grupo">
+                            <label for="Prod_Nombre">Nombre</label>
+                            <input type="text" id="Prod_Nombre" name="Nombre" required>
+                        </div>
+                        <div class="Form_Grupo">
+                            <label for="Prod_Categoria">Categoría</label>
+                            <select id="Prod_Categoria" name="ID_Categoría" required></select>
+                        </div>
+                        <div class="Form_Grupo">
+                            <label for="Prod_Precio">Precio</label>
+                            <input type="number" id="Prod_Precio" name="Precio" step="0.01" required>
+                        </div>
+                        <div class="Form_Grupo">
+                            <label><input type="checkbox" id="Prod_Activo" name="Activo"> Activo</label>
+                        </div>
+
+                        <!-- Pestañas -->
+                        <div class="Tabs">
+                            <button type="button" data-tab="datos" class="Tab Tab_Activo Botones">Datos</button>
+                            <button type="button" data-tab="variantes" class="Tab Botones">Variantes</button>
+                            <button type="button" data-tab="imagenes" class="Tab Botones">Imágenes</button>
+                        </div>
+
+                        <!-- Contenido de pestañas -->
+                        <div id="Tab_datos" class="TabContent">
+                            <!-- Podrías repetir aquí los mismos campos básicos si quieres -->
+                        </div>
+                        <div id="Tab_variantes" class="TabContent Oculto">
+                            <button type="button" id="BtnNuevaVariante" class="Botones">Nueva Variante</button>
+                            <table class="Tabla_Admin">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>SKU</th>
+                                        <th>Precio</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="TablaVariantes"></tbody>
+                            </table>
+                        </div>
+                        <div id="Tab_imagenes" class="TabContent Oculto">
+                            <button type="button" id="BtnNuevaImagen" class="Botones">Nueva Imagen</button>
+                            <table class="Tabla_Admin">
+                                <thead>
+                                    <tr>
+                                        <th>URL</th>
+                                        <th>Alt</th>
+                                        <th>Predet.</th>
+                                        <th>Orden</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="TablaImagenes"></tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+                <footer class="Modal_Footer">
+                    <button id="BtnGuardarProducto" class="Botones">Guardar</button>
+                    <button id="BtnCancelarProducto" class="Botones Botón_Secundario">Cancelar</button>
+                </footer>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/global.js"></script>
+    <script src="/js/administrador.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,1353 @@
+/* Sección Principal del Carrito */
+.Sección_Carrito {
+    padding: 3rem 0;
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 80px;
+}
+
+.Título_Página {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--Texto_Primario);
+    position: relative;
+    padding-bottom: 0.8rem;
+}
+
+.Título_Página::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(to right, var(--Primario), var(--Secundario));
+}
+
+/* Contenedor y Layout del Carrito */
+.Contenedor_Carrito {
+    display: grid;
+    grid-template-columns: 65% 32%;
+    gap: 3%;
+    margin-top: 2rem;
+}
+
+/* Lista de Productos del Carrito */
+.Productos_Carrito {
+    background-color: var(--Gris_Oscuro);
+    border-radius: var(--Radio_Borde);
+    padding: 1.5rem;
+    box-shadow: var(--Sombra);
+}
+
+/* Producto Individual en el Carrito */
+.Producto_Carrito {
+    display: grid;
+    grid-template-columns: 120px 1fr 120px 140px 40px;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.2rem;
+    margin-bottom: 1rem;
+    background-color: var(--Gris_Claro);
+    border-radius: var(--Radio_Borde);
+    transition: transform var(--Velocidad_Transición) ease;
+}
+
+.Producto_Carrito:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Imagen del Producto en Carrito */
+.Imagen_Producto_Carrito {
+    width: 100%;
+    height: 100px;
+    overflow: hidden;
+    border-radius: calc(var(--Radio_Borde) - 2px);
+}
+
+.Imagen_Producto_Carrito img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.Producto_Carrito:hover .Imagen_Producto_Carrito img {
+    transform: scale(1.1);
+}
+
+/* Detalles del Producto */
+.Detalles_Producto_Carrito {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.Nombre_Producto_Carrito {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--Blanco);
+    margin-bottom: 0.3rem;
+}
+
+.Precio_Unitario {
+    font-size: 0.9rem;
+    color: var(--Texto_Secundario);
+}
+
+.Precio_Unitario .Valor_Precio {
+    color: var(--Acento);
+    font-weight: 600;
+}
+
+/* Control de Cantidad */
+.Control_Cantidad_Carrito {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.Botón_Disminuir,
+.Botón_Aumentar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(45deg, var(--Primario), var(--Secundario));
+    color: var(--Blanco);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--Velocidad_Transición) ease;
+}
+
+.Botón_Disminuir:hover,
+.Botón_Aumentar:hover {
+    transform: scale(1.1);
+    box-shadow: 0 3px 10px rgba(255, 90, 0, 0.3);
+}
+
+.Campo_Cantidad {
+    width: 50px;
+    height: 35px;
+    border-radius: var(--Radio_Borde);
+    border: 2px solid var(--Gris_Claro);
+    background-color: var(--Gris_Oscuro);
+    color: var(--Blanco);
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.Campo_Cantidad:focus {
+    outline: none;
+    border-color: var(--Acento);
+}
+
+/* Subtotal del Producto */
+.Subtotal_Producto {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--Texto_Primario);
+}
+
+.Valor_Subtotal {
+    color: var(--Acento);
+}
+
+/* Botón para eliminar producto */
+.Botón_Eliminar_Producto {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--Gris_Oscuro);
+    color: var(--Secundario);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--Velocidad_Transición) ease;
+}
+
+.Botón_Eliminar_Producto:hover {
+    background-color: var(--Secundario);
+    color: var(--Blanco);
+    transform: rotate(90deg);
+}
+
+/* Mensaje de Carrito Vacío */
+.Mensaje_Carrito_Vacío {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 0;
+    text-align: center;
+}
+
+.Mensaje_Carrito_Vacío i {
+    font-size: 5rem;
+    color: var(--Texto_Secundario);
+    margin-bottom: 1.5rem;
+    opacity: 0.6;
+}
+
+.Mensaje_Carrito_Vacío h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: var(--Texto_Primario);
+}
+
+.Mensaje_Carrito_Vacío p {
+    color: var(--Texto_Secundario);
+    margin-bottom: 2rem;
+}
+
+.Botón_Volver_Productos {
+    display: inline-block;
+    padding: 12px 25px;
+    background: linear-gradient(45deg, var(--Primario), var(--Secundario));
+    color: var(--Blanco);
+    border-radius: var(--Radio_Borde);
+    font-weight: 600;
+    transition: all var(--Velocidad_Transición) ease;
+    box-shadow: 0 4px 15px rgba(255, 90, 0, 0.3);
+}
+
+.Botón_Volver_Productos:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 20px rgba(255, 90, 0, 0.4);
+}
+
+/* Resumen del Carrito */
+.Resumen_Carrito {
+    background-color: var(--Gris_Oscuro);
+    border-radius: var(--Radio_Borde);
+    padding: 1.5rem;
+    box-shadow: var(--Sombra);
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+}
+
+.Resumen_Carrito h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--Gris_Claro);
+}
+
+.Resumen_Carrito.Carrito_Vacío {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Detalles del Resumen */
+.Detalles_Resumen {
+    margin-bottom: 1.5rem;
+}
+
+.Línea_Resumen {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: var(--Texto_Secundario);
+}
+
+.Línea_Resumen.Total {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--Blanco);
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--Gris_Claro);
+}
+
+.Línea_Resumen.Total span:last-child {
+    color: var(--Acento);
+}
+
+/* Opciones de Envío */
+.Opciones_Envío {
+    margin-bottom: 2rem;
+}
+
+.Opciones_Envío h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+}
+
+.Opción_Envío {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    cursor: pointer;
+}
+
+.Opción_Envío input[type="radio"] {
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--Texto_Secundario);
+    margin-right: 10px;
+    position: relative;
+    cursor: pointer;
+}
+
+.Opción_Envío input[type="radio"]:checked {
+    border-color: var(--Primario);
+}
+
+.Opción_Envío input[type="radio"]:checked::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--Primario);
+}
+
+.Opción_Envío label {
+    font-size: 0.95rem;
+    color: var(--Texto_Primario);
+    cursor: pointer;
+}
+
+.Opción_Envío input[type="radio"]:disabled + label {
+    color: var(--Texto_Secundario);
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Botones de Acción del Carrito */
+.Botones_Acción_Carrito {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.Botones_Acción_Carrito button {
+    width: 100%;
+    padding: 1rem;
+    border-radius: var(--Radio_Borde);
+    border: none;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all var(--Velocidad_Transición) ease;
+}
+
+.Botones_Acción_Carrito button i {
+    font-size: 1.1rem;
+}
+
+.Botones_Acción_Carrito .Botón_Primario {
+    background: linear-gradient(45deg, var(--Primario), var(--Secundario));
+    color: var(--Blanco);
+    box-shadow: 0 4px 15px rgba(255, 90, 0, 0.3);
+}
+
+.Botones_Acción_Carrito .Botón_Primario:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 20px rgba(255, 90, 0, 0.4);
+}
+
+.Botones_Acción_Carrito .Botón_Secundario {
+    background-color: transparent;
+    border: 2px solid var(--Acento);
+    color: var(--Blanco);
+}
+
+.Botones_Acción_Carrito .Botón_Secundario:hover {
+    background-color: var(--Acento);
+    color: var(--Blanco);
+}
+
+.Botones_Acción_Carrito .Botón_Terciario {
+    background-color: transparent;
+    border: 1px solid var(--Texto_Secundario);
+    color: var(--Texto_Secundario);
+}
+
+.Botones_Acción_Carrito .Botón_Terciario:hover {
+    border-color: var(--Secundario);
+    color: var(--Secundario);
+}
+
+.Botones_Acción_Carrito button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Productos Sugeridos */
+.Productos_Sugeridos {
+    margin: 4rem auto;
+    width: 90%;
+    max-width: 1200px;
+}
+
+.Productos_Sugeridos h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    position: relative;
+    padding-bottom: 0.8rem;
+}
+
+.Productos_Sugeridos h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(to right, var(--Primario), var(--Secundario));
+}
+
+.Contenedor_Productos_Sugeridos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+/* Tarjeta de Producto Sugerido */
+.Tarjeta_Producto {
+    background-color: var(--Gris_Oscuro);
+    border-radius: var(--Radio_Borde);
+    overflow: hidden;
+    transition: transform var(--Velocidad_Transición) ease, box-shadow var(--Velocidad_Transición) ease;
+    animation: Desvanecerse 0.8s ease forwards;
+}
+
+.Tarjeta_Producto:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.Imagen_Producto {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.Imagen_Producto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.Tarjeta_Producto:hover .Imagen_Producto img {
+    transform: scale(1.1);
+}
+
+.Botón_Favorito {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: rgba(30, 30, 30, 0.8);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--Texto_Secundario);
+    cursor: pointer;
+    z-index: 2;
+    transition: all var(--Velocidad_Transición) ease;
+}
+
+.Botón_Favorito:hover {
+    color: var(--Secundario);
+    transform: scale(1.1);
+}
+
+.Sombra_Producto {
+    position: absolute;
+    bottom: -60px;
+    left: 0;
+    width: 100%;
+    padding: 0.8rem;
+    background: linear-gradient(to top, rgba(18, 18, 18, 0.9), rgba(18, 18, 18, 0));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all var(--Velocidad_Transición) ease;
+    opacity: 0;
+}
+
+.Tarjeta_Producto:hover .Sombra_Producto {
+    bottom: 0;
+    opacity: 1;
+}
+
+.Botón_Vista_Rápida {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--Blanco);
+    color: var(--Oscuro);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--Velocidad_Transición) ease;
+}
+
+.Botón_Vista_Rápida:hover {
+    background-color: var(--Acento);
+    color: var(--Blanco);
+    transform: scale(1.1);
+}
+
+.Botón_Añadir_Al_Carrito {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    border-radius: var(--Radio_Borde);
+    background: linear-gradient(45deg, var(--Primario), var(--Secundario));
+    color: var(--Blanco);
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all var(--Velocidad_Transición) ease;
+}
+
+.Botón_Añadir_Al_Carrito:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(255, 90, 0, 0.3);
+}
+
+.Información_Producto {
+    padding: 1.2rem;
+}
+
+.Información_Producto h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    transition: color var(--Velocidad_Transición) ease;
+}
+
+.Información_Producto h3:hover {
+    color: var(--Primario);
+}
+
+.Información_Producto p {
+    font-size: 0.9rem;
+    color: var(--Texto_Secundario);
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.Pie_Producto {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.Precio {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--Acento);
+}
+
+.Clasificación {
+    display: flex;
+    gap: 2px;
+}
+
+.Clasificación i {
+    color: #ffc107;
+    font-size: 0.9rem;
+}
+
+/* Modales */
+.Modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--Velocidad_Transición) ease;
+}
+
+.Modal.Mostrar {
+    opacity: 1;
+    visibility: visible;
+}
+
+.Contenido_Modal {
+    width: 90%;
+    max-width: 500px;
+    background-color: var(--Gris_Oscuro);
+    border-radius: var(--Radio_Borde);
+    overflow: hidden;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    transform: translateY(-50px);
+    transition: all var(--Velocidad_Transición) ease;
+}
+
+.Modal.Mostrar .Contenido_Modal {
+    transform: translateY(0);
+}
+
+.Encabezado_Modal {
+    background-color: var(--Gris_Claro);
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.Encabezado_Modal h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.Cerrar_Modal {
+    background: none;
+    border: none;
+    color: var(--Texto_Secundario);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color var(--Velocidad_Transición) ease;
+}
+
+.Cerrar_Modal:hover {
+    color: var(--Secundario);
+}
+
+.Cuerpo_Modal {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.Cuerpo_Modal p {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.Pie_Modal {
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    border-top: 1px solid var(--Gris_Claro);
+}
+
+.Pie_Modal button {
+    padding: 0.7rem 1.5rem;
+    border-radius: var(--Radio_Borde);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--Velocidad_Transición) ease;
+}
+
+.Modal_Factura {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    align-items: center;
+    justify-content: center;
+}
+
+.Modal_Factura .Contenido_Modal_Factura {
+    max-width: 700px;
+}
+
+.Contenido_Modal_Factura {
+    background-color: var(--Gris_Oscuro);
+    border-radius: var(--Radio_Borde);
+    width: 90%;
+    max-width: 700px;
+    box-shadow: var(--Sombra);
+    animation: Aparecer 0.3s ease;
+}
+
+@keyframes Aparecer {
+    from { opacity: 0; transform: translateY(-30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.Encabezado_Modal {
+    padding: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--Gris_Claro);
+}
+
+.Encabezado_Modal h2 {
+    margin: 0;
+    color: var(--Primario);
+    font-size: 1.5rem;
+}
+
+.Cerrar_Modal {
+    color: var(--Texto_Secundario);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: color var(--Velocidad_Transición) ease;
+}
+
+.Cerrar_Modal:hover {
+    color: var(--Primario);
+}
+
+.Cuerpo_Modal {
+    padding: 1.25rem;
+    max-height: 65vh;
+    overflow-y: auto;
+}
+
+.Pie_Modal {
+    padding: 0.85rem 1.25rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    border-top: 1px solid var(--Gris_Claro);
+}
+
+/* Contenido específico de la factura */
+.Encabezado_Factura {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.Logo_Factura h2 {
+    color: var(--Primario);
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.Logo_Factura p {
+    color: var(--Texto_Secundario);
+    margin: 0.2rem 0;
+    font-size: 0.9rem;
+}
+
+.Información_Factura {
+    text-align: right;
+}
+
+.Información_Factura h3 {
+    color: var(--Acento);
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.Información_Factura p {
+    font-size: 0.9rem;
+    margin: 0.3rem 0;
+}
+
+.Factura_Cliente {
+    margin-bottom: 1.5rem;
+    padding: 0.85rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: var(--Radio_Borde);
+}
+
+.Factura_Cliente h4 {
+    color: var(--Acento);
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.Factura_Cliente p {
+    font-size: 0.9rem;
+    margin: 0.3rem 0;
+}
+
+.Factura_Productos table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+}
+
+.Factura_Productos th {
+    background-color: var(--Gris_Claro);
+    padding: 0.65rem;
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+.Factura_Productos td {
+    padding: 0.65rem;
+    border-bottom: 1px solid var(--Gris_Claro);
+    font-size: 0.9rem;
+}
+
+.Factura_Productos tbody tr:last-child td {
+    border-bottom: 2px solid var(--Gris_Claro);
+}
+
+.Texto_Derecha {
+    text-align: right;
+}
+
+.Fila_Total {
+    font-weight: 700;
+    color: var(--Primario);
+    font-size: 1rem;
+}
+
+.Pie_Factura {
+    text-align: center;
+    margin-top: 2.5rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--Gris_Claro);
+}
+
+.Pie_Factura p {
+    color: var(--Texto_Secundario);
+    margin: 0.2rem 0;
+    font-size: 0.85rem;
+}
+
+/* Estilos Responsivos */
+
+/* Tablets grandes y laptops pequeñas */
+@media screen and (max-width: 1200px) {
+    .Sección_Carrito {
+        width: 95%;
+        padding: 2rem 0;
+    }
+    
+    .Contenedor_Carrito {
+        grid-template-columns: 60% 37%;
+        gap: 3%;
+    }
+    
+    .Contenedor_Productos_Sugeridos {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+}
+
+/* Tablets */
+@media screen and (max-width: 1024px) {
+    .Título_Página {
+        font-size: 2.2rem;
+    }
+    
+    .Contenedor_Carrito {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .Resumen_Carrito {
+        position: static;
+        order: -1; /* Mueve el resumen arriba en móviles */
+    }
+    
+    .Producto_Carrito {
+        grid-template-columns: 100px 1fr 100px 120px 35px;
+        gap: 0.8rem;
+        padding: 1rem;
+    }
+    
+    .Imagen_Producto_Carrito {
+        height: 80px;
+    }
+    
+    .Contenedor_Productos_Sugeridos {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .Imagen_Producto {
+        height: 180px;
+    }
+}
+
+/* Tablets pequeñas */
+@media screen and (max-width: 768px) {
+    .Sección_Carrito {
+        margin-top: 60px;
+        padding: 1.5rem 0;
+    }
+    
+    .Título_Página {
+        font-size: 1.8rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .Productos_Carrito,
+    .Resumen_Carrito {
+        padding: 1rem;
+    }
+    
+    .Producto_Carrito {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 1rem;
+        text-align: center;
+    }
+    
+    .Imagen_Producto_Carrito {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto;
+    }
+    
+    .Detalles_Producto_Carrito {
+        text-align: center;
+        order: 1;
+    }
+    
+    .Nombre_Producto_Carrito {
+        font-size: 1rem;
+    }
+    
+    .Control_Cantidad_Carrito {
+        justify-content: center;
+        margin: 1rem 0;
+        order: 2;
+    }
+    
+    .Subtotal_Producto {
+        text-align: center;
+        font-size: 1.1rem;
+        order: 3;
+    }
+    
+    .Botón_Eliminar_Producto {
+        width: 100%;
+        height: 40px;
+        border-radius: var(--Radio_Borde);
+        order: 4;
+    }
+    
+    .Botón_Eliminar_Producto:hover {
+        transform: none;
+    }
+    
+    /* Resumen del carrito en tablets */
+    .Resumen_Carrito h2 {
+        font-size: 1.3rem;
+        text-align: center;
+    }
+    
+    .Botones_Acción_Carrito {
+        gap: 0.8rem;
+    }
+    
+    .Botones_Acción_Carrito button {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+    
+    /* Productos sugeridos */
+    .Productos_Sugeridos h2 {
+        font-size: 1.6rem;
+    }
+    
+    .Imagen_Producto {
+        height: 160px;
+    }
+    
+    .Información_Producto {
+        padding: 1rem;
+    }
+    
+    .Información_Producto h3 {
+        font-size: 1rem;
+    }
+    
+    .Información_Producto p {
+        font-size: 0.85rem;
+    }
+    
+    /* Modal responsivo */
+    .Contenido_Modal {
+        width: 95%;
+        max-width: 450px;
+    }
+    
+    .Contenido_Modal_Factura {
+        width: 95%;
+        max-width: 600px;
+    }
+    
+    .Cuerpo_Modal {
+        max-height: 60vh;
+    }
+    
+    .Encabezado_Factura {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .Información_Factura {
+        text-align: center;
+    }
+    
+    .Factura_Productos table {
+        font-size: 0.8rem;
+    }
+    
+    .Factura_Productos th,
+    .Factura_Productos td {
+        padding: 0.5rem 0.3rem;
+    }
+}
+
+/* Móviles grandes */
+@media screen and (max-width: 576px) {
+    .Sección_Carrito {
+        width: 100%;
+        padding: 1rem;
+        margin-top: 50px;
+    }
+    
+    .Título_Página {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .Título_Página::after {
+        width: 60px;
+        height: 2px;
+    }
+    
+    .Productos_Carrito,
+    .Resumen_Carrito {
+        padding: 0.8rem;
+        border-radius: 8px;
+    }
+    
+    .Producto_Carrito {
+        padding: 0.8rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .Imagen_Producto_Carrito {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .Nombre_Producto_Carrito {
+        font-size: 0.9rem;
+    }
+    
+    .Precio_Unitario {
+        font-size: 0.8rem;
+    }
+    
+    .Control_Cantidad_Carrito {
+        gap: 0.3rem;
+    }
+    
+    .Botón_Disminuir,
+    .Botón_Aumentar {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .Campo_Cantidad {
+        width: 45px;
+        height: 32px;
+        font-size: 0.9rem;
+    }
+    
+    .Subtotal_Producto {
+        font-size: 0.9rem;
+    }
+    
+    /* Resumen del carrito móvil */
+    .Resumen_Carrito {
+        margin-bottom: 1rem;
+    }
+    
+    .Resumen_Carrito h2 {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+    
+    .Línea_Resumen {
+        font-size: 0.9rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .Línea_Resumen.Total {
+        font-size: 1.1rem;
+    }
+    
+    .Opciones_Envío h3 {
+        font-size: 1rem;
+    }
+    
+    .Opción_Envío {
+        margin-bottom: 0.6rem;
+    }
+    
+    .Opción_Envío label {
+        font-size: 0.9rem;
+    }
+    
+    .Botones_Acción_Carrito button {
+        padding: 0.7rem;
+        font-size: 0.85rem;
+    }
+    
+    /* Productos sugeridos móvil */
+    .Productos_Sugeridos {
+        margin: 2rem auto;
+        padding: 0 1rem;
+    }
+    
+    .Productos_Sugeridos h2 {
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+    }
+    
+    .Productos_Sugeridos h2::after {
+        width: 50px;
+    }
+    
+    .Contenedor_Productos_Sugeridos {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .Tarjeta_Producto {
+        max-width: 100%;
+    }
+    
+    .Imagen_Producto {
+        height: 200px;
+    }
+    
+    .Información_Producto {
+        padding: 0.8rem;
+    }
+    
+    .Información_Producto h3 {
+        font-size: 0.95rem;
+    }
+    
+    .Información_Producto p {
+        font-size: 0.8rem;
+        margin-bottom: 0.8rem;
+    }
+    
+    .Precio {
+        font-size: 1rem;
+    }
+    
+    .Botón_Añadir_Al_Carrito {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.75rem;
+    }
+    
+    /* Modal móvil */
+    .Contenido_Modal,
+    .Contenido_Modal_Factura {
+        width: 95%;
+        margin: 1rem auto;
+    }
+    
+    .Encabezado_Modal {
+        padding: 1rem;
+    }
+    
+    .Encabezado_Modal h2,
+    .Encabezado_Modal h3 {
+        font-size: 1.1rem;
+    }
+    
+    .Cuerpo_Modal {
+        padding: 1rem;
+        max-height: 50vh;
+    }
+    
+    .Pie_Modal {
+        padding: 0.8rem 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .Pie_Modal button {
+        width: 100%;
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+    
+    /* Factura móvil */
+    .Logo_Factura h2 {
+        font-size: 1.2rem;
+    }
+    
+    .Logo_Factura p {
+        font-size: 0.8rem;
+    }
+    
+    .Información_Factura h3 {
+        font-size: 1rem;
+    }
+    
+    .Información_Factura p {
+        font-size: 0.8rem;
+    }
+    
+    .Factura_Cliente {
+        padding: 0.6rem;
+    }
+    
+    .Factura_Cliente h4 {
+        font-size: 0.9rem;
+    }
+    
+    .Factura_Cliente p {
+        font-size: 0.8rem;
+    }
+    
+    .Factura_Productos table {
+        font-size: 0.7rem;
+    }
+    
+    .Factura_Productos th,
+    .Factura_Productos td {
+        padding: 0.4rem 0.2rem;
+    }
+    
+    .Fila_Total {
+        font-size: 0.8rem;
+    }
+    
+    .Pie_Factura p {
+        font-size: 0.75rem;
+    }
+}
+
+/* Móviles muy pequeños */
+@media screen and (max-width: 380px) {
+    .Sección_Carrito {
+        padding: 0.5rem;
+    }
+    
+    .Título_Página {
+        font-size: 1.3rem;
+    }
+    
+    .Productos_Carrito,
+    .Resumen_Carrito {
+        padding: 0.6rem;
+    }
+    
+    .Producto_Carrito {
+        padding: 0.6rem;
+    }
+    
+    .Imagen_Producto_Carrito {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .Nombre_Producto_Carrito {
+        font-size: 0.85rem;
+    }
+    
+    .Campo_Cantidad {
+        width: 40px;
+        height: 30px;
+        font-size: 0.8rem;
+    }
+    
+    .Botón_Disminuir,
+    .Botón_Aumentar {
+        width: 25px;
+        height: 25px;
+    }
+    
+    .Botones_Acción_Carrito button {
+        padding: 0.6rem;
+        font-size: 0.8rem;
+    }
+    
+    .Productos_Sugeridos h2 {
+        font-size: 1.2rem;
+    }
+    
+    .Imagen_Producto {
+        height: 160px;
+    }
+    
+    .Información_Producto {
+        padding: 0.6rem;
+    }
+    
+    .Información_Producto h3 {
+        font-size: 0.9rem;
+    }
+    
+    .Información_Producto p {
+        font-size: 0.75rem;
+    }
+    
+    .Factura_Productos table {
+        font-size: 0.6rem;
+    }
+    
+    .Factura_Productos th,
+    .Factura_Productos td {
+        padding: 0.3rem 0.1rem;
+    }
+}
+
+/* Orientación horizontal en móviles */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+    .Modal_Factura .Contenido_Modal_Factura {
+        max-height: 90vh;
+    }
+    
+    .Cuerpo_Modal {
+        max-height: 40vh;
+    }
+    
+    .Resumen_Carrito {
+        position: static;
+    }
+}

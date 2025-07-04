@@ -1,0 +1,1328 @@
+/* Producto Detalle */
+.Detalle_Producto {
+    padding: 40px 5%;
+}
+
+.Contenedor_Detalle_Producto {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+/* Galería */
+.Galería_Producto {
+    border-radius: var(--Radio_Borde);
+    overflow: hidden;
+    background-color: var(--Gris_Oscuro);
+    position: relative;
+}
+
+.Imagen_Principal {
+    height: 400px;
+    background-color: var(--Blanco);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--Radio_Borde);
+}
+
+.Imagen_Principal img {
+    max-height: 100%;
+    object-fit: contain;
+    transition: transform 0.5s ease;
+}
+
+.Botón_Zoom {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: var(--Blanco);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.Botón_Zoom:hover {
+    background-color: var(--Primario);
+}
+
+.Imagen_Principal {
+    transition: transform 0.3s ease-out;
+    cursor: default;
+}
+
+.Imagen_Principal.En_Zoom {
+    transition: none;
+    cursor: move;
+    will-change: transform;
+}
+
+.Zoom_Contenedor {
+    overflow: hidden;
+    position: relative;
+}
+
+.Miniaturas_Producto {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.Miniatura {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--Radio_Borde);
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all var(--Velocidad_Transición) ease;
+}
+
+.Miniatura.Activo {
+    border-color: var(--Primario);
+}
+
+.Miniatura:hover {
+    transform: translateY(-3px);
+}
+
+.Miniatura img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.Sistema_Calificación {
+    width: 85%;
+    background-color: #444;
+    border-radius: var(--Radio_Borde);
+    padding: 15px;
+    margin: 15px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    text-align: center;
+    display: flex;
+    justify-self: center;
+    margin-top: 50px;
+}
+
+.Calificación_Usuario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.Etiqueta_Calificación {
+    color: var(--Texto_Secundario);
+    font-size: 0.95rem;
+    line-height: 1.4;
+    max-width: 90%;
+}
+
+.Estrellas_Usuario {
+    color: #ffc107;
+    display: flex;
+    gap: 8px;
+}
+
+.Estrella_Usuario {
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+    font-size: 1.4rem;
+}
+
+.Estrella_Usuario:hover {
+    transform: scale(1.2);
+}
+
+@keyframes Pulso {
+    0% {transform: scale(1);}
+    50% {transform: scale(1.3);}
+    100% {transform: scale(1);}
+}
+
+.Estrella_Animada {
+    animation: Pulso 0.5s ease;
+}
+
+/* Información del producto */
+.Información_Detallada {
+    display: flex;
+    flex-direction: column;
+}
+
+.Nombre_Producto {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    color: var(--Blanco);
+}
+
+.Etiquetas_Producto {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.Etiqueta {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.Etiqueta.Nuevo {
+    background-color: var(--Acento);
+    color: var(--Blanco);
+}
+
+.Etiqueta.Oferta {
+    background-color: var(--Secundario);
+    color: var(--Blanco);
+}
+
+.Calificación_Producto {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.Estrellas {
+    color: #ffc107;
+    margin-right: 10px;
+}
+
+.Número_Reseñas {
+    color: var(--Texto_Secundario);
+    font-size: 0.9rem;
+}
+
+.Precio_Producto {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.Precio_Actual {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--Acento);
+    margin-right: 15px;
+}
+
+.Precio_Anterior {
+    font-size: 1.2rem;
+    text-decoration: line-through;
+    color: var(--Texto_Secundario);
+}
+
+.Descuento {
+    background-color: var(--Secundario);
+    color: var(--Blanco);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-left: 15px;
+}
+
+.Descripción_Breve {
+    margin-bottom: 30px;
+    color: var(--Texto_Secundario);
+    line-height: 1.8;
+}
+
+.Opciones_Producto {
+    margin-bottom: 30px;
+}
+
+.Tipo_Opción {
+    margin-bottom: 15px;
+}
+
+.Tipo_Opción h3 {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.Selección_Opciones {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.Opción {
+    padding: 8px 15px;
+    border-radius: var(--Radio_Borde);
+    border: 2px solid var(--Gris_Claro);
+    cursor: pointer;
+    transition: all var(--Velocidad_Transición) ease;
+}
+
+.Opción:hover,
+.Opción.Seleccionado {
+    background-color: var(--Primario);
+    color: var(--Blanco);
+    border-color: var(--Primario);
+}
+
+.Cantidad_Producto {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.Cantidad_Producto h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0;
+    margin-right: 20px;
+}
+
+.Contador {
+    display: flex;
+    align-items: center;
+    background-color: var(--Gris_Claro);
+    border-radius: var(--Radio_Borde);
+    overflow: hidden;
+}
+
+.Botón_Contador {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--Gris_Claro);
+    border: none;
+    color: var(--Texto_Primario);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all var(--Velocidad_Transición) ease;
+}
+
+.Botón_Contador:hover {
+    background-color: var(--Primario);
+}
+
+.Valor_Contador {
+    width: 50px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.Botones_Acción {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.Botón_Agregar {
+    flex: 1;
+}
+
+.Botón_Lista,
+.Botón_Compartir {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--Gris_Claro);
+    border-radius: var(--Radio_Borde);
+    color: var(--Texto_Primario);
+    cursor: pointer;
+    transition: all var(--Velocidad_Transición) ease;
+}
+
+.Botón_Lista:hover,
+.Botón_Compartir:hover {
+    background-color: var(--Acento);
+    transform: translateY(-3px);
+}
+
+.Información_Adicional {
+    padding: 20px;
+    background-color: var(--Gris_Oscuro);
+    border-radius: var(--Radio_Borde);
+}
+
+.Elemento_Información {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.Elemento_Información:last-child {
+    margin-bottom: 0;
+}
+
+.Elemento_Información i {
+    color: var(--Acento);
+    margin-right: 10px;
+    font-size: 1.2rem;
+}
+
+/* Pestañas de información */
+.Pestañas_Información {
+    margin-bottom: 60px;
+}
+
+.Navegación_Pestañas {
+    display: flex;
+    border-bottom: 1px solid var(--Gris_Claro);
+    margin-bottom: 20px;
+}
+
+.Pestaña {
+    padding: 15px 25px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--Velocidad_Transición) ease;
+    position: relative;
+}
+
+.Pestaña.Activo {
+    color: var(--Primario);
+}
+
+.Pestaña.Activo::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--Primario);
+}
+
+.Pestañas_Contenido {
+    background-color: var(--Gris_Oscuro);
+    padding: 30px;
+    border-radius: var(--Radio_Borde);
+}
+
+.Pestaña_Contenido {
+    display: none;
+}
+
+.Pestaña_Contenido.Activo {
+    display: block;
+    animation: Desvanecerse 0.5s ease;
+}
+
+/* Reseñas */
+.Reseñas_Producto {
+    margin-bottom: 60px;
+}
+
+.Contenedor_Reseñas {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 30px;
+}
+
+.Resumen_Reseñas {
+    height: 600px;
+    background-color: var(--Gris_Oscuro);
+    padding: 30px;
+    border-radius: var(--Radio_Borde);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+}
+
+.Calificación_Grande {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: var(--Blanco);
+}
+
+.Estrellas_Grande {
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.Distribución_Estrellas {
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.Barra_Estrellas {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.Nivel_Estrellas {
+    width: 100px;
+    display: flex;
+    align-items: center;
+}
+
+.Barra_Progreso {
+    flex: 1;
+    height: 8px;
+    background-color: var(--Gris_Claro);
+    margin: 0 10px;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.Progreso {
+    height: 100%;
+    background-color: var(--Primario);
+}
+
+.Porcentaje {
+    width: 40px;
+    text-align: right;
+    font-size: 0.9rem;
+    color: var(--Texto_Secundario);
+}
+
+.Listado_Reseñas {
+    background-color: var(--Gris_Oscuro);
+    padding: 30px;
+    border-radius: var(--Radio_Borde);
+}
+
+.Reseña {
+    border-bottom: 1px solid var(--Gris_Claro);
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.Reseña:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.Encabezado_Reseña {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.Información_Usuario {
+    display: flex;
+    align-items: center;
+}
+
+.Avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 15px;
+}
+
+.Avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.Detalles_Usuario h4 {
+    margin-bottom: 0;
+    font-size: 1rem;
+}
+
+.Fecha_Reseña {
+    font-size: 0.9rem;
+    color: var(--Texto_Secundario);
+}
+
+.Estrellas_Reseña {
+    font-size: 0.9rem;
+}
+
+.Contenido_Reseña p {
+    margin-bottom: 10px;
+    line-height: 1.8;
+}
+
+.Imágenes_Reseña {
+    display: flex;
+    gap: 10px;
+}
+
+.Imagen_Reseña {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--Radio_Borde);
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.Imagen_Reseña img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Productos Relacionados */
+.Productos_Relacionados {
+    margin-bottom: 60px;
+}
+
+.Contenedor_Relacionados {
+    position: relative;
+}
+
+.Carrusel_Relacionados {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.Tarjeta_Producto {
+    background-color: var(--Gris_Oscuro);
+    border-radius: var(--Radio_Borde);
+    overflow: hidden;
+    transition: all var(--Velocidad_Transición) ease;
+}
+
+.Tarjeta_Producto:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--Sombra);
+}
+
+.Imagen_Tarjeta {
+    height: 300px;
+    position: relative;
+    overflow: hidden;
+}
+
+.Imagen_Tarjeta img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.Tarjeta_Producto:hover .Imagen_Tarjeta img {
+    transform: scale(1.1);
+}
+
+.Cuerpo_Tarjeta {
+    padding: 15px;
+}
+
+.Título_Producto {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.Información_Producto {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.Precio_Tarjeta {
+    font-weight: 600;
+    color: var(--Acento);
+}
+
+.Estrellas_Tarjeta {
+    font-size: 0.9rem;
+    color: #ffc107;
+}
+
+.Botones_Tarjeta {
+    display: flex;
+    gap: 10px;
+}
+
+.Botón_Tarjeta {
+    flex: 1;
+    height: 40px;
+    font-size: 0.9rem;
+}
+
+/* Productos Comprados Juntos */
+.Comprados_Juntos {
+    margin-bottom: 60px;
+}
+
+.Contenedor_Conjunto {
+    background-color: var(--Gris_Oscuro);
+    padding: 30px;
+    border-radius: var(--Radio_Borde);
+}
+
+.Productos_Paquete {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.Producto_Paquete {
+    width: 150px;
+    text-align: center;
+}
+
+.Imagen_Paquete {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 10px;
+    border-radius: var(--Radio_Borde);
+    overflow: hidden;
+}
+
+.Imagen_Paquete img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.Nombre_Paquete {
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+}
+
+.Precio_Paquete {
+    font-weight: 600;
+    color: var(--Acento);
+}
+
+.Separador_Paquete {
+    width: 30px;
+    text-align: center;
+    font-size: 1.5rem;
+    color: var(--Texto_Secundario);
+    align-self: center;
+}
+
+.Resumen_Paquete {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--Gris_Claro);
+    padding-top: 20px;
+}
+
+.Precio_Total {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--Acento);
+}
+
+/* Animaciones de entrada */
+@keyframes Desvanecerse {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.Galería_Producto,
+.Información_Detallada,
+.Pestañas_Información,
+.Productos_Relacionados,
+.Comprados_Juntos {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.Galería_Producto.Animado,
+.Información_Detallada.Animado,
+.Pestañas_Información.Animado,
+.Productos_Relacionados.Animado,
+.Comprados_Juntos.Animado {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.Contenedor_Conjunto .Productos_Paquete .Producto_Paquete {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* altura mínima = imagen (100px) + gap + 2 líneas de título + precio */
+  min-height: 180px; /* ajústalo (p.ej. 170–200px) para tu diseño */
+}
+
+/* limitar el nombre a 2 líneas */
+.Contenedor_Conjunto .Productos_Paquete .Nombre_Paquete {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-align: center;
+  line-height: 1.2em;
+  margin: 0 0 0.5em;
+}
+
+/* empuja el precio al fondo */
+.Contenedor_Conjunto .Productos_Paquete .Precio_Paquete {
+  margin-top: auto;
+}
+/* Menú Compartir */
+.Menú_Compartir {
+    background-color: var(--Gris_Oscuro);
+    border-radius: var(--Radio_Borde);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    min-width: 150px;
+    z-index: 100;
+    overflow: hidden;
+    animation: Desvanecerse 0.3s ease;
+}
+
+.Opción_Compartir {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: all var(--Velocidad_Transición) ease;
+    display: flex;
+    align-items: center;
+}
+
+.Opción_Compartir:hover {
+    background-color: var(--Primario);
+}
+
+.Opción_Compartir i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+/* Botón lista de deseos activo */
+.Botón_Lista.Activo {
+    background-color: var(--Acento);
+    color: var(--Blanco);
+}
+
+/* Efecto de zoom para las imágenes */
+.Imagen_Principal.Zoom {
+    cursor: zoom-out;
+}
+
+.Imagen_Principal:not(.Zoom) {
+    cursor: zoom-in;
+}
+
+/* Diseño Responsivo */
+
+/* Breakpoints más específicos */
+@media screen and (max-width: 1200px) {
+    .Detalle_Producto {
+        padding: 30px 3%;
+    }
+    
+    .Contenedor_Detalle_Producto {
+        gap: 30px;
+    }
+    
+    .Nombre_Producto {
+        font-size: 2.2rem;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .Carrusel_Relacionados {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .Precio_Actual {
+        font-size: 1.8rem;
+    }
+    
+    .Imagen_Principal {
+        height: 350px;
+    }
+    
+    .Pestañas_Contenido {
+        padding: 25px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .Detalle_Producto {
+        padding: 20px 4%;
+    }
+    
+    .Contenedor_Detalle_Producto {
+        grid-template-columns: 1fr;
+        gap: 25px;
+        margin-bottom: 40px;
+    }
+
+    .Carrusel_Relacionados {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .Contenedor_Reseñas {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .Resumen_Reseñas {
+        height: auto;
+        padding: 20px;
+    }
+
+    .Navegación_Pestañas {
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .Pestaña {
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .Nombre_Producto {
+        font-size: 2rem;
+    }
+    
+    .Precio_Actual {
+        font-size: 1.6rem;
+    }
+    
+    .Imagen_Principal {
+        height: 300px;
+    }
+    
+    .Miniaturas_Producto {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .Miniatura {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .Botones_Acción {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .Botón_Lista,
+    .Botón_Compartir {
+        width: 100%;
+        height: 45px;
+    }
+    
+    .Cantidad_Producto {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .Cantidad_Producto h3 {
+        margin-right: 0;
+    }
+    
+    .Selección_Opciones {
+        justify-content: center;
+    }
+    
+    .Opción {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+    }
+    
+    .Calificación_Grande {
+        font-size: 3rem;
+    }
+    
+    .Distribución_Estrellas {
+        margin: 15px 0;
+    }
+    
+    .Barra_Estrellas {
+        margin-bottom: 12px;
+    }
+    
+    .Nivel_Estrellas {
+        width: 80px;
+    }
+    
+    .Productos_Paquete {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .Separador_Paquete {
+        transform: rotate(90deg);
+        font-size: 1.2rem;
+    }
+    
+    .Resumen_Paquete {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .Pestañas_Contenido {
+        padding: 20px;
+    }
+    
+    .Listado_Reseñas {
+        padding: 20px;
+    }
+    
+    .Encabezado_Reseña {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .Información_Usuario {
+        width: 100%;
+    }
+    
+    .Estrellas_Reseña {
+        align-self: flex-start;
+    }
+    
+    .Imágenes_Reseña {
+        flex-wrap: wrap;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .Detalle_Producto {
+        padding: 15px 3%;
+    }
+    
+    .Contenedor_Detalle_Producto {
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+    
+    .Carrusel_Relacionados {
+        grid-template-columns: 1fr;
+    }
+
+    .Productos_Paquete {
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .Resumen_Paquete {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .Botones_Acción {
+        flex-direction: column;
+    }
+
+    .Botón_Agregar {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .Nombre_Producto {
+        font-size: 1.8rem;
+        line-height: 1.2;
+    }
+    
+    .Precio_Actual {
+        font-size: 1.4rem;
+    }
+    
+    .Precio_Anterior {
+        font-size: 1rem;
+    }
+    
+    .Descuento {
+        font-size: 0.8rem;
+        padding: 4px 8px;
+    }
+    
+    .Imagen_Principal {
+        height: 250px;
+    }
+    
+    .Miniaturas_Producto {
+        gap: 8px;
+    }
+    
+    .Miniatura {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .Etiquetas_Producto {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .Etiqueta {
+        font-size: 0.7rem;
+        padding: 4px 10px;
+    }
+    
+    .Navegación_Pestañas {
+        justify-content: center;
+    }
+    
+    .Pestaña {
+        padding: 10px 15px;
+        font-size: 0.85rem;
+        text-align: center;
+        min-width: 80px;
+    }
+    
+    .Pestañas_Contenido {
+        padding: 15px;
+    }
+    
+    .Calificación_Grande {
+        font-size: 2.5rem;
+    }
+    
+    .Estrellas_Grande {
+        font-size: 1.2rem;
+    }
+    
+    .Resumen_Reseñas {
+        padding: 15px;
+    }
+    
+    .Listado_Reseñas {
+        padding: 15px;
+    }
+    
+    .Avatar {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .Detalles_Usuario h4 {
+        font-size: 0.9rem;
+    }
+    
+    .Fecha_Reseña {
+        font-size: 0.8rem;
+    }
+    
+    .Imagen_Reseña {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .Contador {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .Botón_Contador {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+    
+    .Valor_Contador {
+        width: 60px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+    
+    .Información_Adicional {
+        padding: 15px;
+    }
+    
+    .Elemento_Información {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        margin-bottom: 15px;
+    }
+    
+    .Elemento_Información i {
+        margin-right: 0;
+        margin-bottom: 5px;
+    }
+    
+    .Tarjeta_Producto {
+        max-width: 300px;
+        margin: 0 auto;
+    }
+    
+    .Imagen_Tarjeta {
+        height: 200px;
+    }
+    
+    .Cuerpo_Tarjeta {
+        padding: 12px;
+    }
+    
+    .Título_Producto {
+        font-size: 1rem;
+    }
+    
+    .Precio_Tarjeta {
+        font-size: 0.9rem;
+    }
+    
+    .Botón_Tarjeta {
+        height: 35px;
+        font-size: 0.8rem;
+    }
+    
+    .Producto_Paquete {
+        width: 120px;
+    }
+    
+    .Imagen_Paquete {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .Nombre_Paquete {
+        font-size: 0.8rem;
+    }
+    
+    .Precio_Paquete {
+        font-size: 0.9rem;
+    }
+    
+    .Precio_Total {
+        font-size: 1.2rem;
+    }
+    
+    .Sistema_Calificación {
+        width: 95%;
+        padding: 12px;
+        margin: 20px auto;
+    }
+    
+    .Etiqueta_Calificación {
+        font-size: 0.9rem;
+    }
+    
+    .Estrella_Usuario {
+        font-size: 1.2rem;
+    }
+    
+    .Menú_Compartir {
+        min-width: 120px;
+    }
+    
+    .Opción_Compartir {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Breakpoint adicional para pantallas muy pequeñas */
+@media screen and (max-width: 400px) {
+    .Detalle_Producto {
+        padding: 10px 2%;
+    }
+    
+    .Nombre_Producto {
+        font-size: 1.6rem;
+    }
+    
+    .Precio_Actual {
+        font-size: 1.2rem;
+    }
+    
+    .Imagen_Principal {
+        height: 200px;
+    }
+    
+    .Miniatura {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .Pestaña {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .Pestañas_Contenido {
+        padding: 12px;
+    }
+    
+    .Calificación_Grande {
+        font-size: 2rem;
+    }
+    
+    .Tarjeta_Producto {
+        max-width: 250px;
+    }
+    
+    .Imagen_Tarjeta {
+        height: 150px;
+    }
+}
+
+/* Orientación landscape en móviles */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+    .Imagen_Principal {
+        height: 200px;
+    }
+    
+    .Resumen_Reseñas {
+        height: auto;
+        padding: 15px;
+    }
+    
+    .Calificación_Grande {
+        font-size: 2rem;
+    }
+    
+    .Distribución_Estrellas {
+        margin: 10px 0;
+    }
+}
+
+/* Mejoras para accesibilidad en pantallas táctiles */
+@media (hover: none) and (pointer: coarse) {
+    .Opción {
+        padding: 12px 18px;
+        font-size: 1rem;
+    }
+    
+    .Botón_Contador {
+        width: 50px;
+        height: 50px;
+        font-size: 1.3rem;
+    }
+    
+    .Valor_Contador {
+        width: 60px;
+        height: 50px;
+    }
+    
+    .Miniatura {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .Estrella_Usuario {
+        font-size: 1.5rem;
+    }
+    
+    .Pestaña {
+        padding: 15px 20px;
+        font-size: 1rem;
+    }
+}

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Pedido - Licorería</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/confirmación.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <nav class="Navbar">
+            <div class="Menú_Oculto" id="Menú_Oculto">
+                <div class="Barra"></div>
+                <div class="Barra"></div>
+                <div class="Barra"></div>
+            </div>
+            <ul class="Enlaces_Navegación Izquierda">
+                <li><a href="/html/index.html">Inicio</a></li>
+                <li><a href="/html/productos.html">Productos</a></li>
+                <li><a href="/html/index.html#Promociones">Promociones</a></li>
+            </ul>
+            <div class="Contenedor_Logo">
+                <img src="https://res.cloudinary.com/dq4yyycio/image/upload/v1745784729/Logo_ixx6lt.png" alt="La Última Ronda" class="Logo">
+            </div>
+            <ul class="Enlaces_Navegación Derecha">
+                <li><a href="/html/index.html#Delivery">Delivery</a></li>
+                <li><a href="/html/index.html#Contacto">Contacto</a></li>
+                <li class="Ícono_Carrito"><a href="/html/carrito.html"><i class="fas fa-shopping-cart"></i> <span
+                            id="Contador_Carrito">0</span></a></li>
+                <li class="Menu_Usuario">
+                    <div class="Icono_Usuario" id="iconoUsuario">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="Dropdown_Usuario" id="dropdownUsuario">
+                        <div class="Usuario_Info">
+                            <div class="Usuario_Nombre">Susan Aguilar</div>
+                            <div class="Usuario_Email">susan.aguilar@espoch.edu.ec</div>
+                        </div>
+                        <ul class="Menu_Items">
+                            <li class="Menu_Item">
+                                <a href="/html/carrito.html#Contenedor_Confirmación">
+                                    <i class="fas fa-box"></i>
+                                    Mis Pedidos
+                                </a>
+                            </li>
+                            <li class="Menu_Item logout">
+                                <a href="#" id="cerrarSesion">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    Cerrar Sesión
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Migas de Pan -->
+    <section class="Migas_Pan">
+        <div class="Contenedor_Migas_Pan">
+            <a href="/html/index.html">Inicio</a>
+            <span>/</span>
+            <a href="/html/productos.html">Productos</a>
+            <span>/</span>
+            <a href="/html/carrito.html">Carrito</a>
+            <span>/</span>
+            <a href="/html/checkout.html">Checkout</a>
+            <span>/</span>
+            <span class="Actual">Confirmación</span>
+        </div>
+    </section>
+
+    <main class="Contenedor_Confirmación">
+        <section class="Sección_Confirmación">
+            <div class="Encabezado_Sección">
+                <h2>¡Pedido Confirmado!</h2>
+                <p>Gracias por su compra. Hemos recibido su pedido correctamente.</p>
+            </div>
+
+            <div class="Contenedor_Detalles">
+                <section class="Sección_Pedido">
+                    <div class="Encabezado_Confirmación">
+                        <i class="fas fa-receipt"></i>
+                        <h2>Detalles del Pedido</h2>
+                        <p></p>
+                    </div>
+
+                    <div class="Información_Pedido">
+                        <div class="Información_Elemento">
+                            <span class="Etiqueta_Información">Número de Pedido:</span>
+                            <span id="Número_Pedido" class="Valor_Información"></span>
+                        </div>
+                        <div class="Información_Elemento">
+                            <span class="Etiqueta_Información">Fecha de Pedido:</span>
+                            <span id="Fecha_Pedido" class="Valor_Información"></span>
+                        </div>
+                        <div class="Información_Elemento">
+                            <span class="Etiqueta_Información">Método de Pago:</span>
+                            <span id="Método_Pago" class="Valor_Información"></span>
+                        </div>
+                        <div class="Información_Elemento">
+                            <span class="Etiqueta_Información">Estado:</span>
+                            <span class="Estado_Texto Pagado">Pagado</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="Sección_Productos">
+                    <div class="Encabezado_Confirmación">
+                        <i class="fas fa-box-open"></i>
+                        <h2>Resumen de Productos</h2>
+                        <p></p>
+                    </div>
+                    <div class="Contenedor_Productos" id="Lista_Productos">
+                        <!-- Los productos se insertarán aquí desde JS -->
+                    </div>
+
+                    <div class="Totales_Pedido">
+                        <div class="Línea_Total">
+                            <span>Subtotal:</span>
+                            <span id="Valor_Subtotal"></span>
+                        </div>
+                        <div class="Línea_Total" id="Contenedor_Descuento">
+                            <span>Descuento:</span>
+                            <span id="Valor_Descuento"></span>
+                        </div>
+                        <div class="Línea_Total">
+                            <span>Envío:</span>
+                            <span id="Valor_Envío"></span>
+                        </div>
+                        <div class="Línea_Total Total_Principal">
+                            <span>Total:</span>
+                            <span id="Valor_Total"></span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="Sección_Envío">
+                    <div class="Encabezado_Confirmación">
+                        <i class="fas fa-truck"></i>
+                        <h2>Información de Envío</h2>
+                        <p></p>
+                    </div>
+                    <div class="Información_Envío" id="Información_Envío">
+                        <!-- La información se insertará aquí desde JS -->
+                    </div>
+                </section>
+            </div>
+
+            <div class="Acciones_Confirmación">
+                <a href="#" class="Botones Botón_Secundario" id="Descargar_Factura">
+                    <i class="fas fa-file-invoice"></i> Descargar Factura
+                </a>
+                <a href="/html/index.html" class="Botones Botón_Primario">
+                    <i class="fas fa-home"></i> Volver al Inicio
+                </a>
+            </div>
+        </section>
+
+        <section class="Sección_Historial">
+            <div class="Encabezado_Sección">
+                <h2>Historial de Compras</h2>
+                <p>Revise sus compras anteriores</p>
+            </div>
+
+            <div class="Tabla_Historial">
+                <div class="Encabezado_Tabla">
+                    <div class="Celda_Tabla">N° Pedido</div>
+                    <div class="Celda_Tabla">Fecha</div>
+                    <div class="Celda_Tabla">Total</div>
+                    <div class="Celda_Tabla">Estado</div>
+                    <div class="Celda_Tabla">Facturas</div>
+                </div>
+                <div class="Cuerpo_Tabla" id="Tabla_Historial">
+                    <!-- El historial se cargará dinámicamente -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div class="Modal_Factura" id="Modal_Factura">
+        <div class="Contenido_Modal_Factura">
+            <div class="Encabezado_Modal_Factura">
+                <h2>Factura</h2>
+                <span class="Cerrar_Modal_Factura">&times;</span>
+            </div>
+            <div class="Cuerpo_Modal_Factura" id="Contenido_Factura">
+                <div class="Encabezado_Factura">
+                    <div class="Logo_Factura">
+                        <h2>La Última Ronda - Licorería</h2>
+                        <p>Av. Canónigo Ramos & Luis Moscozo</p>
+                        <p>RUC: 0604013366</p>
+                    </div>
+                    <div class="Información_Factura">
+                        <h3>FACTURA</h3>
+                        <p><strong>N°:</strong> <span id="Número_Factura">Cargando...</span></p>
+                        <p><strong>Fecha:</strong> <span id="Fecha_Factura">Cargando...</span></p>
+                    </div>
+                </div>
+
+                <div class="Factura_Cliente">
+                    <h4>Cliente</h4>
+                    <p><strong>Nombre:</strong> <span id="Nombre_Cliente">Cargando...</span></p>
+                    <p><strong>Dirección:</strong> <span id="Dirección_Cliente">Cargando...</span></p>
+                    <p><strong>Teléfono:</strong> <span id="Teléfono_Cliente">Cargando...</span></p>
+                    <p><strong>Correo_Electrónico:</strong> <span id="Correo_Electrónico_Cliente">Cargando...</span></p>
+                </div>
+
+                <div class="Factura_Productos">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Precio Unit.</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody id="Factura_Artículos">
+                            <!-- Artículos cargados dinámicamente -->
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="Texto_Derecha">Subtotal:</td>
+                                <td id="Subtotal_Factura">$0.00</td>
+                            </tr>
+                            <tr id="Fila_Descuento_Factura" style="display: none;">
+                                <td colspan="3" class="Texto_Derecha">Descuento:</td>
+                                <td id="Descuento_Factura">-$0.00</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="Texto_Derecha">IVA (15%):</td>
+                                <td id="IVA_Factura">$0.00</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="Texto_Derecha">Envío:</td>
+                                <td id="Envío_Factura">$0.00</td>
+                            </tr>
+                            <tr class="Fila_Total">
+                                <td colspan="3" class="Texto_Derecha">TOTAL:</td>
+                                <td id="Total_Factura">$0.00</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="Pie_Factura">
+                    <p>Gracias por su compra</p>
+                    <p>Para cualquier consulta, contáctenos: laultimaronda1@gmail.com</p>
+                </div>
+            </div>
+            <div class="Pie_Modal_Factura">
+                <button class="Botones Botón_Primario" id="Imprimir_Factura">
+                    <i class="fas fa-print"></i> Imprimir o Descargar PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="Contenedor_Footer">
+            <div class="Logo_Footer">
+                <img src="https://res.cloudinary.com/dq4yyycio/image/upload/v1745784729/Logo_ixx6lt.png" alt="La Última Ronda" class="Logo">
+                <p>Su destino para los mejores licores, granizados y más.</p>
+            </div>
+            <div class="Sección_Footer">
+                <h3>Enlaces Rápidos</h3>
+                <ul>
+                    <li><a href="/html/index.html">Inicio</a></li>
+                    <li><a href="/html/productos.html">Productos</a></li>
+                    <li><a href="/html/index.html#Promociones">Promociones</a></li>
+                    <li><a href="/html/carrito.html">Carrito de Compras</a></li>
+                    <li><a href="/html/index.html#Contacto">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="Sección_Footer">
+                <h3>Categorías</h3>
+                <ul>
+                    <li><a href="/html/productos.html?Filtro=Licores" class="Enlace_Filtro">Licores</a></li>
+                    <li><a href="/html/productos.html?Filtro=Granizados" class="Enlace_Filtro">Granizados</a>
+                    </li>
+                    <li><a href="/html/productos.html?Filtro=Postres">Postres</a></li>
+                    <li><a href="/html/productos.html?Filtro=Packs">Packs y Regalos</a></li>
+
+                </ul>
+            </div>
+            <div class="Sección_Footer">
+                <h3>Contacto</h3>
+                <ul>
+                    <li><a href="tel:+593984796539">+593 98 479 6539</a></li>
+                    <li><a href="laultimaronda1@gmail.com">laultimaronda1@gmail.com</a></li>
+                    <li class="Redes_Sociales">
+                        <a href="https://www.instagram.com/laultimarondar3?igsh=MXc2d2xtZDI3YmY5aQ=="
+                            class="Ícono_Redes_Sociales"><i class="fab fa-instagram"></i></a>
+                            <a href="https://www.tiktok.com/@ftoxicr3?_t=ZM-8vVvtySlFiP&_r=1"
+                            class="Ícono_Redes_Sociales"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://wa.me/message/3A6H5X5BCRACL1" class="Ícono_Redes_Sociales"><i
+                                class="fab fa-whatsapp"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="Footer_Inferior">
+            <p>&copy; 2025 La Última Ronda. Todos los derechos reservados.</p>
+            <p class="Restricción_Edad">Prohibida la venta a menores de 18 años. Beber con moderación.</p>
+        </div>
+    </footer>
+
+    <script src="/js/global.js"></script>
+    <script src="/js/confirmación.js"></script>
+</body>
+
+</html>

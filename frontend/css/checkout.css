@@ -1,0 +1,854 @@
+.Encabezado_Checkout {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 2rem;
+}
+
+.Encabezado_Checkout h1 {
+    font-size: 2.5rem;
+}
+
+.Encabezado_Checkout p {
+    font-size: 1.2rem;
+}
+
+.Contenido_Checkout {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+/* Estilos de formulario */
+.Sección_Formulario {
+    background-color: var(--Gris_Claro);
+    border-radius: var(--Radio_Borde);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: var(--Sombra);
+}
+
+.Sección_Formulario h3 {
+    color: var(--Blanco);
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+}
+
+.Sección_Formulario h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(to right, var(--Primario), var(--Secundario));
+}
+
+.Sección_Formulario h4 {
+    color: var(--Texto_Primario);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.Cuadrícula_Formulario {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.Cuadrícula_Formulario_2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.Grupo_Formulario {
+    margin-bottom: 1.2rem;
+}
+
+.Grupo_Formulario label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--Texto_Secundario);
+}
+
+.Grupo_Formulario input,
+.Grupo_Formulario select,
+.Grupo_Formulario textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border-radius: var(--Radio_Borde);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: var(--Gris_Oscuro);
+    color: var(--Texto_Primario);
+    font-family: 'Poppins', sans-serif;
+    transition: all var(--Velocidad_Transición) ease;
+}
+
+.Grupo_Formulario input:focus,
+.Grupo_Formulario select:focus,
+.Grupo_Formulario textarea:focus {
+    outline: none;
+    border-color: var(--Primario);
+    box-shadow: 0 0 0 2px rgba(255, 90, 0, 0.25);
+}
+
+.Grupo_Formulario textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.Grupo_Formulario input::placeholder,
+.Grupo_Formulario textarea::placeholder {
+    color: var(--Texto_Secundario);
+    opacity: 0.7;
+}
+
+/* Opciones de pago */
+.Cuadrícula_Opciones_Pago {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.Tarjeta_Opción_Pago {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: var(--Radio_Borde);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--Velocidad_Transición) ease;
+    height: 180px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.Tarjeta_Opción_Pago:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--Sombra);
+}
+
+.Tarjeta_Opción_Pago.Seleccionado {
+    border: 2px solid var(--Primario);
+    box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
+    position: relative;
+}
+
+.Tarjeta_Opción_Pago.Seleccionado::after {
+    content: '✓';
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: var(--Primario);
+    color: var(--Blanco);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Opción_Pago_Logo {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: var(--Radio_Borde);
+    object-fit: contain;
+    overflow: hidden;
+}
+
+/* Sección de detalles del método seleccionado */
+.Detalles_Pago {
+    background-color: var(--Gris_Oscuro);
+    border-radius: var(--Radio_Borde);
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.Detalles_Método {
+    display: none;
+}
+
+.Detalles_Método.Activo {
+    display: block;
+}
+
+.Detalles_Método h4 {
+    color: var(--Texto_Primario);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    border-bottom: 1px solid var(--Primario);
+    padding-bottom: 0.5rem;
+}
+
+.Instrucciones_Pago ol {
+    padding-left: 1.5rem;
+    margin: 1rem 0;
+}
+
+.Instrucciones_Pago ol li {
+    margin-bottom: 0.5rem;
+}
+
+.Datos_Transferencia {
+    background-color: rgba(0, 0, 0, 0.03);
+    padding: 1rem;
+    border-radius: var(--Radio_Borde);
+    margin: 1rem 0;
+}
+
+.Datos_Transferencia p {
+    margin-bottom: 0.5rem;
+}
+
+.Nota {
+    font-size: 0.9rem;
+    color: var(--Texto_Secundario);
+    font-style: italic;
+    margin-top: 1rem;
+}
+
+/* Botones de acción */
+.Acciones_Checkout {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+
+.Botón_Primario {
+    padding: 0.8rem 1.5rem;
+    border-radius: var(--Radio_Borde);
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all var(--Velocidad_Transición) ease;
+}
+
+.Botón_Secundario {
+    padding: 0.8rem 1.5rem;
+    border-radius: var(--Radio_Borde);
+    font-weight: 600;
+    border: 1px solid var(--Texto_Secundario);
+    cursor: pointer;
+    transition: all var(--Velocidad_Transición) ease;
+}
+
+/* Resumen del pedido */
+.Resumen_Pedido {
+    position: sticky;
+    top: 2rem;
+}
+
+.Productos_Carrito {
+    margin-bottom: 1.5rem;
+}
+
+.Producto_Resumen {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.Producto_Resumen:last-child {
+    border-bottom: none;
+}
+
+.Producto_Resumen_Imagen {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--Radio_Borde);
+    overflow: hidden;
+    margin-right: 1rem;
+}
+
+.Producto_Resumen_Imagen img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.Producto_Resumen_Información {
+    flex: 1;
+}
+
+.Producto_Resumen_Nombre h4 {
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+}
+
+.Producto_Resumen_Detalles {
+    font-size: 0.85rem;
+    color: var(--Texto_Secundario);
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+    flex-direction: column;
+}
+
+.Producto_Resumen_Detalles h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--Blanco);
+}
+
+.Producto_Resumen_Información {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.Producto_Resumen_Cantidad {
+    font-size: 0.85rem;
+    color: var(--Texto_Secundario);
+}
+
+.Producto_Resumen_Precio {
+    font-weight: 600;
+    color: var(--Primario);
+}
+
+.Totales_Carrito {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem;
+}
+
+.Línea_Total {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.Total_Principal {
+    margin-top: 1rem;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--Blanco);
+}
+
+#Total_Resumen {
+    color: var(--Primario);
+}
+
+/* Modal de confirmación */
+.Modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.Modal.visible {
+    display: flex;
+}
+
+.Contenido_Modal {
+    background-color: var(--Gris_Oscuro);
+    border-radius: var(--Radio_Borde);
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: Entrada_Modal 0.3s ease;
+}
+
+@keyframes Entrada_Modal {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.Encabezado_Modal {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.Encabezado_Modal h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.Cerrar_Modal {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--Texto_Secundario);
+    transition: all var(--Velocidad_Transición) ease;
+}
+
+.Cerrar_Modal:hover {
+    color: var(--Primario);
+}
+
+.Cuerpo_Modal {
+    padding: 2rem;
+}
+
+/* Estilos para el contenedor de QR */
+.Contenedor_QR {
+    text-align: center;
+    display: block;
+}
+
+.Código_QR {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 1.5rem;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.Código_QR img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.Instrucciones_QR {
+    margin-bottom: 1.5rem;
+}
+
+.Instrucciones_QR p {
+    margin-bottom: 0.5rem;
+    color: var(--Texto_Secundario);
+    text-align: left;
+}
+
+.Nota_QR {
+    margin-top: 1rem;
+    font-style: italic;
+    color: var(--Primario) !important;
+}
+
+/* Estilos para el estado pendiente */
+.Estado_Pago {
+    display: none;
+    text-align: center;
+}
+
+.Estado_Pago.Activo {
+    display: block;
+}
+
+.Ícono_Pendiente {
+    width: 70px;
+    height: 70px;
+    background-color: #ff9800;
+    color: white;
+    font-size: 2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+}
+
+#Estado_Pendiente h3 {
+    margin-bottom: 1rem;
+}
+
+#Estado_Pendiente p {
+    margin-bottom: 1rem;
+    color: var(--Texto_Secundario);
+}
+
+#Estado_Pendiente #Botón_Finalizar {
+    margin-top: 1.5rem;
+}
+
+/* Diseño Responsivo */
+
+/* Tablets grandes y pantallas medianas */
+@media (max-width: 1024px) {
+    .Contenido_Checkout {
+        grid-template-columns: 1fr 350px;
+        gap: 1.5rem;
+        max-width: 100%;
+        padding: 0 1.5rem;
+    }
+    
+    .Encabezado_Checkout h1 {
+        font-size: 2.2rem;
+    }
+    
+    .Cuadrícula_Opciones_Pago {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+    
+    .Tarjeta_Opción_Pago {
+        height: 160px;
+    }
+}
+
+/* Tablets */
+@media (max-width: 992px) {
+    .Contenido_Checkout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 0 1rem;
+    }
+    
+    .Resumen_Pedido {
+        position: static;
+        order: -1;
+    }
+    
+    .Encabezado_Checkout {
+        margin-top: 20px;
+    }
+    
+    .Encabezado_Checkout h1 {
+        font-size: 2rem;
+    }
+    
+    .Encabezado_Checkout p {
+        font-size: 1.1rem;
+    }
+    
+    .Cuadrícula_Opciones_Pago {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.8rem;
+    }
+    
+    .Tarjeta_Opción_Pago {
+        height: 140px;
+    }
+}
+
+/* Tablets pequeños */
+@media (max-width: 768px) {
+    .Contenido_Checkout {
+        margin: 1rem auto;
+        padding: 0 0.8rem;
+    }
+    
+    .Sección_Formulario {
+        padding: 1.2rem;
+        margin-bottom: 1.2rem;
+    }
+    
+    .Sección_Formulario h3 {
+        font-size: 1.2rem;
+    }
+    
+    .Cuadrícula_Formulario_2 {
+        grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+    
+    .Cuadrícula_Opciones_Pago {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.8rem;
+    }
+    
+    .Tarjeta_Opción_Pago {
+        height: 120px;
+    }
+    
+    .Acciones_Checkout {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .Acciones_Checkout button {
+        width: 100%;
+        padding: 1rem;
+    }
+    
+    .Botón_Secundario {
+        order: 2;
+    }
+    
+    .Botón_Primario {
+        order: 1;
+    }
+    
+    .Contenido_Modal {
+        margin: 1rem;
+        max-width: calc(100% - 2rem);
+    }
+    
+    .Encabezado_Modal {
+        padding: 1.2rem;
+    }
+    
+    .Cuerpo_Modal {
+        padding: 1.5rem;
+    }
+    
+    .Código_QR {
+        width: 180px;
+        height: 180px;
+    }
+}
+
+/* Móviles grandes */
+@media (max-width: 576px) {
+    .Contenido_Checkout {
+        padding: 0 0.5rem;
+    }
+    
+    .Encabezado_Checkout {
+        margin-top: 15px;
+        margin-bottom: 1.5rem;
+    }
+    
+    .Encabezado_Checkout h1 {
+        font-size: 1.8rem;
+    }
+    
+    .Encabezado_Checkout p {
+        font-size: 1rem;
+    }
+    
+    .Sección_Formulario {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .Sección_Formulario h3 {
+        font-size: 1.1rem;
+    }
+    
+    .Grupo_Formulario {
+        margin-bottom: 1rem;
+    }
+    
+    .Grupo_Formulario input,
+    .Grupo_Formulario select,
+    .Grupo_Formulario textarea {
+        padding: 0.7rem;
+        font-size: 0.9rem;
+    }
+    
+    .Cuadrícula_Opciones_Pago {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.6rem;
+    }
+    
+    .Tarjeta_Opción_Pago {
+        height: 100px;
+    }
+    
+    .Producto_Resumen {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .Producto_Resumen_Imagen {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .Producto_Resumen_Información {
+        width: 100%;
+    }
+    
+    .Producto_Resumen_Detalles {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .Línea_Total {
+        font-size: 0.9rem;
+    }
+    
+    .Total_Principal {
+        font-size: 1.1rem;
+    }
+    
+    .Código_QR {
+        width: 160px;
+        height: 160px;
+    }
+    
+    .Detalles_Pago {
+        padding: 1rem;
+    }
+    
+    .Datos_Transferencia {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Móviles pequeños */
+@media (max-width: 480px) {
+    .Encabezado_Checkout h1 {
+        font-size: 1.6rem;
+    }
+    
+    .Encabezado_Checkout p {
+        font-size: 0.95rem;
+    }
+    
+    .Sección_Formulario {
+        padding: 0.8rem;
+    }
+    
+    .Grupo_Formulario input,
+    .Grupo_Formulario select,
+    .Grupo_Formulario textarea {
+        padding: 0.6rem;
+        font-size: 0.85rem;
+    }
+    
+    .Cuadrícula_Opciones_Pago {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    
+    .Tarjeta_Opción_Pago {
+        height: 80px;
+    }
+    
+    .Código_QR {
+        width: 140px;
+        height: 140px;
+    }
+    
+    .Contenido_Modal {
+        margin: 0.5rem;
+        max-width: calc(100% - 1rem);
+    }
+    
+    .Encabezado_Modal {
+        padding: 1rem;
+    }
+    
+    .Cuerpo_Modal {
+        padding: 1rem;
+    }
+    
+    .Ícono_Pendiente {
+        width: 60px;
+        height: 60px;
+        font-size: 1.8rem;
+    }
+}
+
+/* Móviles muy pequeños */
+@media (max-width: 360px) {
+    .Contenido_Checkout {
+        padding: 0 0.3rem;
+    }
+    
+    .Encabezado_Checkout h1 {
+        font-size: 1.4rem;
+    }
+    
+    .Sección_Formulario {
+        padding: 0.6rem;
+    }
+    
+    .Grupo_Formulario input,
+    .Grupo_Formulario select,
+    .Grupo_Formulario textarea {
+        padding: 0.5rem;
+        font-size: 0.8rem;
+    }
+    
+    .Tarjeta_Opción_Pago {
+        height: 70px;
+    }
+    
+    .Código_QR {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .Producto_Resumen_Imagen {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .Línea_Total {
+        font-size: 0.8rem;
+    }
+    
+    .Total_Principal {
+        font-size: 1rem;
+    }
+}
+
+/* Orientación horizontal en móviles */
+@media (max-width: 768px) and (orientation: landscape) {
+    .Encabezado_Checkout {
+        margin-top: 10px;
+        margin-bottom: 1rem;
+    }
+    
+    .Encabezado_Checkout h1 {
+        font-size: 1.8rem;
+    }
+    
+    .Cuadrícula_Opciones_Pago {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .Tarjeta_Opción_Pago {
+        height: 90px;
+    }
+    
+    .Código_QR {
+        width: 150px;
+        height: 150px;
+    }
+}
+
+/* Ajustes adicionales para mejor UX */
+@media (max-width: 768px) {
+    /* Mejorar el toque en móviles */
+    .Grupo_Formulario input,
+    .Grupo_Formulario select,
+    .Grupo_Formulario textarea {
+        min-height: 44px; /* Tamaño mínimo recomendado para touch */
+    }
+    
+    .Tarjeta_Opción_Pago {
+        min-height: 44px;
+    }
+    
+    .Botón_Primario,
+    .Botón_Secundario {
+        min-height: 44px;
+    }
+    
+    /* Espaciado mejorado */
+    .Grupo_Formulario label {
+        font-size: 0.9rem;
+    }
+    
+    .Instrucciones_Pago ol {
+        padding-left: 1.2rem;
+    }
+    
+    .Nota {
+        font-size: 0.8rem;
+    }
+}

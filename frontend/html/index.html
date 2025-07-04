@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Última Ronda - Licorería</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <nav class="Navbar">
+            <div class="Menú_Oculto" id="Menú_Oculto">
+                <div class="Barra"></div>
+                <div class="Barra"></div>
+                <div class="Barra"></div>
+            </div>
+            <ul class="Enlaces_Navegación Izquierda">
+                <li><a href="#" class="Activo">Inicio</a></li>
+                <li><a href="#Promociones">Promociones</a></li>
+                <li><a href="/html/productos.html">Productos</a></li>
+            </ul>
+            <div class="Contenedor_Logo">
+                <img src="https://res.cloudinary.com/dq4yyycio/image/upload/v1745784729/Logo_ixx6lt.png"
+                    alt="La Última Ronda" class="Logo">
+            </div>
+            <ul class="Enlaces_Navegación Derecha">
+                <li><a href="/html/index.html#Delivery">Delivery</a></li>
+                <li><a href="/html/index.html#Contacto">Contacto</a></li>
+                <li class="Ícono_Carrito"><a href="/html/carrito.html"><i class="fas fa-shopping-cart"></i> <span
+                            id="Contador_Carrito">0</span></a></li>
+                <li class="Menu_Usuario">
+                    <div class="Icono_Usuario" id="iconoUsuario">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="Dropdown_Usuario" id="dropdownUsuario">
+                        <div class="Usuario_Info">
+                            <div class="Usuario_Nombre">Susan Aguilar</div>
+                            <div class="Usuario_Email">susan.aguilar@espoch.edu.ec</div>
+                        </div>
+                        <ul class="Menu_Items">
+                            <li class="Menu_Item">
+                                <a href="/html/carrito.html#Contenedor_Confirmación">
+                                    <i class="fas fa-box"></i>
+                                    Mis Pedidos
+                                </a>
+                            </li>
+                            <li class="Menu_Item logout">
+                                <a href="#" id="cerrarSesion">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    Cerrar Sesión
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="Carrusel">
+        <div class="Contenedor_Carrusel">
+            <!-- Las imágenes del carrusel se cargarán dinámicamente aquí -->
+            <div class="Imágenes_Carrusel">
+                <!-- Contenido de imágenes cargado dinámicamente -->
+            </div>
+
+            <div class="Controles_Carrusel">
+                <button class="Control_Carrusel Anterior">&lt;</button>
+                <div class="Indicadores_Carrusel">
+                    <!-- Indicadores cargados dinámicamente -->
+                </div>
+                <button class="Control_Carrusel Siguiente">&gt;</button>
+            </div>
+        </div>
+    </section>
+
+    <!--
+    <section class="Destacados" id="Destacados">
+    <div class="Encabezado_Sección">
+        <h2>Productos Destacados</h2>
+        <p>Descubra nuestras mejores opciones</p>
+    </div>
+    <div class="Cuadrícula_Productos">
+    </div>
+    <div class="Ver_Más">
+        <a href="/html/productos.html" class="Botones Botón_Ver_Más Botón_Link_Productos">Ver Todos los Productos</a>
+    </div>
+    </section>
+    -->
+
+    <section class="Destacados" id="Destacados">
+        <div class="Encabezado_Sección">
+            <h2>Productos Destacados</h2>
+            <p>Descubra nuestras mejores opciones</p>
+        </div>
+
+        <div class="Contenedor_Video">
+            <video class="Video_Principal" id="videoPrincipal" muted loop>
+                <source
+                    src="https://res.cloudinary.com/dq4yyycio/video/upload/v1748312308/Productos_Destacados_uxdsqn.mp4"
+                    type="video/mp4">
+                <source
+                    src="https://res.cloudinary.com/dq4yyycio/video/upload/v1748312308/Productos_Destacados_uxdsqn.mp4"
+                    type="video/webm">
+                Su navegador no soporta el elemento de video.
+            </video>
+
+            <div class="Controles_Video">
+                <button class="Control_Video" id="btnPlay">▶</button>
+                <button class="Control_Video" id="btnMute">🔊</button>
+            </div>
+
+            <div class="Superposición_Video">
+                <h3 class="Título_Video">Calidad y Excelencia</h3>
+                <p class="Descripción_Video">
+                    Conozca más sobre nuestros productos y servicios
+                </p>
+                <div class="Botones_Video">
+                    <a href="/html/productos.html" class="Botón_Video Botón_Primario">Ver Productos</a>
+                    <a href="/html/contacto.html" class="Botón_Video Botón_Secundario">Contactanos</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="Categorías" class="Categorías">
+        <div class="Encabezado_Sección">
+            <h2>Nuestras Categorías</h2>
+            <p>Explore nuestra variedad de productos</p>
+        </div>
+        <div class="Contenedor_Categorías">
+            <!-- Aquí irán las tarjetas inyectadas por JS -->
+        </div>
+
+        <!-- Plantilla para cada tarjeta de categoría -->
+        <template id="template-categoria">
+            <div class="Tarjeta_Categoría">
+                <div class="Ícono_Categoría"><i></i></div>
+                <h3 class="nombre-categoria"></h3>
+                <p class="descripcion-categoria"></p>
+                <a href="#" class="Botón_Categoría">Explorar</a>
+            </div>
+        </template>
+    </section>
+
+    <section id="Delivery" class="Delivery">
+        <div class="Contenedor_Delivery">
+            <div class="Información_Delivery">
+                <h2>Delivery Rápido y Seguro</h2>
+                <p>Entregamos sus productos favoritos directamente a su puerta.</p>
+                <ul class="Características_Delivery">
+                    <li><i class="fas fa-truck"></i> Entrega el mismo día</li>
+                    <li><i class="fas fa-shield-alt"></i> Productos verificados</li>
+                    <li><i class="fas fa-money-bill-wave"></i> Pago por transferencia, Deuna y PeiGo</li>
+                </ul>
+                <a href="/html/productos.html" class="Botones Botón_Primario">Hacer un Pedido</a>
+            </div>
+            <div class="Imagen_Delivery">
+                <img src="https://res.cloudinary.com/dq4yyycio/image/upload/v1745784725/Delivery_jrmws1.jpg"
+                    alt="Servicio de Delivery">
+            </div>
+        </div>
+    </section>
+
+    <section id="Promociones" class="Promociones">
+        <div class="Encabezado_Sección">
+            <h2>Promociones Especiales</h2>
+            <p>Aproveche nuestras ofertas limitadas</p>
+        </div>
+        <div class="Contenedor_Promociones">
+            <!-- Aquí irán las tarjetas inyectadas por JS -->
+        </div>
+
+        <!-- Plantilla para cada promoción -->
+        <template id="template-promocion">
+            <div class="Tarjeta_Promociones">
+                <div class="Contenido_Promociones">
+                    <h3 class="promocion-titulo"></h3>
+                    <p class="promocion-descripcion"></p>
+                    <a href="#" class="Botones Botón_Ver_Más">Ver Detalles</a>
+                </div>
+            </div>
+        </template>
+    </section>
+
+    <!-- Modal de Promociones -->
+    <div class="Modal_Promoción" id="Modal_Promoción">
+        <div class="Contenido_Modal">
+            <span class="Cerrar_Modal">&times;</span>
+            <h3 id="Título_Modal">Título de promoción</h3>
+            <p id="Descripción_Modal">Descripción de la promoción.</p>
+            <div class="Detalles_Adicionales">
+                <p>Válido hasta: 31/12/2025</p>
+                <p>No acumulable con otras promociones</p>
+                <p>Consulte términos y condiciones</p>
+            </div>
+        </div>
+    </div>
+
+    <section id="Contacto" class="Contacto">
+        <div class="Contenedor_Contacto">
+            <div class="Columna_Izquierda">
+                <div class="Información_Contacto">
+                    <h2>Contáctenos</h2>
+                    <p>Estamos aquí para ayudarle</p>
+
+                    <div class="Elementos_Información">
+                        <div class="Elemento_Información">
+                            <div class="Ícono_Circular">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <p>Av. Canónigo Ramos & Luis Moscozo</p>
+                        </div>
+
+                        <div class="Elemento_Información">
+                            <div class="Ícono_Circular">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <p>+593 98 479 6539</p>
+                        </div>
+
+                        <div class="Elemento_Información">
+                            <div class="Ícono_Circular">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <p>Abierto: 11:00 AM - 02:00 AM</p>
+                        </div>
+                    </div>
+
+                    <div class="Redes_Sociales">
+                        <a href="https://www.instagram.com/laultimarondar3?igsh=MXc2d2xtZDI3YmY5aQ=="
+                            class="Ícono_Redes_Sociales"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.tiktok.com/@ftoxicr3?_t=ZM-8vVvtySlFiP&_r=1"
+                            class="Ícono_Redes_Sociales"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://wa.me/message/3A6H5X5BCRACL1" class="Ícono_Redes_Sociales"><i
+                                class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <div class="Formulario_Contacto">
+                    <form id="Formulario_Contacto">
+                        <div class="Grupo_Formulario">
+                            <label for="Mensaje">Mensaje</label>
+                            <textarea id="Mensaje" name="Mensaje" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="Botones Botón_Primario">ENVIAR MENSAJE</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="Columna_Derecha">
+                <div class="Mapa_Contacto">
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d352.50639067123853!2d-78.67245453990748!3d-1.654714614649864!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses-419!2sec!4v1743440564320!5m2!1ses-419!2sec"
+                        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="Whatsapp_Flotante">
+        <a href="https://wa.me/message/3A6H5X5BCRACL1" target="_blank">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
+
+    <footer>
+        <div class="Contenedor_Footer">
+            <div class="Logo_Footer">
+                <img src="https://res.cloudinary.com/dq4yyycio/image/upload/v1745784729/Logo_ixx6lt.png"
+                    alt="La Última Ronda" class="Logo">
+                <p>Su destino para los mejores licores, granizados y más.</p>
+            </div>
+            <div class="Sección_Footer">
+                <h3>Enlaces Rápidos</h3>
+                <ul>
+                    <li><a href="/html/index.html">Inicio</a></li>
+                    <li><a href="/html/productos.html">Productos</a></li>
+                    <li><a href="/html/index.html#Promociones">Promociones</a></li>
+                    <li><a href="/html/carrito.html">Carrito de Compras</a></li>
+                    <li><a href="/html/index.html#Contacto">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="Sección_Footer">
+                <h3>Categorías</h3>
+                <ul>
+                    <li><a href="/html/productos.html?Filtro=Licores" class="Enlace_Filtro">Licores</a></li>
+                    <li><a href="/html/productos.html?Filtro=Granizados" class="Enlace_Filtro">Granizados</a>
+                    </li>
+                    <li><a href="/html/productos.html?Filtro=Postres">Postres</a></li>
+                    <li><a href="/html/productos.html?Filtro=Packs">Packs y Regalos</a></li>
+
+                </ul>
+            </div>
+            <div class="Sección_Footer">
+                <h3>Contacto</h3>
+                <ul>
+                    <li><a href="tel:+593984796539">+593 98 479 6539</a></li>
+                    <li><a href="laultimaronda1@gmail.com">laultimaronda1@gmail.com</a></li>
+                    <li class="Redes_Sociales">
+                        <a href="https://www.instagram.com/laultimarondar3?igsh=MXc2d2xtZDI3YmY5aQ=="
+                            class="Ícono_Redes_Sociales"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.tiktok.com/@ftoxicr3?_t=ZM-8vVvtySlFiP&_r=1"
+                            class="Ícono_Redes_Sociales"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://wa.me/message/3A6H5X5BCRACL1" class="Ícono_Redes_Sociales"><i
+                                class="fab fa-whatsapp"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="Footer_Inferior">
+            <p>&copy; 2025 La Última Ronda. Todos los derechos reservados.</p>
+            <p class="Restricción_Edad">Prohibida la venta a menores de 18 años. Beber con moderación.</p>
+        </div>
+    </footer>
+
+    <script src="/js/global.js"></script>
+    <script src="/js/index.js"></script>
+</body>
+
+</html>

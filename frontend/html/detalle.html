@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Botella - Vodka 40 Party | Licores Artesanales</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/detalle.css">
+    <link rel="stylesheet" href="/css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <!-- INYECCIÓN DEL LOGIN (ahora dentro del body) -->
+    <div id="Login_Container"></div>
+    <script>
+        // Carga asíncrona del HTML de login
+        fetch('/html/login.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('Login_Container').innerHTML = html;
+                if (window.Configurar_Eventos_Modal) Configurar_Eventos_Modal();
+            })
+            .catch(console.error);
+    </script>
+
+    <header>
+        <nav class="Navbar">
+            <div class="Menú_Oculto" id="Menú_Oculto">
+                <div class="Barra"></div>
+                <div class="Barra"></div>
+                <div class="Barra"></div>
+            </div>
+            <ul class="Enlaces_Navegación Izquierda">
+                <li><a href="/html/index.html">Inicio</a></li>
+                <li><a href="#" class="Activo">Productos</a></li>
+                <li><a href="/html/index.html#Promociones">Promociones</a></li>
+            </ul>
+            <div class="Contenedor_Logo">
+                <img src="https://res.cloudinary.com/dq4yyycio/image/upload/v1745784729/Logo_ixx6lt.png"
+                    alt="La Última Ronda" class="Logo">
+            </div>
+            <ul class="Enlaces_Navegación Derecha">
+                <li><a href="/html/index.html#Delivery">Delivery</a></li>
+                <li><a href="/html/index.html#Contacto">Contacto</a></li>
+                <li class="Ícono_Carrito"><a href="/html/carrito.html"><i class="fas fa-shopping-cart"></i> <span
+                            id="Contador_Carrito">0</span></a></li>
+                <li class="Menu_Usuario">
+                    <div class="Icono_Usuario" id="iconoUsuario">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="Dropdown_Usuario" id="dropdownUsuario">
+                        <div class="Usuario_Info">
+                            <div class="Usuario_Nombre">Susan Aguilar</div>
+                            <div class="Usuario_Email">susan.aguilar@espoch.edu.ec</div>
+                        </div>
+                        <ul class="Menu_Items">
+                            <li class="Menu_Item">
+                                <a href="/html/carrito.html#Contenedor_Confirmación">
+                                    <i class="fas fa-box"></i>
+                                    Mis Pedidos
+                                </a>
+                            </li>
+                            <li class="Menu_Item logout">
+                                <a href="#" id="cerrarSesion">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    Cerrar Sesión
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Migas de Pan -->
+    <section class="Migas_Pan">
+        <div class="Contenedor_Migas_Pan">
+            <a href="/html/index.html">Inicio</a>
+            <span>/</span>
+            <a href="/html/productos.html">Productos</a>
+            <span>/</span>
+            <a href="../../páginas/productos/productos.html" class="Link_Categoria">Categoría</a>
+            <span>/</span>
+            <span class="Actual">Cargando...</span>
+        </div>
+    </section>
+
+    <!-- Detalle del Producto -->
+    <section class="Detalle_Producto">
+        <div class="Contenedor_Detalle_Producto">
+            <!-- Columna Izquierda - Galería -->
+            <div class="Galería_Producto">
+                <div class="Imagen_Principal">
+                    <div class="Botón_Zoom">
+                        <i class="fas fa-search-plus"></i>
+                    </div>
+                </div>
+
+                <div class="Miniaturas_Producto">
+                    <!-- Las miniaturas se cargarán dinámicamente -->
+                </div>
+
+                <div class="Sistema_Calificación">
+                    <div class="Calificación_Usuario">
+                        <span class="Etiqueta_Calificación">¿Disfrutó de su compra? Califique el producto y ayude a
+                            otros a elegir.</span>
+                        <div class="Estrellas_Usuario">
+                            <i class="far fa-star Estrella_Usuario" data-valor="1"></i>
+                            <i class="far fa-star Estrella_Usuario" data-valor="2"></i>
+                            <i class="far fa-star Estrella_Usuario" data-valor="3"></i>
+                            <i class="far fa-star Estrella_Usuario" data-valor="4"></i>
+                            <i class="far fa-star Estrella_Usuario" data-valor="5"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna Derecha - Información -->
+            <div class="Información_Detallada">
+                <h1 class="Nombre_Producto">Cargando producto...</h1>
+
+                <div class="Etiquetas_Producto">
+                    <!-- Las etiquetas se cargarán dinámicamente -->
+                </div>
+
+                <div class="Calificación_Producto">
+                    <div class="Estrellas">
+                        <i class="far fa-star Estrella"></i>
+                        <i class="far fa-star Estrella"></i>
+                        <i class="far fa-star Estrella"></i>
+                        <i class="far fa-star Estrella"></i>
+                        <i class="far fa-star Estrella"></i>
+                    </div>
+                    <span class="Número_Reseñas">(0 reseñas)</span>
+                </div>
+
+                <div class="Precio_Producto">
+                    <span class="Precio_Actual">$0.00</span>
+                </div>
+
+                <p class="Descripción_Breve">
+                    Cargando descripción del producto...
+                </p>
+
+                <div class="Opciones_Producto">
+                    <div class="Tipo_Opción">
+                        <h3>Presentación</h3>
+                        <div class="Selección_Opciones">
+                            <!-- Las opciones se cargarán dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="Cantidad_Producto">
+                    <h3>Cantidad</h3>
+                    <div class="Contador">
+                        <button class="Botón_Contador">-</button>
+                        <div class="Valor_Contador">1</div>
+                        <button class="Botón_Contador">+</button>
+                    </div>
+                </div>
+
+                <div class="Botones_Acción">
+                    <button class="Botones Botón_Primario Botón_Agregar">
+                        <i class="fas fa-shopping-cart"></i> Agregar al Carrito
+                    </button>
+                    <div class="Botón_Compartir">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    <div class="Botón_Lista">
+                        <i class="far fa-heart"></i>
+                    </div>
+                </div>
+
+                <div class="Información_Adicional">
+                    <div class="Elemento_Información">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Verificando disponibilidad...</span>
+                    </div>
+                    <div class="Elemento_Información">
+                        <i class="fas fa-truck"></i>
+                        <span>Envío gratis en compras superiores a $30</span>
+                    </div>
+                    <div class="Elemento_Información">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Garantía de calidad</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pestañas de Información -->
+        <div class="Pestañas_Información">
+            <div class="Navegación_Pestañas">
+                <div class="Pestaña Activo">Características</div>
+                <div class="Pestaña">Cómo Disfrutarlo</div>
+                <div class="Pestaña">Envío y Devoluciones</div>
+            </div>
+
+            <div class="Pestañas_Contenido">
+                <div class="Pestaña_Contenido Activo">
+                    <h3>Características del Producto</h3>
+                    <ul>
+                        <li><strong>Origen:</strong> Información no disponible</li>
+                        <li><strong>Contenido alcohólico:</strong> Información no disponible</li>
+                        <li><strong>En stock:</strong> Verificando...</li>
+                        <li><strong>Volumen:</strong> Información no disponible</li>
+                        <li><strong>Temperatura de servicio recomendada:</strong> 16-18°C</li>
+                    </ul>
+                </div>
+
+                <div class="Pestaña_Contenido">
+                    <h3>Cómo Disfrutar Este Producto</h3>
+                    <p>Información no disponible</p>
+                </div>
+
+                <div class="Pestaña_Contenido">
+                    <h3>Política de Envíos</h3>
+                    <p>Realizamos envíos dentro de la ciudad de Riobamba. El tiempo estimado de entrega es de 15-20
+                        minutos dependiendo de la ubicación. Todos los pedidos son procesados y despachados en un máximo
+                        de 30 minutos después de confirmado el pago.</p>
+
+                    <h4>Costos de envío:</h4>
+                    <ul>
+                        <li>Compras superiores a $50.000: Envío GRATIS</li>
+                        <li>Compras inferiores a $50.000: Entre $1,00 y $2,50 dependiendo del destino</li>
+                    </ul>
+
+                    <h3>Política de Devoluciones</h3>
+                    <p>No aceptamos devoluciones posteriores a la compra.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Productos Relacionados -->
+        <div class="Productos_Relacionados">
+            <h2 class="Título_Sección">También Te Puede Interesar</h2>
+
+            <div class="Contenedor_Relacionados">
+                <div class="Carrusel_Relacionados">
+                    <!-- Los productos relacionados se cargarán dinámicamente -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Comprados Juntos -->
+        <div class="Comprados_Juntos">
+            <h2 class="Título_Sección">Frecuentemente Comprados Juntos</h2>
+
+            <div class="Contenedor_Conjunto">
+                <div class="Productos_Paquete">
+                    <div class="Producto_Paquete">
+                        <div class="Imagen_Paquete">
+                        </div>
+                        <div class="Nombre_Paquete">Producto complementario</div>
+                        <div class="Precio_Paquete">$0.00</div>
+                    </div>
+
+                    <div class="Separador_Paquete">+</div>
+
+                    <div class="Producto_Paquete">
+                        <div class="Imagen_Paquete">
+                        </div>
+                        <div class="Nombre_Paquete">Accesorio recomendado</div>
+                        <div class="Precio_Paquete">$0.00</div>
+                    </div>
+
+                    <div class="Separador_Paquete">+</div>
+
+                    <div class="Producto_Paquete">
+                        <div class="Imagen_Paquete">
+                        </div>
+                        <div class="Nombre_Paquete">Producto adicional</div>
+                        <div class="Precio_Paquete">$0.00</div>
+                    </div>
+                </div>
+
+                <div class="Resumen_Paquete">
+                    <div>
+                        <div class="Precio_Total">$0.00</div>
+                    </div>
+
+                    <button class="Botones Botón_Primario">Agregar Todo al Carrito</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="Whatsapp_Flotante">
+        <a href="https://wa.me/message/3A6H5X5BCRACL1" target="_blank">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
+
+    <section class="Sección_Lista_Deseos">
+        <button class="Botón_Lista_Deseos" aria-label="Ver lista de deseos">
+            <i class="fas fa-heart"></i>
+            <span class="Contador_Lista_Deseos">0</span>
+        </button>
+
+        <div class="Lista_Deseos">
+            <div class="Encabezado_Lista_Deseos">
+                <h2><i class="fas fa-heart"></i> Mi Lista de Deseos</h2>
+                <button class="Cerrar_Lista_Deseos" aria-label="Cerrar lista de deseos">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="Elementos_Lista_Deseos">
+                <!-- Los productos se agregarán dinámicamente -->
+            </div>
+        </div>
+
+        <template id="Plantilla_Elemento_Deseo">
+            <div class="Elemento_Lista_Deseos" data-index="">
+                <div class="Imagen_Lista_Deseos">
+                    <img src="" alt="">
+                </div>
+                <div class="Información_Lista_Deseos">
+                    <h3></h3>
+                    <div class="Precio_Lista_Deseos"></div>
+                    <div class="Acciones_Lista_Deseos">
+                        <button class="Agregar_Carrito">Añadir al Carrito</button>
+                        <button class="Eliminar_Deseo">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </section>
+
+    <footer>
+        <div class="Contenedor_Footer">
+            <div class="Logo_Footer">
+                <img src="https://res.cloudinary.com/dq4yyycio/image/upload/v1745784729/Logo_ixx6lt.png"
+                    alt="La Última Ronda" class="Logo">
+                <p>Su destino para los mejores licores, granizados y más.</p>
+            </div>
+            <div class="Sección_Footer">
+                <h3>Enlaces Rápidos</h3>
+                <ul>
+                    <li><a href="/html/index.html">Inicio</a></li>
+                    <li><a href="/html/productos.html">Productos</a></li>
+                    <li><a href="/html/index.html#Promociones">Promociones</a></li>
+                    <li><a href="/html/carrito.html">Carrito de Compras</a></li>
+                    <li><a href="/html/index.html#Contacto">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="Sección_Footer">
+                <h3>Categorías</h3>
+                <ul>
+                    <li><a href="/html/productos.html?Filtro=Licores" class="Enlace_Filtro">Licores</a></li>
+                    <li><a href="/html/productos.html?Filtro=Granizados" class="Enlace_Filtro">Granizados</a>
+                    </li>
+                    <li><a href="/html/productos.html?Filtro=Postres">Postres</a></li>
+                    <li><a href="/html/productos.html?Filtro=Packs">Packs y Regalos</a></li>
+
+                </ul>
+            </div>
+            <div class="Sección_Footer">
+                <h3>Contacto</h3>
+                <ul>
+                    <li><a href="tel:+593984796539">+593 98 479 6539</a></li>
+                    <li><a href="laultimaronda1@gmail.com">laultimaronda1@gmail.com</a></li>
+                    <li class="Redes_Sociales">
+                        <a href="https://www.instagram.com/laultimarondar3?igsh=MXc2d2xtZDI3YmY5aQ=="
+                            class="Ícono_Redes_Sociales"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.tiktok.com/@ftoxicr3?_t=ZM-8vVvtySlFiP&_r=1"
+                            class="Ícono_Redes_Sociales"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://wa.me/message/3A6H5X5BCRACL1" class="Ícono_Redes_Sociales"><i
+                                class="fab fa-whatsapp"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="Footer_Inferior">
+            <p>&copy; 2025 La Última Ronda. Todos los derechos reservados.</p>
+            <p class="Restricción_Edad">Prohibida la venta a menores de 18 años. Beber con moderación.</p>
+        </div>
+    </footer>
+
+    <script src="/js/global.js"></script>
+    <script src="/js/detalle.js"></script>
+    <script src="/js/login.js"></script>
+</body>
+
+</html>

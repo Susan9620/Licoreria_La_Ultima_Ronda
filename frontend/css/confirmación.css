@@ -1,0 +1,558 @@
+/* Secciones */
+.Sección_Confirmación {
+    margin-bottom: 3rem;
+}
+
+.Encabezado_Confirmación h2 {
+    font-size: 2rem;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 8px;
+}
+
+.Encabezado_Confirmación h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(to right, var(--Primario), var(--Secundario));
+}
+
+.Encabezado_Confirmación p {
+    color: var(--Texto_Secundario);
+    font-size: 1rem;
+    max-width: 600px;
+    margin: 0.5rem auto 0;
+}
+
+.Contenedor_Detalles {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    margin-bottom: 2rem;
+}
+
+.Sección_Pedido, .Sección_Productos, .Sección_Envío {
+    background-color: var(--Gris_Oscuro);
+    border-radius: var(--Radio_Borde);
+    padding: 1.5rem;
+    box-shadow: var(--Sombra);
+    animation: Desvanecerse 1s ease-out;
+}
+
+.Encabezado_Confirmación {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid var(--Gris_Claro);
+    padding-bottom: 0.75rem;
+    padding: 1rem 1rem 0.75rem;
+}
+
+.Encabezado_Confirmación i {
+    font-size: 1.25rem;
+    margin-right: 0.75rem;
+    color: var(--Blanco);
+}
+
+.Encabezado_Confirmación h2 {
+    margin-bottom: 0;
+    padding-bottom: 0.35rem;
+    position: relative;
+    font-size: 1.5rem;
+}
+
+.Encabezado_Confirmación h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background: linear-gradient(to right, var(--Primario), var(--Secundario));
+}
+
+.Información_Pedido {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.25rem;
+    padding: 0 0.5rem;
+}
+
+.Información_Elemento {
+    display: flex;
+    flex-direction: column;
+}
+
+.Etiqueta_Información {
+    font-size: 0.85rem;
+    color: var(--Texto_Secundario);
+    margin-bottom: 0.25rem;
+}
+
+.Valor_Información {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.Contenedor_Productos {
+    margin-bottom: 1.25rem;
+    padding: 0 0.5rem;
+}
+
+.Elemento_Producto {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--Gris_Claro);
+}
+
+.Elemento_Producto:last-child {
+    border-bottom: none;
+}
+
+.Imagen_Producto {
+    width: 70px;
+    height: 70px;
+    border-radius: var(--Radio_Borde);
+    overflow: hidden;
+    margin-right: 1.25rem;
+    background-color: var(--Gris_Claro);
+    flex-shrink: 0;
+}
+
+.Imagen_Producto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.Información_Producto {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.Nombre_Producto {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    font-size: 1rem;
+}
+
+.Detalle_Producto {
+    display: flex;
+    color: var(--Texto_Secundario);
+    font-size: 0.85rem;
+}
+
+.Cantidad_Producto {
+    margin-right: 1.25rem;
+}
+
+.Precio_Producto {
+    margin-left: auto;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.Totales_Pedido {
+    margin-top: 1.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--Gris_Claro);
+    padding: 0.75rem 0.5rem 0;
+}
+
+.Línea_Total {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.Total_Principal {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--Gris_Claro);
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.Información_Envío {
+    background-color: rgba(255, 255, 255, 0.03);
+    padding: 1.25rem;
+    border-radius: var(--Radio_Borde);
+    margin-bottom: 1.5rem;
+}
+
+.Dirección_Envío {
+    margin-bottom: 0.75rem;
+}
+
+.Dirección_Envío p {
+    margin: 0.25rem 0;
+}
+
+.Instrucciones_Envío p {
+    color: var(--Texto_Secundario);
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+/* Acciones de confirmación */
+.Acciones_Confirmación {
+    display: flex;
+    justify-content: center;
+    gap: 1.25rem;
+    margin-top: 2.5rem;
+}
+
+/* Botones */
+.Botones {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 24px;
+    border-radius: var(--Radio_Borde);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all var(--Velocidad_Transición) ease;
+    letter-spacing: 0.5px;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.Botones i {
+    margin-right: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.Botones::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.4s ease-out;
+    z-index: -1;
+}
+
+.Botones:hover::before {
+    left: 0;
+}
+
+.Botón_Primario {
+    background: linear-gradient(45deg, var(--Primario), var(--Secundario));
+    color: var(--Blanco);
+    box-shadow: 0 3px 12px rgba(230, 57, 70, 0.25);
+}
+
+.Botón_Primario:hover {
+    box-shadow: 0 5px 15px rgba(230, 57, 70, 0.35);
+    transform: translateY(-2px);
+}
+
+.Botón_Secundario {
+    background: linear-gradient(45deg, var(--Acento), #0a9fb0);
+    color: var(--Blanco);
+    box-shadow: 0 3px 12px rgba(22, 194, 213, 0.25);
+}
+
+.Botón_Secundario:hover {
+    box-shadow: 0 5px 15px rgba(22, 194, 213, 0.35);
+    transform: translateY(-2px);
+}
+
+/* Diseño Responsivo */
+
+/* Tablets y pantallas medianas (768px - 1024px) */
+@media (max-width: 1024px) {
+    .Contenedor_Detalles {
+        gap: 1.5rem;
+    }
+    
+    .Información_Pedido {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+    }
+    
+    .Acciones_Confirmación {
+        gap: 1rem;
+    }
+}
+
+/* Tablets verticales (768px y menos) */
+@media (max-width: 768px) {
+    .Sección_Confirmación {
+        margin-bottom: 2rem;
+    }
+    
+    .Encabezado_Confirmación h2 {
+        font-size: 1.75rem;
+    }
+    
+    .Encabezado_Confirmación p {
+        font-size: 0.95rem;
+        max-width: 100%;
+    }
+    
+    .Contenedor_Detalles {
+        gap: 1.25rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .Sección_Pedido, .Sección_Productos, .Sección_Envío {
+        padding: 1.25rem;
+    }
+    
+    .Encabezado_Confirmación {
+        padding: 0.75rem 0.75rem 0.5rem;
+    }
+    
+    .Información_Pedido {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 0.75rem;
+        padding: 0;
+    }
+    
+    .Contenedor_Productos {
+        padding: 0;
+    }
+    
+    .Elemento_Producto {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem 0;
+    }
+    
+    .Imagen_Producto {
+        width: 60px;
+        height: 60px;
+        margin-right: 0;
+        margin-bottom: 0.75rem;
+        align-self: center;
+    }
+    
+    .Información_Producto {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .Detalle_Producto {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .Cantidad_Producto {
+        margin-right: 0;
+    }
+    
+    .Precio_Producto {
+        margin-left: 0;
+        margin-top: 0.5rem;
+        font-size: 1.1rem;
+    }
+    
+    .Totales_Pedido {
+        padding: 0.75rem 0 0;
+    }
+    
+    .Información_Envío {
+        padding: 1rem;
+    }
+    
+    .Acciones_Confirmación {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 2rem;
+    }
+    
+    .Botones {
+        width: 100%;
+        max-width: 300px;
+        padding: 12px 24px;
+    }
+}
+
+/* Móviles (480px y menos) */
+@media (max-width: 480px) {
+    .Encabezado_Confirmación h2 {
+        font-size: 1.5rem;
+    }
+    
+    .Encabezado_Confirmación p {
+        font-size: 0.9rem;
+    }
+    
+    .Contenedor_Detalles {
+        gap: 1rem;
+    }
+    
+    .Sección_Pedido, .Sección_Productos, .Sección_Envío {
+        padding: 1rem;
+    }
+    
+    .Encabezado_Confirmación {
+        padding: 0.5rem 0.5rem 0.25rem;
+        margin-bottom: 1rem;
+    }
+    
+    .Encabezado_Confirmación h2 {
+        font-size: 1.25rem;
+    }
+    
+    .Encabezado_Confirmación i {
+        font-size: 1.1rem;
+        margin-right: 0.5rem;
+    }
+    
+    .Información_Pedido {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    
+    .Información_Elemento {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .Información_Elemento:last-child {
+        border-bottom: none;
+    }
+    
+    .Etiqueta_Información {
+        margin-bottom: 0;
+        font-size: 0.8rem;
+    }
+    
+    .Valor_Información {
+        font-size: 0.9rem;
+        text-align: right;
+    }
+    
+    .Imagen_Producto {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 0.5rem;
+    }
+    
+    .Nombre_Producto {
+        font-size: 0.9rem;
+    }
+    
+    .Detalle_Producto {
+        font-size: 0.8rem;
+    }
+    
+    .Precio_Producto {
+        font-size: 1rem;
+    }
+    
+    .Línea_Total {
+        font-size: 0.9rem;
+    }
+    
+    .Total_Principal {
+        font-size: 1rem;
+    }
+    
+    .Información_Envío {
+        padding: 0.75rem;
+    }
+    
+    .Dirección_Envío p {
+        font-size: 0.85rem;
+    }
+    
+    .Instrucciones_Envío p {
+        font-size: 0.8rem;
+    }
+    
+    .Acciones_Confirmación {
+        margin-top: 1.5rem;
+    }
+    
+    .Botones {
+        max-width: 100%;
+        padding: 14px 20px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Móviles muy pequeños (320px y menos) */
+@media (max-width: 320px) {
+    .Encabezado_Confirmación h2 {
+        font-size: 1.25rem;
+    }
+    
+    .Sección_Pedido, .Sección_Productos, .Sección_Envío {
+        padding: 0.75rem;
+    }
+    
+    .Encabezado_Confirmación {
+        padding: 0.5rem;
+    }
+    
+    .Información_Pedido {
+        gap: 0.25rem;
+    }
+    
+    .Información_Elemento {
+        padding: 0.25rem 0;
+    }
+    
+    .Etiqueta_Información {
+        font-size: 0.75rem;
+    }
+    
+    .Valor_Información {
+        font-size: 0.85rem;
+    }
+    
+    .Botones {
+        padding: 12px 16px;
+        font-size: 0.8rem;
+    }
+}
+
+/* Orientación landscape en móviles */
+@media (max-height: 500px) and (orientation: landscape) {
+    .Acciones_Confirmación {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 1rem;
+    }
+    
+    .Botones {
+        width: auto;
+        min-width: 150px;
+        max-width: 200px;
+    }
+}
+
+/* Mejoras para pantallas táctiles */
+@media (pointer: coarse) {
+    .Botones {
+        padding: 14px 24px;
+        min-height: 48px;
+    }
+    
+    .Elemento_Producto {
+        padding: 1rem 0;
+    }
+}

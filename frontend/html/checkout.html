@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Completar Compra - Licorería</title>
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/checkout.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Poppins:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <nav class="Navbar">
+            <div class="Menú_Oculto" id="Menú_Oculto">
+                <div class="Barra"></div>
+                <div class="Barra"></div>
+                <div class="Barra"></div>
+            </div>
+            <ul class="Enlaces_Navegación Izquierda">
+                <li><a href="/html/index.html">Inicio</a></li>
+                <li><a href="/html/productos.html">Productos</a></li>
+                <li><a href="/html/index.html#Promociones">Promociones</a></li>
+            </ul>
+            <div class="Contenedor_Logo">
+                <img src="https://res.cloudinary.com/dq4yyycio/image/upload/v1745784729/Logo_ixx6lt.png" alt="La Última Ronda" class="Logo">
+            </div>
+            <ul class="Enlaces_Navegación Derecha">
+                <li><a href="/html/index.html#Delivery">Delivery</a></li>
+                <li><a href="/html/index.html#Contacto">Contacto</a></li>
+                <li class="Ícono_Carrito"><a href="/html/carrito.html"><i class="fas fa-shopping-cart"></i> <span
+                            id="Contador_Carrito">0</span></a></li>
+                <li class="Menu_Usuario">
+                    <div class="Icono_Usuario" id="iconoUsuario">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="Dropdown_Usuario" id="dropdownUsuario">
+                        <div class="Usuario_Info">
+                            <div class="Usuario_Nombre">Susan Aguilar</div>
+                            <div class="Usuario_Email">susan.aguilar@espoch.edu.ec</div>
+                        </div>
+                        <ul class="Menu_Items">
+                            <li class="Menu_Item">
+                                <a href="/html/carrito.html#Contenedor_Confirmación">
+                                    <i class="fas fa-box"></i>
+                                    Mis Pedidos
+                                </a>
+                            </li>
+                            <li class="Menu_Item logout">
+                                <a href="#" id="cerrarSesion">
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    Cerrar Sesión
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Migas de Pan -->
+    <section class="Migas_Pan">
+        <div class="Contenedor_Migas_Pan">
+            <a href="/html/index.html">Inicio</a>
+            <span>/</span>
+            <a href="/html/productos.html">Productos</a>
+            <span>/</span>
+            <a href="/html/carrito.html">Carrito</a>
+            <span>/</span>
+            <span class="Actual">Checkout</span>
+        </div>
+    </section>
+
+    <div class="Contenedor_Principal">
+        <div class="Encabezado_Checkout">
+            <h1>Completar Compra</h1>
+            <p>Complete sus datos y realice el pago para finalizar su pedido</p>
+        </div>
+
+        <div class="Contenido_Checkout">
+            <!-- Columna Izquierda: Formulario de Checkout -->
+            <div class="Formulario_Pago">
+                <!-- Sección de Dirección de Envío -->
+                <div class="Sección_Formulario">
+                    <h3>Dirección de Envío</h3>
+                    <div class="Grupo_Formulario">
+                        <label for="Direccion">Dirección</label>
+                        <input type="text" id="Direccion" placeholder="Calle principal, número, referencias" required>
+                    </div>
+                    <div class="Cuadrícula_Formulario Cuadrícula_Formulario_2">
+                    </div>
+                    <div class="Grupo_Formulario">
+                        <label for="Código_Postal">Código Postal</label>
+                        <input type="text" id="Código_Postal" placeholder="Código postal" required>
+                    </div>
+                    <div class="Grupo_Formulario">
+                        <label for="Instrucciones_Envío">Instrucciones de Entrega (Opcional)</label>
+                        <textarea id="Instrucciones_Envío"
+                            placeholder="Indicaciones adicionales para la entrega"></textarea>
+                    </div>
+                </div>
+
+                <!-- Sección de Métodos de Pago -->
+                <div class="Sección_Formulario">
+                    <h3>Seleccione un medio de pago</h3>
+                    <div class="Cuadrícula_Opciones_Pago">
+                        <!-- Opción: De Una - Banco Pichincha -->
+                        <div class="Tarjeta_Opción_Pago" data-metodo="Deuna">
+                            <img src="https://res.cloudinary.com/dq4yyycio/image/upload/v1745784727/Logo_Deuna_syt3jt.png" alt="Logo De Una" class="Opción_Pago_Logo">
+                        </div>
+
+                        <!-- Opción: Transferencia Banco Pichincha -->
+                        <div class="Tarjeta_Opción_Pago" data-metodo="Transferencia">
+                            <img src="https://res.cloudinary.com/dq4yyycio/image/upload/v1745784726/Logo_Banco_Pichincha_xfdqlu.png" alt="Logo Banco Pichincha"
+                                class="Opción_Pago_Logo">
+                        </div>
+
+                        <!-- Opción: Peigo - Banco Guayaquil -->
+                        <div class="Tarjeta_Opción_Pago" data-metodo="PeiGo">
+                            <img src="https://res.cloudinary.com/dq4yyycio/image/upload/v1745784728/Logo_PeiGo_bo2y60.png" alt="Logo Peigo" class="Opción_Pago_Logo">
+                        </div>
+                    </div>
+
+                    <!-- Sección de detalles del método seleccionado -->
+                    <div class="Detalles_Pago">
+                        <!-- Detalles para Deuna -->
+                        <div class="Detalles_Método" id="Detalles_Deuna">
+                            <h4>💳 Deuna - Banco Pichincha</h4>
+                            <div class="Instrucciones_Pago">
+                                <p>📱 Pague al instante usando Deuna del Banco Pichincha:</p>
+                                <ol>
+                                    <li>✅ Seleccione <strong>"Deuna"</strong> como método de pago.</li>
+                                    <li>🟧 Haga clic en el botón <strong>"Confirmar Pedido"</strong>.</li>
+                                    <li>📄 Se generará un <strong>código QR</strong>.</li>
+                                    <li>📲 Escanéelo con su celular.</li>
+                                    <li>💰 Realice el pago desde su app bancaria.</li>
+                                    <li>⌛ El sistema cambiará el estado a <strong>"Pendiente"</strong>.</li>
+                                </ol>
+                                <p class="Nota">📩 <strong>Importante:</strong> Envíe el comprobante de pago a nuestro
+                                    <strong>WhatsApp</strong> para confirmar su pedido. Una vez verificado, el estado
+                                    pasará a <strong>"Pagado"</strong> y su orden será procesada. 🚚
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Detalles para Transferencia -->
+                        <div class="Detalles_Método" id="Detalles_Transferencia">
+                            <h4>🏦 Transferencia Bancaria - Banco Pichincha</h4>
+                            <div class="Instrucciones_Pago">
+                                <p>💵 Realice una transferencia desde su cuenta del Banco Pichincha:</p>
+                                <ol>
+                                    <li>✅ Seleccione <strong>"Transferencia Bancaria"</strong> como método de pago.</li>
+                                    <li>🟧 Haga clic en el botón <strong>"Confirmar Pedido"</strong>.</li>
+                                </ol>
+                                <div class="Datos_Transferencia">
+                                    <p><strong>🏦 Banco:</strong> Banco Pichincha</p>
+                                    <p><strong>📂 Tipo de Cuenta:</strong> Ahorro</p>
+                                    <p><strong>🔢 Número de Cuenta:</strong> 2209507198</p>
+                                    <p><strong>👤 Titular:</strong> Susan Aguilar</p>
+                                    <p><strong>🪪 Cédula:</strong> 0704013366</p>
+                                    <p><strong>📧 Correo_Electrónico:</strong> susan_9620@hotmail.com</p>
+                                </div>
+                                <ol>
+                                    <li>💰 Realice la transferencia desde su app o ventanilla.</li>
+                                    <li>⌛ El sistema cambiará el estado a <strong>"Pendiente"</strong>.</li>
+                                </ol>
+                                <p class="Nota">📩 <strong>Importante:</strong> Envíe el comprobante de pago a nuestro
+                                    <strong>WhatsApp</strong> para confirmar su pedido. Una vez verificado, el estado
+                                    pasará a <strong>"Pagado"</strong> y su orden será procesada. 🚚
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Detalles para Peigo -->
+                        <div class="Detalles_Método" id="Detalles_PeiGo">
+                            <h4>💳 PeiGo - Banco Guayaquil</h4>
+                            <div class="Instrucciones_Pago">
+                                <p>📱 Pague al instante usando PeiGo del Banco Guayaquil:</p>
+                                <ol>
+                                    <li>✅ Seleccione <strong>"PeiGo"</strong> como método de pago.</li>
+                                    <li>🟧 Haga clic en el botón <strong>"Confirmar Pedido"</strong>.</li>
+                                    <li>📄 Se generará un <strong>código QR</strong>.</li>
+                                    <li>📲 Escanéelo con su celular.</li>
+                                    <li>💰 Realice el pago desde su app bancaria.</li>
+                                    <li>⌛ El sistema cambiará el estado a <strong>"Pendiente"</strong>.</li>
+                                </ol>
+                                <p class="Nota">📩 <strong>Importante:</strong> Envíe el comprobante de pago a nuestro
+                                    <strong>WhatsApp</strong> para confirmar su pedido. Una vez verificado, el estado
+                                    pasará a <strong>"Pagado"</strong> y su orden será procesada. 🚚
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones de acción -->
+                <div class="Acciones_Checkout">
+                    <button class="Botón_Secundario" id="Volver_Carrito">Volver al Carrito</button>
+                    <button class="Botón_Primario" id="Confirmar_Pedido">Confirmar Pedido</button>
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Resumen del Carrito -->
+            <div class="Resumen_Pedido">
+                <div class="Sección_Formulario">
+                    <h3>Resumen de su Pedido</h3>
+                    <div class="Productos_Carrito" id="Resumen_Productos">
+                        <!-- Los productos del carrito se cargarán dinámicamente aquí -->
+                    </div>
+                    <div class="Totales_Carrito">
+                        <div class="Línea_Total">
+                            <span>Subtotal:</span>
+                            <span id="Subtotal_Resumen">$0.00</span>
+                        </div>
+                        <div class="Línea_Total Línea_IVA">
+                            <span>IVA (15%):</span>
+                            <span id="IVA_Resumen">$0.00</span>
+                        </div>
+                        <div class="Línea_Total">
+                            <span>Envío:</span>
+                            <span id="Costo_Envío">$1.50</span>
+                        </div>
+                        <div class="Línea_Total Total_Principal">
+                            <span>Total:</span>
+                            <span id="Total_Resumen">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación de Pago -->
+    <div class="Modal" id="Modal_Confirmación">
+        <div class="Contenido_Modal">
+            <div class="Encabezado_Modal">
+                <h2>📲 Escanee el Código QR para realizar su pago</h2>
+                <span class="Cerrar_Modal">&times;</span>
+            </div>
+            <div class="Cuerpo_Modal">
+                <div class="Contenedor_QR">
+                    <div class="Código_QR" id="Código_QR">
+                        <!-- La imagen del código QR se actualizará según el método -->
+                        <img src="https://res.cloudinary.com/dq4yyycio/image/upload/v1745784737/QR_PeiGo_fyh5ux.jpg" alt="Código QR de pago" id="Imagen_QR">
+                    </div>
+                    <div class="Instrucciones_QR">
+                        <p>1️⃣ Escanee el código QR con la aplicación de su banco o billetera digital.</p>
+                        <p>2️⃣ Complete el pago desde su aplicación.</p>
+                        <p>3️⃣ Envíe el comprobante de pago a nuestro WhatsApp. 📩</p>
+                        <p class="Nota_QR">🔎 Una vez recibido el comprobante, su pedido quedará en estado
+                            <strong>"Pendiente"</strong> hasta confirmar el pago.</p>
+                    </div>
+                    <button class="Botón_Primario" id="Botón_Cerrar_QR">✅ He realizado el pago</button>
+                </div>
+
+                <div class="Estado_Pago" id="Estado_Pendiente">
+                    <div class="Ícono_Pendiente">⏳</div>
+                    <h3>🕒 ¡Pago en proceso de verificación!</h3>
+                    <p>Su pedido ha sido registrado con el estado <strong>pendiente</strong>.</p>
+                    <p>Estamos verificando su comprobante de pago enviado por WhatsApp. 📲</p>
+                    <p>Número de pedido: <strong id="Número_Pedido"></strong></p>
+                    <button class="Botón_Primario" id="Botón_Finalizar">🏁 Finalizar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="Contenedor_Footer">
+            <div class="Logo_Footer">
+                <img src="https://res.cloudinary.com/dq4yyycio/image/upload/v1745784729/Logo_ixx6lt.png" alt="La Última Ronda" class="Logo">
+                <p>Su destino para los mejores licores, granizados y más.</p>
+            </div>
+            <div class="Sección_Footer">
+                <h3>Enlaces Rápidos</h3>
+                <ul>
+                    <li><a href="/html/index.html">Inicio</a></li>
+                    <li><a href="/html/productos.html">Productos</a></li>
+                    <li><a href="/html/index.html#Promociones">Promociones</a></li>
+                    <li><a href="/html/carrito.html">Carrito de Compras</a></li>
+                    <li><a href="/html/index.html#Contacto">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="Sección_Footer">
+                <h3>Categorías</h3>
+                <ul>
+                    <li><a href="/html/productos.html?Filtro=Licores" class="Enlace_Filtro">Licores</a></li>
+                    <li><a href="/html/productos.html?Filtro=Granizados" class="Enlace_Filtro">Granizados</a>
+                    </li>
+                    <li><a href="/html/productos.html?Filtro=Postres">Postres</a></li>
+                    <li><a href="/html/productos.html?Filtro=Packs">Packs y Regalos</a></li>
+
+                </ul>
+            </div>
+            <div class="Sección_Footer">
+                <h3>Contacto</h3>
+                <ul>
+                    <li><a href="tel:+593984796539">+593 98 479 6539</a></li>
+                    <li><a href="laultimaronda1@gmail.com">laultimaronda1@gmail.com</a></li>
+                    <li class="Redes_Sociales">
+                        <a href="https://www.instagram.com/laultimarondar3?igsh=MXc2d2xtZDI3YmY5aQ=="
+                            class="Ícono_Redes_Sociales"><i class="fab fa-instagram"></i></a>
+                            <a href="https://www.tiktok.com/@ftoxicr3?_t=ZM-8vVvtySlFiP&_r=1"
+                            class="Ícono_Redes_Sociales"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://wa.me/message/3A6H5X5BCRACL1" class="Ícono_Redes_Sociales"><i
+                                class="fab fa-whatsapp"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="Footer_Inferior">
+            <p>&copy; 2025 La Última Ronda. Todos los derechos reservados.</p>
+            <p class="Restricción_Edad">Prohibida la venta a menores de 18 años. Beber con moderación.</p>
+        </div>
+    </footer>
+
+    <script src="/js/global.js"></script>
+    <script src="/js/checkout.js"></script>
+</body>
+
+</html>
