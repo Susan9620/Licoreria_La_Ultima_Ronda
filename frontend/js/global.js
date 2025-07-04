@@ -1289,7 +1289,7 @@ async function Cargar_Datos_Usuario_Global() {
     }
 
     try {
-        const resp = await fetch('/api/usuarios/me', {
+        const resp = await fetch(`${baseUrl}/api/usuarios/me`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         const json = await resp.json();
@@ -1324,7 +1324,7 @@ async function Cargar_Historial_Pedidos_Global() {
     }
 
     try {
-        const resp = await fetch('/api/pedidos/usuario', {
+        const resp = await fetch(`${baseUrl}/api/pedidos/usuario`, {
             headers: { 'Authorization': 'Bearer ' + token }
         });
         const json = await resp.json();
@@ -1411,7 +1411,7 @@ async function Ver_Factura_Global(idPedido) {
         // Si no tiene items, cargarlos desde la API
         if (!Array.isArray(pedido.items) || pedido.items.length === 0) {
             const token = localStorage.getItem('token');
-            const resp = await fetch(`/api/pedidos/${idPedido}`, {
+            const resp = await fetch(`${baseUrl}/api/pedidos/${idPedido}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const json = await resp.json();
