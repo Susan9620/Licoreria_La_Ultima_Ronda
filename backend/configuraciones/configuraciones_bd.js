@@ -1,56 +1,43 @@
-const mysql = require('mysql2/promise');
+const { Pool } = require('pg');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
-// Verificar que las variables de entorno estén definidas
-const dbHost = process.env.DB_HOST || 'localhost';
-const dbPort = process.env.DB_PORT || 3307;
-const dbUser = process.env.DB_USER || 'user_sistema';
-const dbPassword = process.env.DB_PASSWORD || "12345";
-const dbName = process.env.DB_NAME || 'bd_licoreria';
+// Variables de entorno para la base de datos
+const dbHost     = process.env.DB_HOST;
+const dbPort     = process.env.DB_PORT;
+const dbUser     = process.env.DB_USER;
+const dbPassword = process.env.DB_PASSWORD;
+const dbName     = process.env.DB_NAME;
 
-// Mostrar información de depuración en desarrollo (sin contraseñas)
+// Mostrar info en desarrollo (sin exponer la contraseña)
 if (process.env.NODE_ENV === 'development') {
-  console.log('📊 Configuración de BD:');
+  console.log('📊 Configuración de BD Postgres:');
   console.log(`   Host: ${dbHost}`);
   console.log(`   Puerto: ${dbPort}`);
   console.log(`   Usuario: ${dbUser}`);
   console.log(`   Base de datos: ${dbName}`);
 }
 
-// Configuración de la conexión a la base de datos
-const config = {
-  host: dbHost,
-  port: dbPort,
-  user: dbUser,
+// Crear pool de conexiones Postgres
+const pool = new Pool({
+  host:     dbHost,
+  port:     dbPort,
+  user:     dbUser,
   password: dbPassword,
   database: dbName,
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
-};
+  ssl:      { rejectUnauthorized: false }
+});
 
-// Crear pool de conexiones
-const pool = mysql.createPool(config);
-
-// Comprobar conexión
 async function testConnection() {
   try {
-    const connection = await pool.getConnection();
-    console.log('✅ Conexión a la base de datos establecida correctamente');
-    connection.release();
+    const client = await pool.connect();
+    console.log('✅ Conexión a Postgres establecida correctamente');
+    client.release();
     return true;
-  } catch (error) {
-    console.error('❌ Error al conectar con la base de datos:', error.message);
-    console.error('   Verifique que:');
-    console.error('   1. El servidor MySQL esté ejecutándose en el puerto correcto');
-    console.error('   2. Las credenciales en el archivo .env sean correctas');
-    console.error('   3. La base de datos exista');
+  } catch (err) {
+    console.error('❌ Error al conectar con Postgres:', err.message);
     return false;
   }
 }
 
-module.exports = {
-  pool,
-  testConnection
-};
+module.exports = { pool, testConnection };
