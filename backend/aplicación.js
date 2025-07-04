@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const { configurarServidor } = require('./configuraciones/configuraciones_servidor');
 const { testConnection } = require('./configuraciones/configuraciones_bd');
 const { notFoundHandler, errorHandler } = require('./middleware/middleware_error');
@@ -7,6 +8,11 @@ const path = require('path');
 
 // Crear la aplicación Express
 const app = express();
+
+app.use(cors({
+  origin: process.env.CORS_ORIGIN,
+  credentials: true
+}));
 
 // Aplicar configuraciones iniciales del servidor
 configurarServidor(app);
