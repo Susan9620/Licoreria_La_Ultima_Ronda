@@ -11,19 +11,20 @@ class ModeloImagenesCarrusel {
   async obtenerImagenesCarrusel() {
     try {
       const [imagenes] = await pool.query(
-        `SELECT 
-          ID_Imagen, 
-          Título, 
-          Subtítulo, 
-          URL_Imagen, 
-          Enlace_Principal, 
-          Orden 
-        FROM 
-          IMÁGENES_CARRUSEL 
-        WHERE 
-          Activo = 1 
-        ORDER BY 
-          Orden ASC`
+      `SELECT 
+        "ID_Imagen", 
+        "Título", 
+        "Subtítulo", 
+        "URL_Imagen", 
+        "Enlace_Principal", 
+        "Orden"
+      FROM 
+        "IMÁGENES_CARRUSEL"
+      WHERE 
+        "Activo" = true
+      ORDER BY 
+        "Orden" ASC
+    `
       );
 
       return imagenes;
