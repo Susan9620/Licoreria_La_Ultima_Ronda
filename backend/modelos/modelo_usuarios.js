@@ -47,20 +47,19 @@ class ModeloUsuarios {
    * @returns {Promise<Object|null>}
    */
   async obtenerPorId(id) {
-    const sql = `
-      SELECT 
-        ID_Usuario,
-        Nombre_Completo,
-        Correo_Electrónico,
-        Teléfono
-      FROM USUARIOS
-      WHERE ID_Usuario = $1
-        AND Activo = 1
-      LIMIT 1
-    `;
-    const result = await pool.query(sql, [id]);
-    const rows = result.rows;
-    return rows[0] || null;
+    const result = await pool.query(
+      `SELECT 
+       "ID_Usuario",
+       "Nombre_Completo",
+       "Correo_Electrónico",
+       "Teléfono"
+     FROM "USUARIOS"
+     WHERE "ID_Usuario" = $1
+       AND "Activo" = 1
+     LIMIT 1`,
+      [id]
+    );
+    return result.rows[0] || null;
   }
 
   /**
