@@ -10,24 +10,23 @@ class ModeloImagenesCarrusel {
    */
   async obtenerImagenesCarrusel() {
     try {
-      const [imagenes] = await pool.query(
-      `SELECT 
-        "ID_Imagen", 
-        "Título", 
-        "Subtítulo", 
-        "URL_Imagen", 
-        "Enlace_Principal", 
-        "Orden"
-      FROM 
-        "IMÁGENES_CARRUSEL"
-      WHERE 
-        "Activo" = true
-      ORDER BY 
-        "Orden" ASC
-    `
-      );
+      const imagenes = await pool.query(`
+        SELECT 
+          "ID_Imagen", 
+          "Título", 
+          "Subtítulo", 
+          "URL_Imagen", 
+          "Enlace_Principal", 
+          "Orden"
+        FROM 
+          "IMÁGENES_CARRUSEL"
+        WHERE 
+          "Activo" = true
+        ORDER BY 
+          "Orden" ASC
+      `);
 
-      return imagenes;
+      return imagenes.rows;
     } catch (error) {
       console.error('Error al obtener imágenes del carrusel:', error);
       throw new Error('Error al obtener las imágenes del carrusel');
