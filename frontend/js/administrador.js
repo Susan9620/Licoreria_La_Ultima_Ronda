@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <td>${p.idPedido}</td>
               <td>${p.idUsuario}</td>
               <td>${new Date(p.fecha).toLocaleString()}</td>
-              <td>$${parseFloat(p.total).toFixed(2)}</td>
+              <td>$${parseFloat(p.Total).toFixed(2)}</td>
               <td><span class="Estado_Texto ${p.estadoPedido}">${p.estadoPedido}</span></td>
               <td>
                 <button class="Botones Botón_Primario" onclick="viewPedido(${p.idPedido})">
