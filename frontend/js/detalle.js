@@ -7,7 +7,7 @@ async function cargarDatosDeProductos(ids) {
   const resultados = []
   for (let id of ids) {
     try {
-      const resp = await fetch(`/api/productos/${id}`)
+      const resp = await fetch(`${API_BASE}/api/productos/${id}`)
       if (!resp.ok) continue
       const json = await resp.json()
       if (json.éxito && json.datos) {
@@ -41,7 +41,7 @@ async function cargarDatosProducto() {
     mostrarIndicadorCarga(true)
 
     // Obtener datos del producto
-    const respuestaProducto = await fetch(`/api/productos/${idProducto}`)
+    const respuestaProducto = await fetch(`${API_BASE}/api/productos/${idProducto}`)
     if (!respuestaProducto.ok) {
       throw new Error("Producto no encontrado")
     }
@@ -81,7 +81,7 @@ async function cargarDatosProducto() {
 // Cargar variantes del producto
 async function cargarVariantesProducto(idProducto) {
   try {
-    const respuestaVariantes = await fetch(`/api/variantes/producto/${idProducto}`)
+    const respuestaVariantes = await fetch(`${API_BASE}/api/variantes/producto/${idProducto}`)
     if (respuestaVariantes.ok) {
       const datosVariantes = await respuestaVariantes.json()
       if (datosVariantes.éxito && datosVariantes.datos) {
@@ -100,7 +100,7 @@ async function cargarVariantesProducto(idProducto) {
 // Cargar imágenes del producto
 async function cargarImagenesProducto(idProducto) {
   try {
-    const respuestaImagenes = await fetch(`/api/imagenes/producto/${idProducto}`)
+    const respuestaImagenes = await fetch(`${API_BASE}/api/imagenes/producto/${idProducto}`)
     if (respuestaImagenes.ok) {
       const datosImagenes = await respuestaImagenes.json()
       if (datosImagenes.éxito && datosImagenes.datos) {
@@ -240,7 +240,7 @@ async function initCalificacionUsuario() {
   const token = localStorage.getItem('token');
   if (token) {
     try {
-      const resp = await fetch(`/api/productos/${productoActual.ID_Producto}/calificacion`, {
+      const resp = await fetch(`${API_BASE}/api/productos/${productoActual.ID_Producto}/calificacion`, {
         headers: { 'Authorization': 'Bearer ' + token }
       });
       const json = await resp.json();
@@ -286,7 +286,7 @@ async function initCalificacionUsuario() {
         return;
       }
       try {
-        const resp = await fetch(`/api/productos/${productoActual.ID_Producto}/calificar`, {
+        const resp = await fetch(`${API_BASE}/api/productos/${productoActual.ID_Producto}/calificar`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -692,7 +692,7 @@ function actualizarInformacionAdicional() {
 // Cargar productos relacionados
 async function cargarProductosRelacionados() {
   try {
-    const respuesta = await fetch("/api/productos/all");
+    const respuesta = await fetch('${API_BASE}/api/productos/all');
     if (!respuesta.ok) return;
 
     const datos = await respuesta.json();
@@ -796,7 +796,7 @@ function renderizarProductosRelacionados(productos) {
 async function cargarYRenderizarCompradosJuntos(idProducto) {
   try {
     // 1) Traer los IDs de "comprados juntos"
-    const resp = await fetch(`/api/productos/${idProducto}/compradosjuntos`);
+    const resp = await fetch(`${API_BASE}/api/productos/${idProducto}/compradosjuntos`);
     if (!resp.ok) return;
     const json = await resp.json();
     if (!json.éxito) return;
@@ -811,7 +811,7 @@ async function cargarYRenderizarCompradosJuntos(idProducto) {
     const variantesMap = {};
     await Promise.all(productos.map(async p => {
       try {
-        const r = await fetch(`/api/variantes/producto/${p.ID_Producto}`);
+        const r = await fetch(`${API_BASE}/api/variantes/producto/${p.ID_Producto}`);
         if (!r.ok) return;
         const j = await r.json();
         if (j.éxito && Array.isArray(j.datos) && j.datos.length) {
