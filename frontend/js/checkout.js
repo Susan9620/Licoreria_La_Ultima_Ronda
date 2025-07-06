@@ -338,7 +338,7 @@ const Checkout = {
 
     // 1) Carga *todos* los productos (ajusta la URL a tu endpoint real)
     async cargarTodosLosProductos() {
-        const res = await fetch('/api/productos/all');  // <- aquí tu ruta que devuelve TODO el catálogo
+        const res = await fetch(`${API_BASE}/api/productos/all`);  // <- aquí tu ruta que devuelve TODO el catálogo
         if (!res.ok) throw new Error(`No pude cargar todos los productos: ${res.status}`);
         const json = await res.json();
         // suponemos que vienen en json.datos
@@ -362,7 +362,7 @@ const Checkout = {
                 }
 
                 // 3) Obtenemos la lista de variantes
-                const resVar = await fetch(`/api/variantes/producto/${prod.ID_Producto}`);
+                const resVar = await fetch(`${API_BASE}/api/variantes/producto/${prod.ID_Producto}`);
                 const varJson = await resVar.json();
                 const variantes = Array.isArray(varJson.datos) ? varJson.datos : [];
 
@@ -441,7 +441,7 @@ const Checkout = {
             }
             // 👇 Depuración: muestra el payload que vamos a enviar
             console.log('📤 Payload pedido a enviar:', JSON.stringify(payload, null, 2));
-            const res = await fetch('/api/pedidos', {
+            const res = await fetch(`${API_BASE}/api/pedidos`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
