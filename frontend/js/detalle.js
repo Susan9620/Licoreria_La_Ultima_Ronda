@@ -1,3 +1,5 @@
+const API_BASE = 'https://licoreria-la-ultima-ronda.onrender.com';
+
 // Variables globales para el producto
 let productoActual = null
 let variantesProducto = []
