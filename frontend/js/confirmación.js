@@ -1,3 +1,5 @@
+const API_BASE = 'https://licoreria-la-ultima-ronda.onrender.com';
+
 // Objeto principal para la página de confirmación y gestión de pedidos
 const Gestión_Pedidos = {
     // Configuración
