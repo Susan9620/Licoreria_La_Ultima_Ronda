@@ -62,7 +62,7 @@ const Gestión_Pedidos = {
         }
 
         try {
-            const resp = await fetch('/api/usuarios/me', {
+            const resp = await fetch(`${API_BASE}/api/usuarios/me`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const json = await resp.json();
@@ -102,7 +102,7 @@ const Gestión_Pedidos = {
         }
 
         try {
-            const resp = await fetch(`/api/pedidos/${idPedido}`, {
+            const resp = await fetch(`${API_BASE}/api/pedidos/${idPedido}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token
@@ -307,7 +307,7 @@ const Gestión_Pedidos = {
         if (!token) return;  // sin token no podemos
 
         try {
-            const resp = await fetch('/api/pedidos/usuario', {
+            const resp = await fetch(`${API_BASE}/api/pedidos/usuario`, {
                 headers: { 'Authorization': 'Bearer ' + token }
             });
             const json = await resp.json();
@@ -498,7 +498,7 @@ const Gestión_Pedidos = {
             // 3) Si no trae items, cargarlos desde la API
             if (!Array.isArray(p.items) || p.items.length === 0) {
                 const token = localStorage.getItem('token');
-                const resp = await fetch(`/api/pedidos/${orden}`, {
+                const resp = await fetch(`${API_BASE}/api/pedidos/${orden}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const json = await resp.json();
