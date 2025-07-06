@@ -1,3 +1,5 @@
+const API_BASE = 'https://licoreria-la-ultima-ronda.onrender.com';
+
 // Objeto principal para el manejo del checkout
 const Checkout = {
     // Configuración
