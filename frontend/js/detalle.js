@@ -694,7 +694,7 @@ function actualizarInformacionAdicional() {
 // Cargar productos relacionados
 async function cargarProductosRelacionados() {
   try {
-    const respuesta = await fetch('${API_BASE}/api/productos/all');
+    const respuesta = await fetch(`${API_BASE}/api/productos/all`);
     if (!respuesta.ok) return;
 
     const datos = await respuesta.json();
