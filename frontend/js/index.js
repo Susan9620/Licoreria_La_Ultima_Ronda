@@ -1,4 +1,4 @@
-const API_BASE = 'https://licoreria-la-ultima-ronda.onrender.com/api';
+const API_BASE = 'https://licoreria-la-ultima-ronda.onrender.com';
 
 document.addEventListener('DOMContentLoaded', async function () {
     try {
