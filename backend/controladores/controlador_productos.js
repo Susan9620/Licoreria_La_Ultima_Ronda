@@ -165,7 +165,7 @@ class ControladorProductos {
       const idUsuario = req.usuario.id;
       const fila = await modeloReseñas.obtenerCalificacionUsuario(idProducto, idUsuario);
       // fila puede ser { Valoración: 4 } o undefined
-      return res.json({ éxito: true, datos: fila ? fila.Valoración : null });
+      return res.json({ éxito: true, datos: fila ? fila.valoracion : null });
     } catch (error) {
       console.error('Error en obtenerCalificacionUsuario:', error);
       return res.status(500).json({ éxito: false, mensaje: 'Error al obtener calificación' });
