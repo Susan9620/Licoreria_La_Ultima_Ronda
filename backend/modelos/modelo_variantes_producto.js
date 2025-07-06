@@ -1,67 +1,73 @@
-const { pool } = require("../configuraciones/configuraciones_bd")
+const { pool } = require('../configuraciones/configuraciones_bd');
 
 /**
- * Obtener todas las variantes de un producto específico
+ * Obtiene todas las variantes de un producto específico
+ * @param {number} idProducto
+ * @returns {Promise<Array>}
  */
-const obtenerPorProducto = async (idProducto) => {
+async function obtenerPorProducto(idProducto) {
   try {
-    const query = `
-      SELECT 
-        ID_Variante_Producto,
-        ID_Producto,
-        Nombre_Variante,
-        SKU,
-        Medida,
-        Graduación,
-        Precio,
-        Precio_Oferta,
-        Predeterminada,
-        Stock,
-        Activo
-      FROM VARIANTES_PRODUCTO 
-      WHERE ID_Producto = ? AND Activo = 1
-      ORDER BY Predeterminada DESC, Precio ASC
-    `
-
-    const [rows] = await pool.query(query, [idProducto])
-    return rows
+    const result = await pool.query(
+      `SELECT
+         "ID_Variante_Producto",
+         "ID_Producto",
+         "Nombre_Variante",
+         "SKU",
+         "Medida",
+         "Graduación",
+         "Precio",
+         "Precio_Oferta",
+         "Predeterminada",
+         "Stock",
+         "Activo"
+       FROM "VARIANTES_PRODUCTO"
+       WHERE "ID_Producto" = $1
+         AND "Activo" = TRUE
+       ORDER BY
+         "Predeterminada" DESC,
+         "Precio" ASC`,
+      [idProducto]
+    );
+    return result.rows;
   } catch (error) {
-    console.error("Error en modelo obtenerPorProducto:", error)
-    throw error
+    console.error('Error en modelo obtenerPorProducto:', error);
+    throw error;
   }
 }
 
 /**
- * Obtener una variante específica por ID
+ * Obtiene una variante específica por su ID
+ * @param {number} id
+ * @returns {Promise<Object|null>}
  */
-const obtenerPorId = async (id) => {
+async function obtenerPorId(id) {
   try {
-    const query = `
-      SELECT 
-        ID_Variante_Producto,
-        ID_Producto,
-        Nombre_Variante,
-        SKU,
-        Medida,
-        Graduación,
-        Precio,
-        Precio_Oferta,
-        Predeterminada,
-        Stock,
-        Activo
-      FROM VARIANTES_PRODUCTO 
-      WHERE ID_Variante_Producto = ? AND Activo = 1
-    `
-
-    const [rows] = await pool.query(query, [id])
-    return rows[0] || null
+    const result = await pool.query(
+      `SELECT
+         "ID_Variante_Producto",
+         "ID_Producto",
+         "Nombre_Variante",
+         "SKU",
+         "Medida",
+         "Graduación",
+         "Precio",
+         "Precio_Oferta",
+         "Predeterminada",
+         "Stock",
+         "Activo"
+       FROM "VARIANTES_PRODUCTO"
+       WHERE "ID_Variante_Producto" = $1
+         AND "Activo" = TRUE`,
+      [id]
+    );
+    return result.rows[0] || null;
   } catch (error) {
-    console.error("Error en modelo obtenerPorId:", error)
-    throw error
+    console.error('Error en modelo obtenerPorId:', error);
+    throw error;
   }
 }
 
 module.exports = {
   obtenerPorProducto,
   obtenerPorId,
-}
+};

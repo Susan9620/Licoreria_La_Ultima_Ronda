@@ -1,7 +1,7 @@
 const { pool } = require('../configuraciones/configuraciones_bd');
 
 /**
- * Modelo para gestionar las promociones en la base de datos
+ * Modelo para gestionar las promociones en PostgreSQL
  */
 class ModeloPromociones {
   /**
@@ -10,22 +10,22 @@ class ModeloPromociones {
    */
   async obtenerPromocionesActivas() {
     try {
-      const [promociones] = await pool.query(
-        `SELECT
-           ID_Promoción        AS id,
-           ID_Categoría        AS categoriaId,
-           Título              AS titulo,
-           Descripción         AS descripcion,
-           Fecha_Inicio        AS fechaInicio,
-           Fecha_Fin           AS fechaFin,
-           Tipo                AS tipo,
-           Parámetros          AS parametros
-         FROM PROMOCIONES
-         WHERE (Fecha_Inicio IS NULL OR Fecha_Inicio <= CURRENT_DATE())
-           AND (Fecha_Fin    IS NULL OR Fecha_Fin    >= CURRENT_DATE())
-         ORDER BY Fecha_Inicio DESC`
-      );
-      return promociones;
+      const result = await pool.query(`
+        SELECT
+          "ID_Promoción"   AS id,
+          "ID_Categoría"   AS categoriaId,
+          "Título"         AS titulo,
+          "Descripción"    AS descripcion,
+          "Fecha_Inicio"   AS fechaInicio,
+          "Fecha_Fin"      AS fechaFin,
+          "Tipo"           AS tipo,
+          "Parámetros"     AS parametros
+        FROM "PROMOCIONES"
+        WHERE ("Fecha_Inicio" IS NULL OR "Fecha_Inicio" <= CURRENT_DATE)
+          AND ("Fecha_Fin"    IS NULL OR "Fecha_Fin"    >= CURRENT_DATE)
+        ORDER BY "Fecha_Inicio" DESC
+      `);
+      return result.rows;
     } catch (error) {
       console.error('Error al obtener promociones:', error);
       throw new Error('Error al obtener las promociones');
@@ -34,10 +34,10 @@ class ModeloPromociones {
 
   /**
    * Inserta una nueva promoción y devuelve su ID.
-   * @param {Object} datos 
+   * @param {Object} datos
+   * @returns {Promise<number>}
    */
   async crear(datos) {
-    // Campos permitidos para insertar
     const permitidos = [
       'ID_Categoría',
       'Título',
@@ -52,22 +52,33 @@ class ModeloPromociones {
       throw new Error('No se proporcionaron campos válidos para crear la promoción');
     }
 
-    const columns = keys.map(k => `\`${k}\``).join(', ');
-    const placeholders = keys.map(_ => '?').join(', ');
-    const values = keys.map(k => {
-      // Si es Parámetros, lo serializamos a JSON
-      return k === 'Parámetros' ? JSON.stringify(datos[k]) : datos[k];
-    });
+    const columns = keys.map(k => `"${k}"`).join(', ');
+    const values = keys.map(k =>
+      k === 'Parámetros'
+        ? JSON.stringify(datos[k])
+        : datos[k]
+    );
+    const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
 
-    const sql = `INSERT INTO PROMOCIONES (${columns}) VALUES (${placeholders})`;
-    const [result] = await pool.query(sql, values);
-    return result.insertId;
+    try {
+      const result = await pool.query(
+        `INSERT INTO "PROMOCIONES" (${columns})
+         VALUES (${placeholders})
+         RETURNING "ID_Promoción"`,
+        values
+      );
+      return result.rows[0]['ID_Promoción'];
+    } catch (error) {
+      console.error('Error al crear promoción:', error);
+      throw new Error('Error al crear la promoción');
+    }
   }
 
   /**
    * Actualiza una promoción por su ID.
-   * @param {number} idPromocion 
-   * @param {Object} cambios 
+   * @param {number} idPromocion
+   * @param {Object} cambios
+   * @returns {Promise<number>} filas afectadas
    */
   async actualizar(idPromocion, cambios) {
     const permitidos = [
@@ -84,25 +95,47 @@ class ModeloPromociones {
       throw new Error('No se proporcionaron campos válidos para actualizar la promoción');
     }
 
-    const sets = keys.map(k => `\`${k}\` = ?`).join(', ');
+    const sets = keys
+      .map((k, i) => `"${k}" = $${i + 1}`)
+      .join(', ');
     const values = keys.map(k =>
-      k === 'Parámetros' ? JSON.stringify(cambios[k]) : cambios[k]
+      k === 'Parámetros'
+        ? JSON.stringify(cambios[k])
+        : cambios[k]
     );
     values.push(idPromocion);
 
-    const sql = `UPDATE PROMOCIONES SET ${sets} WHERE ID_Promoción = ?`;
-    const [result] = await pool.query(sql, values);
-    return result.affectedRows;
+    try {
+      const result = await pool.query(
+        `UPDATE "PROMOCIONES"
+         SET ${sets}
+         WHERE "ID_Promoción" = $${values.length}`,
+        values
+      );
+      return result.rowCount;
+    } catch (error) {
+      console.error(`Error al actualizar promoción ${idPromocion}:`, error);
+      throw new Error('Error al actualizar la promoción');
+    }
   }
 
   /**
    * Elimina una promoción por su ID.
-   * @param {number} idPromocion 
+   * @param {number} idPromocion
+   * @returns {Promise<number>} filas afectadas
    */
   async eliminar(idPromocion) {
-    const sql = `DELETE FROM PROMOCIONES WHERE ID_Promoción = ?`;
-    const [result] = await pool.query(sql, [idPromocion]);
-    return result.affectedRows;
+    try {
+      const result = await pool.query(
+        `DELETE FROM "PROMOCIONES"
+         WHERE "ID_Promoción" = $1`,
+        [idPromocion]
+      );
+      return result.rowCount;
+    } catch (error) {
+      console.error(`Error al eliminar promoción ${idPromocion}:`, error);
+      throw new Error('Error al eliminar la promoción');
+    }
   }
 }
 

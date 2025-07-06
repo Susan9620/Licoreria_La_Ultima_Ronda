@@ -1,7 +1,7 @@
 const { pool } = require('../configuraciones/configuraciones_bd');
 
 /**
- * Modelo para gestionar la lista de deseos en la base de datos
+ * Modelo para gestionar la lista de deseos en PostgreSQL
  */
 class ModeloListaDeseos {
   /**
@@ -10,53 +10,84 @@ class ModeloListaDeseos {
    * @returns {Promise<Array>}
    */
   async obtenerPorUsuario(idUsuario) {
-    const query = `
-      SELECT
-        ld.ID_Lista_Deseos AS id,
-        ld.ID_Producto AS productoId,
-        p.Nombre,
-        v.Precio,
-        i.URL AS imagen
-      FROM LISTA_DESEOS ld
-      JOIN PRODUCTOS p ON ld.ID_Producto = p.ID_Producto
-      LEFT JOIN VARIANTES_PRODUCTO v
-        ON p.ID_Producto = v.ID_Producto AND v.Predeterminada = 1 AND v.Activo = 1
-      LEFT JOIN IMÁGENES_PRODUCTO i
-        ON p.ID_Producto = i.ID_Producto AND i.Principal = 1
-      WHERE ld.ID_Usuario = ?
-      ORDER BY ld.Fecha_Agregado DESC
-    `;
-    const [rows] = await pool.query(query, [idUsuario]);
-    return rows;
+    try {
+      const result = await pool.query(
+        `
+          SELECT
+            ld."ID_Lista_Deseos"   AS id,
+            ld."ID_Producto"       AS productoId,
+            p."Nombre",
+            v."Precio",
+            i."URL"                AS imagen
+          FROM "LISTA_DESEOS" ld
+          JOIN "PRODUCTOS" p
+            ON ld."ID_Producto" = p."ID_Producto"
+          LEFT JOIN "VARIANTES_PRODUCTO" v
+            ON p."ID_Producto" = v."ID_Producto"
+             AND v."Predeterminada" = TRUE
+             AND v."Activo" = TRUE
+          LEFT JOIN "IMÁGENES_PRODUCTO" i
+            ON p."ID_Producto" = i."ID_Producto"
+             AND i."Principal" = TRUE
+          WHERE ld."ID_Usuario" = $1
+          ORDER BY ld."Fecha_Agregado" DESC
+        `,
+        [idUsuario]
+      );
+      return result.rows;
+    } catch (error) {
+      console.error('Error al obtener lista de deseos:', error);
+      throw error;
+    }
   }
 
   /**
    * Añade un producto a la lista de deseos de un usuario
    * @param {number} idUsuario
    * @param {number} idProducto
-   * @returns {Promise<Object>} - Datos del registro insertado
+   * @returns {Promise<Object>} - { id, productoId }
    */
   async agregar(idUsuario, idProducto) {
-    const query = `
-      INSERT INTO LISTA_DESEOS (ID_Usuario, ID_Producto)
-      VALUES (?, ?)
-    `;
-    const [result] = await pool.query(query, [idUsuario, idProducto]);
-    return { id: result.insertId, productoId: idProducto };
+    try {
+      const result = await pool.query(
+        `
+          INSERT INTO "LISTA_DESEOS" ("ID_Usuario", "ID_Producto")
+          VALUES ($1, $2)
+          RETURNING "ID_Lista_Deseos" AS id
+        `,
+        [idUsuario, idProducto]
+      );
+      return {
+        id: result.rows[0].id,
+        productoId: idProducto
+      };
+    } catch (error) {
+      console.error('Error al agregar a lista de deseos:', error);
+      throw error;
+    }
   }
 
   /**
    * Elimina un producto de la lista de deseos de un usuario
    * @param {number} idUsuario
    * @param {number} idProducto
-   * @returns {Promise<void>}
+   * @returns {Promise<number>} filas afectadas
    */
   async eliminar(idUsuario, idProducto) {
-    const query = `
-      DELETE FROM LISTA_DESEOS
-      WHERE ID_Usuario = ? AND ID_Producto = ?
-    `;
-    await pool.query(query, [idUsuario, idProducto]);
+    try {
+      const result = await pool.query(
+        `
+          DELETE FROM "LISTA_DESEOS"
+          WHERE "ID_Usuario" = $1
+            AND "ID_Producto" = $2
+        `,
+        [idUsuario, idProducto]
+      );
+      return result.rowCount;
+    } catch (error) {
+      console.error('Error al eliminar de lista de deseos:', error);
+      throw error;
+    }
   }
 }
 

@@ -2,69 +2,80 @@ const { pool } = require('../configuraciones/configuraciones_bd');
 
 class ModeloUsuarios {
   /**
-   * Inserta un nuevo usuario en la base de datos
-   * @param {{ Nombre_Completo:string, Correo_Electrónico:string, Contraseña:string }} datos
-   * @returns {Promise<import('mysql2').ResultSetHeader>}
-   */
-  async crear({ Nombre_Completo, Correo_Electrónico, Contraseña }) {
-    const result = await pool.query(
-      `INSERT INTO USUARIOS (Nombre_Completo, Correo_Electrónico, Contraseña)
-       VALUES ($1, $2, $3)
-       RETURNING ID_Usuario`,
-      [Nombre_Completo, Correo_Electrónico, Contraseña]
-    );
-    return result.rows[0].ID_Usuario;
-  }
-
-  /**
-   * Obtiene un usuario por su correo electrónico
+   * Obtiene un usuario activo por su correo electrónico
    * @param {string} correo
    * @returns {Promise<Object|null>}
    */
   async obtenerPorCorreo(correo) {
-    const result = await pool.query(
-      `SELECT * FROM USUARIOS WHERE Correo_Electrónico = $1 AND Activo = 1 LIMIT 1`,
-      [correo]
-    );
-    return result.rows[0] || null;
+    try {
+      const result = await pool.query(
+        `SELECT *
+           FROM "USUARIOS"
+          WHERE "Correo_Electrónico" = $1
+            AND "Activo" = TRUE
+          LIMIT 1`,
+        [correo]
+      );
+      return result.rows[0] || null;
+    } catch (error) {
+      console.error('Error al obtener usuario por correo:', error);
+      throw new Error('Error al obtener usuario');
+    }
   }
 
   /**
- * Devuelve todos los usuarios activos
- * @returns {Promise<Object[]>}
- */
+   * Lista todos los usuarios activos
+   * @returns {Promise<Array>}
+   */
   async listarTodos() {
-    const result = await pool.query(
-      `SELECT ID_Usuario, Nombre_Completo, Correo_Electrónico, Rol, Activo
-       FROM USUARIOS WHERE Activo = 1`
-    );
-    return result.rows;
+    try {
+      const result = await pool.query(
+        `SELECT
+           "ID_Usuario",
+           "Nombre_Completo",
+           "Correo_Electrónico",
+           "Rol",
+           "Activo"
+         FROM "USUARIOS"
+        WHERE "Activo" = TRUE`
+      );
+      return result.rows;
+    } catch (error) {
+      console.error('Error al listar usuarios:', error);
+      throw new Error('Error al listar los usuarios');
+    }
   }
 
   /**
-   * Devuelve un usuario por su ID
+   * Obtiene un usuario activo por su ID
    * @param {number} id
    * @returns {Promise<Object|null>}
    */
   async obtenerPorId(id) {
-    const result = await pool.query(
-      `SELECT 
-       "ID_Usuario",
-       "Nombre_Completo",
-       "Correo_Electrónico",
-       "Teléfono"
-     FROM "USUARIOS"
-     WHERE "ID_Usuario" = $1
-       AND "Activo" = 1
-     LIMIT 1`,
-      [id]
-    );
-    return result.rows[0] || null;
+    try {
+      const result = await pool.query(
+        `SELECT
+           "ID_Usuario",
+           "Nombre_Completo",
+           "Correo_Electrónico",
+           "Teléfono"
+         FROM "USUARIOS"
+        WHERE "ID_Usuario" = $1
+          AND "Activo" = TRUE
+        LIMIT 1`,
+        [id]
+      );
+      return result.rows[0] || null;
+    } catch (error) {
+      console.error('Error al obtener usuario por ID:', error);
+      throw new Error('Error al obtener usuario');
+    }
   }
 
   /**
-   * Crea un usuario (solo campos obligatorios: nombre, correo y contraseña ya hasheada)
-   * Devuelve el nuevo ID.
+   * Crea un usuario con los campos permitidos y devuelve su ID
+   * @param {Object} datos
+   * @returns {Promise<number>}
    */
   async crear(datos) {
     const permitidos = [
@@ -78,24 +89,34 @@ class ModeloUsuarios {
       'Rol',
       'Activo'
     ];
-
     const keys = Object.keys(datos).filter(k => permitidos.includes(k));
-    const columns = keys.map(k => `"${k}"`).join(', ');
-    const placeholders = keys.map((_, i) => `$${i + 1}`).join(', ');
-    const values = keys.map(k => datos[k]);
+    if (keys.length === 0) {
+      throw new Error('No se proporcionaron campos válidos para crear el usuario');
+    }
 
-    const sql = `
-      INSERT INTO USUARIOS (${columns})
-      VALUES (${placeholders})
-      RETURNING ID_Usuario
-    `;
-    const result = await pool.query(sql, values);
-    return result.rows[0].id_usuario;
+    const columns = keys.map(k => `"${k}"`).join(', ');
+    const values = keys.map(k => datos[k]);
+    const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
+
+    try {
+      const result = await pool.query(
+        `INSERT INTO "USUARIOS" (${columns})
+         VALUES (${placeholders})
+         RETURNING "ID_Usuario"`,
+        values
+      );
+      return result.rows[0]['ID_Usuario'];
+    } catch (error) {
+      console.error('Error al crear usuario:', error);
+      throw new Error('Error al crear el usuario');
+    }
   }
 
   /**
-   * Actualiza un usuario por su ID, solo columnas permitidas.
-   * cambios puede contener Nombre_Completo, Correo_Electrónico, Contraseña, Rol y Activo.
+   * Actualiza un usuario por su ID, sólo con campos permitidos
+   * @param {number} idUsuario
+   * @param {Object} cambios
+   * @returns {Promise<number>} filas afectadas
    */
   async actualizar(idUsuario, cambios) {
     const permitidos = [
@@ -112,23 +133,43 @@ class ModeloUsuarios {
     const keys = Object.keys(cambios).filter(k => permitidos.includes(k));
     if (keys.length === 0) return 0;
 
-    const sets = keys.map((k, i) => `"${k}" = $${i + 1}`).join(', ');
+    const sets = keys
+      .map((k, i) => `"${k}" = $${i + 1}`)
+      .join(', ');
     const values = keys.map(k => cambios[k]);
     values.push(idUsuario);
-    const sql = `UPDATE USUARIOS SET ${sets} WHERE ID_Usuario = $${values.length}`;
-    const result = await pool.query(sql, values);
-    return result.rowCount;
+
+    try {
+      const result = await pool.query(
+        `UPDATE "USUARIOS"
+           SET ${sets}
+         WHERE "ID_Usuario" = $${values.length}`,
+        values
+      );
+      return result.rowCount;
+    } catch (error) {
+      console.error('Error al actualizar usuario:', error);
+      throw new Error('Error al actualizar el usuario');
+    }
   }
 
   /**
-   * Elimina un usuario (se puede desactivar en lugar de borrar, si prefieres soft-delete).
+   * Elimina (borra) un usuario por su ID
+   * @param {number} idUsuario
+   * @returns {Promise<number>} filas afectadas
    */
   async eliminar(idUsuario) {
-    const result = await pool.query(
-      `DELETE FROM USUARIOS WHERE ID_Usuario = $1`,
-      [idUsuario]
-    );
-    return result.rowCount;
+    try {
+      const result = await pool.query(
+        `DELETE FROM "USUARIOS"
+         WHERE "ID_Usuario" = $1`,
+        [idUsuario]
+      );
+      return result.rowCount;
+    } catch (error) {
+      console.error('Error al eliminar usuario:', error);
+      throw new Error('Error al eliminar el usuario');
+    }
   }
 }
 

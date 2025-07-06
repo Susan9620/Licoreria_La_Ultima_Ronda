@@ -1,7 +1,7 @@
 const { pool } = require('../configuraciones/configuraciones_bd');
 
 /**
- * Modelo para gestionar las imágenes del carrusel en la base de datos
+ * Modelo para gestionar las imágenes del carrusel en PostgreSQL
  */
 class ModeloImagenesCarrusel {
   /**
@@ -10,7 +10,7 @@ class ModeloImagenesCarrusel {
    */
   async obtenerImagenesCarrusel() {
     try {
-      const imagenes = await pool.query(`
+      const result = await pool.query(`
         SELECT 
           "ID_Imagen", 
           "Título", 
@@ -21,12 +21,11 @@ class ModeloImagenesCarrusel {
         FROM 
           "IMÁGENES_CARRUSEL"
         WHERE 
-          "Activo" = true
+          "Activo" = TRUE
         ORDER BY 
           "Orden" ASC
       `);
-
-      return imagenes.rows;
+      return result.rows;
     } catch (error) {
       console.error('Error al obtener imágenes del carrusel:', error);
       throw new Error('Error al obtener las imágenes del carrusel');
@@ -36,16 +35,26 @@ class ModeloImagenesCarrusel {
   /**
    * Obtiene una imagen específica del carrusel por su ID
    * @param {number} id - ID de la imagen a obtener
-   * @returns {Promise<Object>} - Imagen del carrusel
+   * @returns {Promise<Object|null>} - Imagen del carrusel o null si no existe
    */
   async obtenerImagenPorId(id) {
     try {
-      const [imagenes] = await pool.query(
-        'SELECT * FROM IMÁGENES_CARRUSEL WHERE ID_Imagen = ?',
+      const result = await pool.query(
+        `SELECT
+           "ID_Imagen",
+           "Título",
+           "Subtítulo",
+           "URL_Imagen",
+           "Enlace_Principal",
+           "Orden",
+           "Activo"
+         FROM
+           "IMÁGENES_CARRUSEL"
+         WHERE
+           "ID_Imagen" = $1`,
         [id]
       );
-
-      return imagenes[0] || null;
+      return result.rows[0] || null;
     } catch (error) {
       console.error(`Error al obtener imagen del carrusel con ID ${id}:`, error);
       throw new Error('Error al obtener la imagen del carrusel');
@@ -54,9 +63,10 @@ class ModeloImagenesCarrusel {
 
   /**
    * Inserta una nueva imagen de carrusel y devuelve su ID.
+   * @param {Object} datos - Campos a insertar
+   * @returns {Promise<number>} ID generado
    */
   async crear(datos) {
-    // Campos permitidos para insertar
     const permitidos = [
       'Título',
       'Subtítulo',
@@ -70,17 +80,29 @@ class ModeloImagenesCarrusel {
       throw new Error('No se proporcionaron campos válidos para crear la imagen de carrusel');
     }
 
-    const columns = keys.map(k => `\`${k}\``).join(', ');
-    const placeholders = keys.map(_ => '?').join(', ');
+    const columns = keys.map(k => `"${k}"`).join(', ');
     const values = keys.map(k => datos[k]);
+    const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
 
-    const sql = `INSERT INTO IMÁGENES_CARRUSEL (${columns}) VALUES (${placeholders})`;
-    const [result] = await pool.query(sql, values);
-    return result.insertId;
+    try {
+      const result = await pool.query(
+        `INSERT INTO "IMÁGENES_CARRUSEL" (${columns})
+         VALUES (${placeholders})
+         RETURNING "ID_Imagen"`,
+        values
+      );
+      return result.rows[0]['ID_Imagen'];
+    } catch (error) {
+      console.error('Error al crear imagen de carrusel:', error);
+      throw new Error('Error al insertar la imagen de carrusel');
+    }
   }
 
   /**
    * Actualiza los campos de una imagen de carrusel dado su ID.
+   * @param {number} idImagen
+   * @param {Object} cambios - Campos a actualizar
+   * @returns {Promise<number>} número de filas afectadas
    */
   async actualizar(idImagen, cambios) {
     const permitidos = [
@@ -96,24 +118,44 @@ class ModeloImagenesCarrusel {
       throw new Error('No se proporcionaron campos válidos para actualizar');
     }
 
-    const sets = keys.map(k => `\`${k}\` = ?`).join(', ');
+    const sets = keys
+      .map((k, i) => `"${k}" = $${i + 1}`)
+      .join(', ');
     const values = keys.map(k => cambios[k]);
+    // último placeholder para el id
     values.push(idImagen);
 
-    const sql = `UPDATE IMÁGENES_CARRUSEL SET ${sets} WHERE ID_Imagen = ?`;
-    const [result] = await pool.query(sql, values);
-    return result.affectedRows;
+    try {
+      const result = await pool.query(
+        `UPDATE "IMÁGENES_CARRUSEL"
+         SET ${sets}
+         WHERE "ID_Imagen" = $${values.length}`,
+        values
+      );
+      return result.rowCount;
+    } catch (error) {
+      console.error(`Error al actualizar imagen ${idImagen}:`, error);
+      throw new Error('Error al actualizar la imagen de carrusel');
+    }
   }
 
   /**
    * Elimina una imagen de carrusel por su ID.
+   * @param {number} idImagen
+   * @returns {Promise<number>} número de filas afectadas
    */
   async eliminar(idImagen) {
-    const [result] = await pool.query(
-      `DELETE FROM IMÁGENES_CARRUSEL WHERE ID_Imagen = ?`,
-      [idImagen]
-    );
-    return result.affectedRows;
+    try {
+      const result = await pool.query(
+        `DELETE FROM "IMÁGENES_CARRUSEL"
+         WHERE "ID_Imagen" = $1`,
+        [idImagen]
+      );
+      return result.rowCount;
+    } catch (error) {
+      console.error(`Error al eliminar imagen ${idImagen}:`, error);
+      throw new Error('Error al eliminar la imagen de carrusel');
+    }
   }
 }
 
