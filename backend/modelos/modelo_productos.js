@@ -11,51 +11,51 @@ class ModeloProductos {
    */
   async obtenerProductosDestacados(limite = 4) {
     try {
-      const [productos] = await pool.query(
+      const resultado = await pool.query(
         `SELECT 
-           p.ID_Producto,
-           p.Nombre,
-           p.Descripción_Corta,
-           p.Slug,
-           p.Etiqueta,
-           c.Nombre AS Categoría,
-           v.ID_Variante_Producto AS ID_Variante,
-           v.Nombre_Variante,
-           v.Graduación AS Graduacion,
-           v.Precio,
-           v.Precio_Oferta,
-           v.Stock       AS Stock,
-           i.URL AS Imagen_URL,
+         p."ID_Producto",
+         p."Nombre",
+         p."Descripción_Corta",
+         p."Slug",
+         p."Etiqueta",
+         c."Nombre" AS "Categoría",
+         v."ID_Variante_Producto" AS "ID_Variante",
+         v."Nombre_Variante",
+         v."Graduación" AS "Graduacion",
+         v."Precio",
+         v."Precio_Oferta",
+         v."Stock" AS "Stock",
+         i."URL" AS "Imagen_URL",
 
-           -- Agregados de reseñas:
-           COALESCE(AVG(r.Valoración), 0) AS CalificaciónMedia,
-           COUNT(r.ID_Reseña)      AS TotalReseñas
+         -- Agregados de reseñas:
+         COALESCE(AVG(r."Valoración"), 0) AS "CalificaciónMedia",
+         COUNT(r."ID_Reseña") AS "TotalReseñas"
 
-         FROM PRODUCTOS p
-         JOIN CATEGORÍAS c
-           ON p.ID_Categoría = c.ID_Categoría
+       FROM "PRODUCTOS" p
+       JOIN "CATEGORÍAS" c
+         ON p."ID_Categoría" = c."ID_Categoría"
 
-         LEFT JOIN VARIANTES_PRODUCTO v
-           ON p.ID_Producto = v.ID_Producto
-          AND v.Activo = 1
-          AND v.Predeterminada = 1
+       LEFT JOIN "VARIANTES_PRODUCTO" v
+         ON p."ID_Producto" = v."ID_Producto"
+        AND v."Activo" = TRUE
+        AND v."Predeterminada" = TRUE
 
-         LEFT JOIN IMÁGENES_PRODUCTO i
-           ON p.ID_Producto = i.ID_Producto
-          AND i.Principal = 1
+       LEFT JOIN "IMÁGENES_PRODUCTO" i
+         ON p."ID_Producto" = i."ID_Producto"
+        AND i."Principal" = TRUE
 
-         LEFT JOIN RESEÑAS r
-           ON p.ID_Producto = r.ID_Producto
+       LEFT JOIN "RESEÑAS" r
+         ON p."ID_Producto" = r."ID_Producto"
 
-         WHERE p.Destacado = 1
-           AND p.Activo = 1
+       WHERE p."Destacado" = TRUE
+         AND p."Activo" = TRUE
 
-         GROUP BY p.ID_Producto
-         ORDER BY p.Fecha_Actualización DESC
-         LIMIT ?`,
+       GROUP BY p."ID_Producto", c."Nombre", v."ID_Variante_Producto", v."Nombre_Variante", v."Graduación", v."Precio", v."Precio_Oferta", v."Stock", i."URL"
+       ORDER BY p."Fecha_Actualización" DESC
+       LIMIT $1`,
         [limite]
       );
-      return productos;
+      return resultado.rows;
     } catch (error) {
       console.error('Error al obtener productos destacados:', error);
       throw new Error('Error al obtener los productos destacados');

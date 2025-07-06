@@ -10,21 +10,21 @@ class ModeloCategorias {
    */
   async obtenerCategorias() {
     try {
-      const [categorias] = await pool.query(
+      const categorias = await pool.query(
         `SELECT 
-           ID_Categoría,
-           Nombre,
-           Descripción,
-           Ícono,
-           Slug
-         FROM 
-           CATEGORÍAS
-         WHERE 
-           Activo = 1
-         ORDER BY 
-           Nombre ASC`
+         "ID_Categoría",
+         "Nombre",
+         "Descripción",
+         "Ícono",
+         "Slug"
+       FROM 
+         "CATEGORÍAS"
+       WHERE 
+         "Activo" = TRUE
+       ORDER BY 
+         "Nombre" ASC`
       );
-      return categorias;
+      return categorias.rows;
     } catch (error) {
       console.error('Error al obtener categorías:', error);
       throw new Error('Error al obtener las categorías');
