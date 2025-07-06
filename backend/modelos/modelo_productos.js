@@ -64,46 +64,52 @@ class ModeloProductos {
    */
   async obtenerTodos() {
     try {
-      const result = await pool.query(
-        `SELECT
-           p."ID_Producto",
-           p."Nombre",
-           p."Descripción_Corta",
-           p."Slug",
-           COALESCE(r.calif, p."Calificación") AS "CalificaciónMedia",
-           COALESCE(r.numReseñas, 0)         AS "NumReseñas",
-           p."Etiqueta",
-           c."Nombre"                    AS "Categoría",
-           v."ID_Variante_Producto"      AS "ID_Variante",
-           v."Nombre_Variante",
-           v."Graduación"                AS "Graduacion",
-           v."Precio",
-           v."Precio_Oferta",
-           v."Stock",
-           i."URL"                       AS "Imagen_URL"
-         FROM "PRODUCTOS" p
-         JOIN "CATEGORÍAS" c
-           ON p."ID_Categoría" = c."ID_Categoría"
-         LEFT JOIN "VARIANTES_PRODUCTO" v
-           ON p."ID_Producto" = v."ID_Producto"
-           AND v."Activo" = TRUE
-           AND v."Predeterminada" = TRUE
-         LEFT JOIN "IMÁGENES_PRODUCTO" i
-           ON p."ID_Producto" = i."ID_Producto"
-           AND i."Principal" = TRUE
-         LEFT JOIN (
-           SELECT
-             "ID_Producto",
-             ROUND(AVG("Valoración")::numeric,1) AS calif,
-             COUNT(*)                          AS numReseñas
-           FROM "RESEÑAS"
-           GROUP BY "ID_Producto"
-         ) r
-           ON p."ID_Producto" = r."ID_Producto"
-         WHERE p."Activo" = TRUE
-         ORDER BY p."Nombre" ASC`
-      );
-      return result.rows;
+      const productos = await pool.query(`
+       SELECT
+          p."ID_Producto",
+          p."Nombre",
+          p."Descripción_Corta",
+          p."Slug",
+          COALESCE(r.calif, p."Calificación") AS "CalificaciónMedia",
+          COALESCE(r.numReseñas, 0) AS "NumReseñas",
+          p."Etiqueta",
+          c."Nombre" AS "Categoría",
+          v."ID_Variante_Producto" AS "ID_Variante",
+          v."Nombre_Variante",
+          v."Graduación" AS "Graduacion",
+          v."Precio",
+          v."Precio_Oferta",
+          v."Stock" AS "Stock",
+          i."URL" AS "Imagen_URL"
+        FROM "PRODUCTOS" p
+        JOIN "CATEGORÍAS" c
+          ON p."ID_Categoría" = c."ID_Categoría"
+        LEFT JOIN "VARIANTES_PRODUCTO" v
+          ON p."ID_Producto" = v."ID_Producto"
+          AND v."Activo" = TRUE
+          AND v."Predeterminada" = TRUE
+        LEFT JOIN LATERAL (
+          SELECT i."URL"
+          FROM "IMÁGENES_PRODUCTO" i
+          WHERE i."ID_Producto" = p."ID_Producto"
+            AND i."Principal" = TRUE
+          ORDER BY i."ID_Imagen" ASC
+          LIMIT 1
+        ) i ON TRUE
+        LEFT JOIN (
+          SELECT
+            "ID_Producto",
+            ROUND(AVG("Valoración"), 1) AS calif,
+            COUNT(*) AS numReseñas
+          FROM "RESEÑAS"
+          GROUP BY "ID_Producto"
+        ) r
+          ON p."ID_Producto" = r."ID_Producto"
+        WHERE p."Activo" = TRUE
+        ORDER BY p."Nombre" ASC;
+
+      `);
+      return productos.rows;
     } catch (error) {
       console.error('Error al obtener todos los productos:', error);
       throw new Error('Error al obtener todos los productos');
@@ -244,9 +250,9 @@ class ModeloProductos {
       throw new Error('No se proporcionaron campos válidos para crear el producto');
     }
 
-    const columns     = keys.map(k => `"${k}"`).join(', ');
-    const values      = keys.map(k => datos[k]);
-    const placeholders = values.map((_, i) => `$${i+1}`).join(', ');
+    const columns = keys.map(k => `"${k}"`).join(', ');
+    const values = keys.map(k => datos[k]);
+    const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
 
     try {
       const result = await pool.query(
@@ -269,10 +275,10 @@ class ModeloProductos {
    * @returns {Promise<number>}
    */
   async actualizar(idProducto, cambios) {
-    const campos  = [];
+    const campos = [];
     const valores = [];
     Object.keys(cambios).forEach((key, idx) => {
-      campos.push(`"${key}" = $${idx+1}`);
+      campos.push(`"${key}" = $${idx + 1}`);
       valores.push(cambios[key]);
     });
     valores.push(idProducto);
