@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalID.textContent = pedido.idPedido;
             detUsuario.textContent = pedido.idUsuario;
             detFecha.textContent = new Date(pedido.fecha).toLocaleString();
-            detTotal.textContent = parseFloat(pedido.total).toFixed(2);
+            detTotal.textContent = parseFloat(pedido.Total).toFixed(2);
             detEstado.value = pedido.estadoPedido;
             detProductos.innerHTML = items.map(item => {
                 const nombre = item.nombreVariante
