@@ -209,7 +209,7 @@ const Gestión_Pedidos = {
         // Totales
         const sub = parseFloat(p.subtotal) || 0;
         const env = parseFloat(p.envio) || 0;
-        const tot = parseFloat(p.total) || 0;
+        const tot = parseFloat(p.Total) || 0;
         const desc = parseFloat(p.descuento) || 0;
 
         document.getElementById('Valor_Subtotal').textContent = `$${sub.toFixed(2)}`;
@@ -337,7 +337,7 @@ const Gestión_Pedidos = {
 
         this.Estado.Historial_Pedidos.forEach(p => {
             const idOrden = p.idPedido || p.numeroPedido;
-            const totalVal = parseFloat(p.total) || 0;
+            const totalVal = parseFloat(p.Total) || 0;
             const fecha = new Date(p.fecha);
             const fechaFormateada = fecha.toLocaleDateString('es-ES', this.Configuración.Fecha_Corta);
             const estadoCapitalizado = p.estadoPedido.charAt(0).toUpperCase() + p.estadoPedido.slice(1);
