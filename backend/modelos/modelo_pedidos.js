@@ -211,7 +211,7 @@ class ModeloPedidos {
            p."ID_Pedido"       AS "idPedido",
            p."Número_Pedido"   AS "numeroPedido",
            p."Fecha_Creación"  AS "fecha",
-           p."Total",
+           p."Total",          AS "total",
            p."Estado_Pedido"   AS "estadoPedido"
          FROM "PEDIDOS" p
          WHERE p."ID_Usuario" = $1

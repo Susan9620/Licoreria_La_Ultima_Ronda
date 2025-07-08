@@ -1358,9 +1358,7 @@ function Renderizar_Historial_Global() {
 
     window.Historial_Global.Pedidos.forEach(p => {
         const idOrden = p.idPedido || p.numeroPedido;
-        const parsed = parseFloat(p.total);
-        const totalVal = isNaN(parsed) ? 0 : parsed;
-        console.log(`Pedido ${p.numeroPedido} → p.total="${p.total}", totalVal=${totalVal}`);
+        const totalVal = parseFloat(p.total) || 0;
         const fecha = new Date(p.fecha);
         const fechaFormateada = fecha.toLocaleDateString('es-ES', window.Configuración_Historial.Formato_Fecha_Corta);
         const estadoCapitalizado = p.estadoPedido.charAt(0).toUpperCase() + p.estadoPedido.slice(1);
