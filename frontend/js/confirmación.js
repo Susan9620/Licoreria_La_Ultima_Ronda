@@ -140,81 +140,50 @@ const Gestión_Pedidos = {
         }
     },
 
+    // Actualizar estado del pedido en la interfaz
     Actualizar_Estado_Pedido: function () {
         const Pedido = this.Estado.Pedido_Actual;
+
         if (!Pedido) return;
 
         const Encabezado_Título = document.querySelector('.Encabezado_Confirmación h2');
         const Encabezado_Subtítulo = document.querySelector('.Encabezado_Confirmación p');
-        const Primer_Punto = document.querySelector('.Estado_Punto');
-        const Estado_Texto = document.querySelector('.Estado_Texto');
 
-        // Limpieza de clases comunes
-        if (Estado_Texto) {
-            Estado_Texto.classList.remove('Pendiente', 'Pagado', 'Entregado', 'Cancelado');
-        }
-
-        // 1) Pendiente
         if (Pedido.estadoPedido === 'Pendiente') {
             Encabezado_Título.textContent = '¡Pedido Pendiente!';
             Encabezado_Subtítulo.textContent = 'Su pedido está en proceso de verificación de pago.';
+
+            const Primer_Punto = document.querySelector('.Estado_Punto');
             if (Primer_Punto) {
                 const Estado_Título = Primer_Punto.querySelector('.Estado_Titulo');
                 if (Estado_Título) Estado_Título.textContent = 'Pedido Pendiente';
             }
+
+            const Estado_Texto = document.querySelector('.Estado_Texto');
             if (Estado_Texto) {
+                Estado_Texto.classList.remove('Pagado');
                 Estado_Texto.classList.add('Pendiente');
                 Estado_Texto.textContent = 'Pendiente';
             }
-
-            // 2) Pagado
-        } else if (Pedido.estadoPedido === 'Pagado') {
+        } else {
             Encabezado_Título.textContent = '¡Pedido Confirmado!';
             Encabezado_Subtítulo.textContent = 'Gracias por su compra. Hemos recibido su pedido correctamente.';
-            if (Primer_Punto) {
-                const Estado_Título = Primer_Punto.querySelector('.Estado_Titulo');
-                if (Estado_Título) Estado_Título.textContent = 'Pedido Pagado';
-            }
+
+            const Estado_Texto = document.querySelector('.Estado_Texto');
             if (Estado_Texto) {
+                Estado_Texto.classList.remove('Pendiente');
                 Estado_Texto.classList.add('Pagado');
                 Estado_Texto.textContent = 'Pagado';
-            }
-
-            // 3) Entregado
-        } else if (Pedido.estadoPedido === 'Entregado') {
-            Encabezado_Título.textContent = '¡Pedido Entregado!';
-            Encabezado_Subtítulo.textContent = 'Tu pedido ha sido entregado con éxito.';
-            if (Primer_Punto) {
-                const Estado_Título = Primer_Punto.querySelector('.Estado_Titulo');
-                if (Estado_Título) Estado_Título.textContent = 'Pedido Entregado';
-            }
-            if (Estado_Texto) {
-                Estado_Texto.classList.add('Entregado');
-                Estado_Texto.textContent = 'Entregado';
-            }
-
-            // 4) Cancelado
-        } else if (Pedido.estadoPedido === 'Cancelado') {
-            Encabezado_Título.textContent = '¡Pedido Cancelado!';
-            Encabezado_Subtítulo.textContent = 'Lamentamos informarle que su pedido ha sido cancelado.';
-            if (Primer_Punto) {
-                const Estado_Título = Primer_Punto.querySelector('.Estado_Titulo');
-                if (Estado_Título) Estado_Título.textContent = 'Pedido Cancelado';
-            }
-            if (Estado_Texto) {
-                Estado_Texto.classList.add('Cancelado');
-                Estado_Texto.textContent = 'Cancelado';
             }
         }
 
         // ——— Bloque para ocultar/mostrar botón de factura ———
         const btnFactura = document.getElementById('Descargar_Factura');
         if (btnFactura) {
-            // por ejemplo: solo muestro factura si ya está pagado o entregado
-            if (['Pagado', 'Entregado'].includes(Pedido.estadoPedido)) {
-                btnFactura.style.display = '';
-            } else {
+            if (Pedido.estadoPedido === 'Pendiente' || Pedido.estadoPedido === 'Cancelado') {
                 btnFactura.style.display = 'none';
+            } else {
+                btnFactura.style.display = ''; // o 'inline-block' si tu CSS lo necesita
             }
         }
     },
