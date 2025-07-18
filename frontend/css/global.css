@@ -267,11 +267,11 @@ img {
     transition: all var(--Velocidad_Transición) ease;
 }
 
-.Menu_Usuario {
+.Menú_Usuario {
     position: relative;
 }
 
-.Icono_Usuario {
+.Ícono_Usuario {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -284,17 +284,17 @@ img {
     border: 2px solid transparent;
 }
 
-.Icono_Usuario:hover {
+.Ícono_Usuario:hover {
     border-color: var(--Primario);
     transform: scale(1.05);
 }
 
-.Icono_Usuario i {
+.Ícono_Usuario i {
     color: var(--Blanco);
     font-size: 1.2rem;
 }
 
-.Dropdown_Usuario {
+.Menú_Desplegable_Usuario {
     position: absolute;
     top: 100%;
     right: 0;
@@ -310,13 +310,13 @@ img {
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.Menu_Usuario.activo .Dropdown_Usuario {
+.Menú_Usuario.activo .Menú_Desplegable_Usuario {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
 }
 
-.Dropdown_Usuario::before {
+.Menú_Desplegable_Usuario::before {
     content: '';
     position: absolute;
     top: -6px;
@@ -329,38 +329,38 @@ img {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.Usuario_Info {
+.Información_Usuario {
     padding: 1rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.Usuario_Nombre {
+.Nombre_Usuario {
     font-weight: 600;
     color: var(--Blanco);
     margin-bottom: 0.2rem;
 }
 
-.Usuario_Email {
+.Email_Usuario {
     font-size: 0.9rem;
     color: var(--Texto_Secundario);
 }
 
-.Menu_Items {
+.Items_Menú {
     list-style: none;
     padding: 0.5rem 0;
 }
 
-.Menu_Item {
+.Item_Menú {
     padding: 0.7rem 1rem;
     transition: background-color var(--Velocidad_Transición) ease;
     cursor: pointer;
 }
 
-.Menu_Item:hover {
+.Item_Menú:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-.Menu_Item a {
+.Item_Menú a {
     color: var(--Texto_Principal);
     text-decoration: none;
     display: flex;
@@ -369,21 +369,21 @@ img {
     font-size: 0.9rem;
 }
 
-.Menu_Item i {
+.Item_Menú i {
     color: var(--Primario);
     width: 16px;
 }
 
-.Menu_Item.logout {
+.Item_Menú.Cerrar_Sesión {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     margin-top: 0.5rem;
 }
 
-.Menu_Item.logout:hover {
+.Item_Menú.Cerrar_Sesión:hover {
     background-color: rgba(255, 90, 0, 0.1);
 }
 
-.Menu_Item.logout a {
+.Item_Menú.Cerrar_Sesión a {
     color: var(--Primario);
     font-weight: 500;
 }
@@ -1367,7 +1367,7 @@ footer {
         height: 50px;
     }
 
-    .Dropdown_Usuario {
+    .Menú_Desplegable_Usuario {
         min-width: 180px;
         right: -10px;
     }

@@ -32,8 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // —————————————————————————————————————————————————————————
 function setupLogoutModalEvents() {
     // 2.1) abrir el modal
-    document.getElementById('cerrarSesion')?.addEventListener('click', e => {
-        console.log('logout listener registrado');
+    document.getElementById('Cerrar_Sesión')?.addEventListener('click', e => {
+        console.log('Cerrar_Sesión listener registrado');
         e.preventDefault();
         abrirModalLogout();
     });
@@ -67,14 +67,14 @@ document.body.addEventListener('click', function (e) {
 
 function abrirModalLogout() {
     const modal = document.getElementById('Modal_Confirmación_Logout');
-    if (!modal) return console.error('Modal de logout no encontrado');
+    if (!modal) return console.error('Modal de Cerrar_Sesión no encontrado');
     modal.classList.add('show');
     document.body.style.overflow = 'hidden';
 }
 
 function cerrarModalLogout() {
     const modal = document.getElementById('Modal_Confirmación_Logout');
-    if (!modal) return console.error('Modal de logout no encontrado');
+    if (!modal) return console.error('Modal de Cerrar_Sesión no encontrado');
     modal.classList.remove('show');
     document.body.style.overflow = '';
 }
@@ -198,13 +198,13 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Menú desplegable
-    const iconoUsuario = document.getElementById('iconoUsuario');
-    const dropdownUsuario = document.getElementById('dropdownUsuario');
-    const menuUsuario = document.querySelector('.Menu_Usuario');
+    const Ícono_Usuario = document.getElementById('Ícono_Usuario');
+    const Menú_Desplegable_Usuario = document.getElementById('Menú_Desplegable_Usuario');
+    const menuUsuario = document.querySelector('.Menú_Usuario');
 
     // Toggle del menú 
-    if (iconoUsuario && menuUsuario) {
-        iconoUsuario.addEventListener('click', function (e) {
+    if (Ícono_Usuario && menuUsuario) {
+        Ícono_Usuario.addEventListener('click', function (e) {
             e.stopPropagation();
             menuUsuario.classList.toggle('activo');
         });
@@ -220,8 +220,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Prevenir que el menú se cierre al hacer clic dentro
-    if (dropdownUsuario) {
-        dropdownUsuario.addEventListener('click', function (e) {
+    if (Menú_Desplegable_Usuario) {
+        Menú_Desplegable_Usuario.addEventListener('click', function (e) {
             e.stopPropagation();
         });
     }
@@ -677,9 +677,9 @@ const Carrito = {
 document.addEventListener('DOMContentLoaded', async function () {
     // 0) Obtener token
     const tuJwt = localStorage.getItem('token');
-    const menuUsuario = document.querySelector('.Menu_Usuario');
-    const nombreElem = document.querySelector('.Usuario_Nombre');
-    const emailElem = document.querySelector('.Usuario_Email');
+    const menuUsuario = document.querySelector('.Menú_Usuario');
+    const nombreElem = document.querySelector('.Nombre_Usuario');
+    const emailElem = document.querySelector('.Email_Usuario');
 
     if (!tuJwt) {
         // Si no hay token, ocultar todo el menú de usuario
@@ -1687,9 +1687,9 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 async function actualizarUsuarioLogueado() {
     const tuJwt = localStorage.getItem('token');
-    const menuUsuario = document.querySelector('.Menu_Usuario');
-    const nombreElem = document.querySelector('.Usuario_Nombre');
-    const emailElem = document.querySelector('.Usuario_Email');
+    const menuUsuario = document.querySelector('.Menú_Usuario');
+    const nombreElem = document.querySelector('.Nombre_Usuario');
+    const emailElem = document.querySelector('.Email_Usuario');
 
     if (!tuJwt) {
         if (menuUsuario) menuUsuario.style.display = 'none';
@@ -1714,10 +1714,10 @@ async function actualizarUsuarioLogueado() {
             try {
                 const payload = JSON.parse(atob(tuJwt.split('.')[1]));
                 if (payload.rol === 'Administrador') {
-                    const menuItems = menuUsuario.querySelector('.Menu_Items');
+                    const menuItems = menuUsuario.querySelector('.Items_Menú');
                     if (menuItems && !document.getElementById('AdminMenuItem')) {
                         const li = document.createElement('li');
-                        li.className = 'Menu_Item';
+                        li.className = 'Item_Menú';
                         li.id = 'AdminMenuItem';
                         li.innerHTML = `<a href="/html/administrador.html"> 
                             <i class="fas fa-user-shield"></i> Administrador 

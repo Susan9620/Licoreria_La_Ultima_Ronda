@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const select = document.getElementById('Select_Administrador');
     const content = document.getElementById('Contenido_Administrador');
     // ---------------- Pedidos ----------------
-    const modal = document.getElementById('Modal_Administrador');
+    const modal = document.getElementById('Modal_Pedido');
     const cerrarModal = document.getElementById('Cerrar_Modal_Pedido');
     const btnGuardar = document.getElementById('Botón_Guardar_Pedido');
     const btnCancelar = document.getElementById('Botón_Cancelar_Pedido');
