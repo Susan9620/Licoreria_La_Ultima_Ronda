@@ -71,9 +71,9 @@ const Gestión_Pedidos = {
             if (resp.ok && json.éxito) {
                 // Asegúrate que el controller devuelve { Nombre_Completo, Correo_Electrónico, Teléfono }
                 this.Estado.Datos_Sesión = {
-                    Nombre_Completo: json.datos.Nombre_Completo,
-                    Correo_Electrónico: json.datos.Correo_Electrónico,
-                    Teléfono: json.datos.Teléfono
+                    Nombre_Completo: json.Datos.Nombre_Completo,
+                    Correo_Electrónico: json.Datos.Correo_Electrónico,
+                    Teléfono: json.Datos.Teléfono
                 };
             } else {
                 throw new Error(json.mensaje || 'No se pudo cargar perfil');
@@ -116,13 +116,13 @@ const Gestión_Pedidos = {
             if (!json.éxito) throw new Error('Pedido no exitoso');
 
             // 1️⃣ Asigna el pedido y sus items al estado
-            this.Estado.Pedido_Actual = json.datos.pedido;
-            this.Estado.Pedido_Actual.items = json.datos.items;
+            this.Estado.Pedido_Actual = json.Datos.pedido;
+            this.Estado.Pedido_Actual.items = json.Datos.items;
 
-            console.log('📝 Datos pedidos completos:', json.datos);
-            console.log('📝 Detalle de items (completo):', JSON.stringify(json.datos.items, null, 2));
+            console.log('📝 Datos pedidos completos:', json.Datos);
+            console.log('📝 Detalle de items (completo):', JSON.stringify(json.Datos.items, null, 2));
             console.log('📋 JSON recibido:', json);
-            console.log('📝 Pedido completo (campos):', JSON.stringify(json.datos.pedido, null, 2));
+            console.log('📝 Pedido completo (campos):', JSON.stringify(json.Datos.pedido, null, 2));
 
             if (!resp.ok || !json.éxito) {
                 throw new Error(json.mensaje || resp.statusText);
@@ -319,7 +319,7 @@ const Gestión_Pedidos = {
             }
 
             // aquí tu array de pedidos reales:
-            this.Estado.Historial_Pedidos = json.datos;
+            this.Estado.Historial_Pedidos = json.Datos;
             this.Renderizar_Historial_Pedidos();
             console.log("Historial de pedidos cargado:", this.Estado.Historial_Pedidos);
 
@@ -507,13 +507,13 @@ const Gestión_Pedidos = {
                 if (!resp.ok || !json.éxito) {
                     throw new Error(json.mensaje || 'Error cargando detalles del pedido');
                 }
-                // json.datos.pedido  y json.datos.items
+                // json.Datos.pedido  y json.Datos.items
                 p = {
-                    ...json.datos.pedido,
-                    items: json.datos.items,
-                    subtotal: json.datos.pedido.subtotal,
-                    envio: json.datos.pedido.envio,
-                    descuento: json.datos.pedido.descuento
+                    ...json.Datos.pedido,
+                    items: json.Datos.items,
+                    subtotal: json.Datos.pedido.subtotal,
+                    envio: json.Datos.pedido.envio,
+                    descuento: json.Datos.pedido.descuento
                 };
             }
 

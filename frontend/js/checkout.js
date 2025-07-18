@@ -343,8 +343,8 @@ const Checkout = {
         const res = await fetch(`${API_BASE}/api/productos/all`);  // <- aquí tu ruta que devuelve TODO el catálogo
         if (!res.ok) throw new Error(`No pude cargar todos los productos: ${res.status}`);
         const json = await res.json();
-        // suponemos que vienen en json.datos
-        return Array.isArray(json.datos) ? json.datos : [];
+        // suponemos que vienen en json.Datos
+        return Array.isArray(json.Datos) ? json.Datos : [];
     },
 
     // 3) Prepara items resolviendo idVariante en memoria (con fallback al ID_Producto)
@@ -366,7 +366,7 @@ const Checkout = {
                 // 3) Obtenemos la lista de variantes
                 const resVar = await fetch(`${API_BASE}/api/variantes/producto/${prod.ID_Producto}`);
                 const varJson = await resVar.json();
-                const variantes = Array.isArray(varJson.datos) ? varJson.datos : [];
+                const variantes = Array.isArray(varJson.Datos) ? varJson.Datos : [];
 
                 // 4) Intentamos emparejar la variante por nombre, o fallback a la predeterminada
                 let varPred = variantes.find(v => v.Nombre_Variante === nombreVariante)
@@ -405,7 +405,7 @@ const Checkout = {
         console.log("Completando pedido…");
 
         // 4.1) Recopilar datos del formulario
-        const datos = this.Recopilar_Datos_Formulario();
+        const Datos = this.Recopilar_Datos_Formulario();
 
         try {
             // 4.2) Resolver idVariante para cada artículo
@@ -413,7 +413,7 @@ const Checkout = {
             const items = await this.prepararItemsParaCheckout();
             console.log("📋 Items procesados para enviar:", items);
 
-            const { direccion, codigoPostal, instrucciones } = datos;
+            const { direccion, codigoPostal, instrucciones } = Datos;
             const subtotal = window.Carrito.Calcular_Total();
             const envio = this.Estado.Envío_Gratis ? 0 : this.Configuración.Envío;
             const descuento = subtotal * this.Estado.Descuento_Aplicado;
@@ -456,7 +456,7 @@ const Checkout = {
             if (!res.ok || !json.éxito) throw new Error(json.mensaje || `Error ${res.status}`);
 
             // 2) Tomamos el id del pedido que acaba de crear el backend
-            const idPedido = json.datos.idPedido;
+            const idPedido = json.Datos.idPedido;
 
             // 3) Vaciamos el carrito
             window.Carrito.Artículos = [];

@@ -45,7 +45,7 @@ class ControladorReseñas {
       return res.status(200).json({
         éxito: true,
         mensaje: 'Reseña registrada correctamente',
-        datos: { promedio, total },
+        Datos: { promedio, total },
       });
     } catch (error) {
       console.error('Error en insertarReseña:', error);
@@ -75,7 +75,7 @@ class ControladorReseñas {
       );
       return res.status(200).json({
         éxito: true,
-        datos: reseñas,
+        Datos: reseñas,
         mensaje: 'Reseñas obtenidas correctamente',
       });
     } catch (error) {

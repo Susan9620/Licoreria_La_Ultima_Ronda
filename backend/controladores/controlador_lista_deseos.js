@@ -10,8 +10,8 @@ class ControladorListaDeseos {
   async obtenerLista(req, res) {
     try {
       const usuarioId = req.usuario.id;
-      const datos = await modeloListaDeseos.obtenerPorUsuario(usuarioId);
-      res.status(200).json({ éxito: true, datos });
+      const Datos = await modeloListaDeseos.obtenerPorUsuario(usuarioId);
+      res.status(200).json({ éxito: true, Datos });
     } catch (error) {
       console.error('Error al obtener lista de deseos:', error);
       res.status(500).json({ éxito: false, mensaje: 'Error al obtener la lista de deseos' });
@@ -29,7 +29,7 @@ class ControladorListaDeseos {
         return res.status(400).json({ éxito: false, mensaje: 'Falta el ID de producto' });
       }
       const nuevo = await modeloListaDeseos.agregar(usuarioId, productoId);
-      res.status(201).json({ éxito: true, datos: nuevo });
+      res.status(201).json({ éxito: true, Datos: nuevo });
     } catch (error) {
       console.error('Error al agregar a lista de deseos:', error);
       res.status(500).json({ éxito: false, mensaje: 'Error al agregar el producto a la lista de deseos' });

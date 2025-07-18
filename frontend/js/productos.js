@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const fragment = document.createDocumentFragment();
 
-            json.datos.forEach(p => {
+            json.Datos.forEach(p => {
                 const clon = Template.content.cloneNode(true);
                 const tarjeta = clon.querySelector('.Tarjeta_Producto');
 

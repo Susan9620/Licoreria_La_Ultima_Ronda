@@ -10,7 +10,7 @@ const obtenerPorProducto = async (req, res) => {
 
     res.json({
       éxito: true,
-      datos: variantes,
+      Datos: variantes,
       mensaje: "Variantes obtenidas exitosamente",
     })
   } catch (error) {
@@ -46,7 +46,7 @@ const obtenerPorId = async (req, res) => {
 
     res.json({
       éxito: true,
-      datos: variante,
+      Datos: variante,
       mensaje: "Variante obtenida exitosamente",
     })
   } catch (error) {

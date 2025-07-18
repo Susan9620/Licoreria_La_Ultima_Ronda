@@ -12,7 +12,7 @@ class ControladorUsuarios {
       const { Nombre_Completo, Correo_Electrónico, Contraseña } = req.body;
       // Validar campos
       if (!Nombre_Completo || !Correo_Electrónico || !Contraseña) {
-        return res.status(400).json({ éxito: false, mensaje: 'Faltan datos' });
+        return res.status(400).json({ éxito: false, mensaje: 'Faltan Datos' });
       }
       // Hashear contraseña
       const salt = await bcrypt.genSalt(10);
@@ -23,7 +23,7 @@ class ControladorUsuarios {
         Correo_Electrónico,
         Contraseña: hash
       });
-      return res.status(201).json({ éxito: true, datos: { id: nuevo.insertId, Correo_Electrónico } });
+      return res.status(201).json({ éxito: true, Datos: { id: nuevo.insertId, Correo_Electrónico } });
     } catch (err) {
       console.error('Error al registrar usuario:', err);
       // Duplicado de correo
@@ -70,7 +70,7 @@ class ControladorUsuarios {
   async listar(req, res) {
     try {
       const usuarios = await modeloUsuarios.listarTodos();
-      res.json({ éxito: true, datos: usuarios });
+      res.json({ éxito: true, Datos: usuarios });
     } catch (err) {
       console.error(err);
       res.status(500).json({ éxito: false, mensaje: 'Error al obtener usuarios' });
@@ -94,7 +94,7 @@ class ControladorUsuarios {
       const { Nombre_Completo, Correo_Electrónico, Teléfono } = usuario;
       res.json({
         éxito: true,
-        datos: { Nombre_Completo, Correo_Electrónico, Teléfono }
+        Datos: { Nombre_Completo, Correo_Electrónico, Teléfono }
       });
     } catch (err) {
       console.error('Error al obtener perfil:', err);
@@ -146,7 +146,7 @@ class ControladorUsuarios {
       return res.status(201).json({
         éxito: true,
         mensaje: 'Usuario creado correctamente',
-        datos: { idUsuario: id }
+        Datos: { idUsuario: id }
       });
     } catch (error) {
       console.error('Error al crear usuario:', error);

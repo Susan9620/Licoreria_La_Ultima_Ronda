@@ -229,10 +229,10 @@ class ModeloProductos {
 
   /**
    * Crea un producto con los campos válidos y devuelve su ID
-   * @param {Object} datos
+   * @param {Object} Datos
    * @returns {Promise<number>}
    */
-  async crear(datos) {
+  async crear(Datos) {
     const permitidos = [
       'ID_Categoría',
       'Nombre',
@@ -245,13 +245,13 @@ class ModeloProductos {
       'Etiqueta',
       'Activo'
     ];
-    const keys = Object.keys(datos).filter(k => permitidos.includes(k));
+    const keys = Object.keys(Datos).filter(k => permitidos.includes(k));
     if (keys.length === 0) {
       throw new Error('No se proporcionaron campos válidos para crear el producto');
     }
 
     const columns = keys.map(k => `"${k}"`).join(', ');
-    const values = keys.map(k => datos[k]);
+    const values = keys.map(k => Datos[k]);
     const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
 
     try {

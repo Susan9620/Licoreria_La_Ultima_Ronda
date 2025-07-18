@@ -14,7 +14,7 @@ class ControladorCategorias {
       res.status(200).json({
         éxito: true,
         mensaje: 'Categorías obtenidas correctamente',
-        datos: categorias
+        Datos: categorias
       });
     } catch (error) {
       console.error('Error en controlador de categorías:', error);
@@ -32,12 +32,12 @@ class ControladorCategorias {
    */
   async crearCategoria(req, res) {
     try {
-      const datos = req.body; 
-      const id = await modeloCategorias.crear(datos);
+      const Datos = req.body; 
+      const id = await modeloCategorias.crear(Datos);
       return res.status(201).json({
         éxito: true,
         mensaje: 'Categoría creada correctamente',
-        datos: { idCategoria: id }
+        Datos: { idCategoria: id }
       });
     } catch (error) {
       console.error('Error al crear categoría:', error);

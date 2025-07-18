@@ -13,7 +13,7 @@ class ControladorContacto {
       }
 
       const id = await ModeloContacto.crear(idUsuario, mensaje.trim());
-      return res.status(201).json({ éxito: true, mensaje: 'Mensaje guardado', datos: { id } });
+      return res.status(201).json({ éxito: true, mensaje: 'Mensaje guardado', Datos: { id } });
     } catch (e) {
       console.error('Error creando mensaje de contacto:', e);
       return res.status(500).json({ éxito: false, mensaje: 'Error interno al guardar el mensaje' });
@@ -24,7 +24,7 @@ class ControladorContacto {
   async listar(req, res) {
     try {
       const mensajes = await ModeloContacto.obtenerTodos();
-      return res.json({ éxito: true, datos: mensajes });
+      return res.json({ éxito: true, Datos: mensajes });
     } catch (e) {
       console.error('Error listando mensajes de contacto:', e);
       return res.status(500).json({ éxito: false, mensaje: 'Error interno al listar mensajes' });

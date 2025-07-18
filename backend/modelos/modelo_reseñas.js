@@ -2,7 +2,7 @@ const { pool } = require('../configuraciones/configuraciones_bd');
 
 /**
  * Inserta una nueva reseña para un producto
- * @param {{ idProducto: number, idUsuario: number, valoracion: number }} datos
+ * @param {{ idProducto: number, idUsuario: number, valoracion: number }} Datos
  * @returns {Promise<void>}
  */
 async function insertarReseña({ idProducto, idUsuario, valoracion }) {

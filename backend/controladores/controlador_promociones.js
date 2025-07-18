@@ -14,7 +14,7 @@ class ControladorPromociones {
       res.status(200).json({
         éxito: true,
         mensaje: 'Promociones obtenidas correctamente',
-        datos: promociones
+        Datos: promociones
       });
     } catch (error) {
       console.error('Error en controlador de promociones:', error);
@@ -36,7 +36,7 @@ class ControladorPromociones {
       return res.status(201).json({
         éxito: true,
         mensaje: 'Promoción creada correctamente',
-        datos: { idPromoción: id }
+        Datos: { idPromoción: id }
       });
     } catch (error) {
       console.error('Error al crear promoción:', error);

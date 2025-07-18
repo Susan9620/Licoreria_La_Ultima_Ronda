@@ -74,7 +74,7 @@ class ControladorPedidos {
       return res.status(201).json({
         éxito: true,
         mensaje: 'Pedido y detalle guardados',
-        datos: { idPedido, númeroPedido: numeroPedido }
+        Datos: { idPedido, númeroPedido: numeroPedido }
       });
     } catch (err) {
       console.error('Error al crear pedido con detalle:', err);
@@ -90,7 +90,7 @@ class ControladorPedidos {
       const pedido = await modeloPedidos.obtenerPorId(id);
       if (!pedido) return res.status(404).json({ éxito: false, mensaje: 'Pedido no encontrado' });
 
-      res.json({ éxito: true, datos: pedido });
+      res.json({ éxito: true, Datos: pedido });
     } catch (err) {
       console.error('Error al obtener pedido:', err);
       res.status(500).json({ éxito: false, mensaje: 'Error al recuperar pedido' });
@@ -101,7 +101,7 @@ class ControladorPedidos {
     try {
       const idPedido = parseInt(req.params.id, 10);
       const { pedido, items } = await modeloPedidos.obtenerConDetalles(idPedido);
-      return res.json({ éxito: true, datos: { pedido, items } });
+      return res.json({ éxito: true, Datos: { pedido, items } });
     } catch (err) {
       console.error(err);
       return res.status(404).json({ éxito: false, mensaje: err.message });
@@ -116,7 +116,7 @@ class ControladorPedidos {
     try {
       const idUsuario = req.usuario.id;
       const pedidos = await modeloPedidos.obtenerPorUsuario(idUsuario);
-      return res.json({ éxito: true, datos: pedidos });
+      return res.json({ éxito: true, Datos: pedidos });
     } catch (err) {
       console.error('Error al obtener historial de pedidos:', err);
       return res.status(500).json({ éxito: false, mensaje: 'Error al recuperar historial de pedidos' });
@@ -163,7 +163,7 @@ class ControladorPedidos {
   async obtenerTodos(req, res) {
     try {
       const pedidos = await modeloPedidos.obtenerTodos();
-      return res.json({ éxito: true, datos: pedidos });
+      return res.json({ éxito: true, Datos: pedidos });
     } catch (error) {
       console.error('Error al listar pedidos:', error);
       return res.status(500).json({ éxito: false, mensaje: 'Error interno del servidor.' });

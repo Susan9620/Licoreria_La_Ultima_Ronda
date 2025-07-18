@@ -694,8 +694,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             });
             const json = await resp.json();
             if (resp.ok && json.éxito) {
-                if (nombreElem) nombreElem.textContent = json.datos.Nombre_Completo;
-                if (emailElem) emailElem.textContent = json.datos.Correo_Electrónico;
+                if (nombreElem) nombreElem.textContent = json.Datos.Nombre_Completo;
+                if (emailElem) emailElem.textContent = json.Datos.Correo_Electrónico;
             } else {
                 throw new Error(json.mensaje || 'Error al cargar perfil');
             }
@@ -744,10 +744,10 @@ const Lista_Deseos = {
             const json = await resp.json();
 
             if (json.éxito) {
-                const datos = json.datos;  // array de variantes
+                const Datos = json.Datos;  // array de variantes
 
                 // 1) Agrupar variantes por productoId
-                const grupos = datos.reduce((acc, item) => {
+                const grupos = Datos.reduce((acc, item) => {
                     const pid = item.productoId;
                     if (!acc[pid]) acc[pid] = [];
                     acc[pid].push(item);
@@ -1296,9 +1296,9 @@ async function Cargar_Datos_Usuario_Global() {
 
         if (resp.ok && json.éxito) {
             window.Historial_Global.Datos_Usuario = {
-                Nombre_Completo: json.datos.Nombre_Completo,
-                Correo_Electrónico: json.datos.Correo_Electrónico,
-                Teléfono: json.datos.Teléfono
+                Nombre_Completo: json.Datos.Nombre_Completo,
+                Correo_Electrónico: json.Datos.Correo_Electrónico,
+                Teléfono: json.Datos.Teléfono
             };
         } else {
             throw new Error(json.mensaje || 'No se pudo cargar perfil');
@@ -1333,7 +1333,7 @@ async function Cargar_Historial_Pedidos_Global() {
             throw new Error(json.mensaje || resp.statusText);
         }
 
-        window.Historial_Global.Pedidos = json.datos;
+        window.Historial_Global.Pedidos = json.Datos;
         return true;
     } catch (e) {
         console.error('❌ Error cargando historial desde API:', e);
@@ -1421,8 +1421,8 @@ async function Ver_Factura_Global(idPedido) {
             }
 
             pedido = {
-                ...json.datos.pedido,
-                items: json.datos.items
+                ...json.Datos.pedido,
+                items: json.Datos.items
             };
         }
 
@@ -1704,8 +1704,8 @@ async function actualizarUsuarioLogueado() {
         });
         const json = await resp.json();
         if (resp.ok && json.éxito) {
-            if (nombreElem) nombreElem.textContent = json.datos.Nombre_Completo;
-            if (emailElem) emailElem.textContent = json.datos.Correo_Electrónico;
+            if (nombreElem) nombreElem.textContent = json.Datos.Nombre_Completo;
+            if (emailElem) emailElem.textContent = json.Datos.Correo_Electrónico;
         } else {
             throw new Error(json.mensaje || 'Error al cargar perfil');
         }

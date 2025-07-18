@@ -74,10 +74,10 @@ class ModeloUsuarios {
 
   /**
    * Crea un usuario con los campos permitidos y devuelve su ID
-   * @param {Object} datos
+   * @param {Object} Datos
    * @returns {Promise<number>}
    */
-  async crear(datos) {
+  async crear(Datos) {
     const permitidos = [
       'Nombre_Completo',
       'Correo_Electrónico',
@@ -89,13 +89,13 @@ class ModeloUsuarios {
       'Rol',
       'Activo'
     ];
-    const keys = Object.keys(datos).filter(k => permitidos.includes(k));
+    const keys = Object.keys(Datos).filter(k => permitidos.includes(k));
     if (keys.length === 0) {
       throw new Error('No se proporcionaron campos válidos para crear el usuario');
     }
 
     const columns = keys.map(k => `"${k}"`).join(', ');
-    const values = keys.map(k => datos[k]);
+    const values = keys.map(k => Datos[k]);
     const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
 
     try {

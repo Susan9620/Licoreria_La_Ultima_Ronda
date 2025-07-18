@@ -11,40 +11,40 @@ document.addEventListener('DOMContentLoaded', async function () {
             throw new Error(`Error de servidor: ${respuesta.status}`);
         }
 
-        const datos = await respuesta.json();
+        const Datos = await respuesta.json();
 
         // Ocultar indicador de carga
         ocultarCargando();
 
-        console.log('Respuesta completa:', datos);
+        console.log('Respuesta completa:', Datos);
 
-        if (datos.éxito) {
+        if (Datos.éxito) {
             // Inicializar componentes con los datos recibidos
-            Inicializar_Carrusel(datos.carrusel);
+            Inicializar_Carrusel(Datos.carrusel);
 
             /*
             // Filtrar la primera aparición de cada producto (ID_Producto)
-            const destacadosUnicos = datos.productosDestacados.filter((prod, i, arr) =>
+            const destacadosUnicos = Datos.productosDestacados.filter((prod, i, arr) =>
                 arr.findIndex(p => p.ID_Producto === prod.ID_Producto) === i
             );
             Inicializar_Productos_Destacados(destacadosUnicos);
             */
 
             Inicializar_Video_Destacado();
-            console.log('Categorías recibidas:', datos.categorias);
-            Inicializar_Categorías(datos.categorias);
+            console.log('Categorías recibidas:', Datos.categorias);
+            Inicializar_Categorías(Datos.categorias);
 
             // Cargar promociones desde el API
             const respPromo = await fetch(`${API_BASE}/api/promociones`);
             const promJson = await respPromo.json();
-            console.log('Promociones recibidas:', promJson.datos);
+            console.log('Promociones recibidas:', promJson.Datos);
             if (promJson.éxito) {
-                Inicializar_Promociones(promJson.datos);
+                Inicializar_Promociones(promJson.Datos);
             }
         }
         else {
-            console.error('Error en la respuesta del servidor:', datos.mensaje);
-            Mostrar_Error(datos.mensaje || 'Error al cargar los datos.');
+            console.error('Error en la respuesta del servidor:', Datos.mensaje);
+            Mostrar_Error(Datos.mensaje || 'Error al cargar los datos.');
         }
     } catch (error) {
         console.error('Error al cargar la página de inicio:', error);
@@ -54,8 +54,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 
 // Función para inicializar el carrusel con datos dinámicos
-function Inicializar_Carrusel(datos_carrusel) {
-    if (!datos_carrusel || datos_carrusel.length === 0) {
+function Inicializar_Carrusel(Datos_carrusel) {
+    if (!Datos_carrusel || Datos_carrusel.length === 0) {
         console.warn('No hay imágenes disponibles para el carrusel');
         return;
     }
@@ -71,7 +71,7 @@ function Inicializar_Carrusel(datos_carrusel) {
     contenedor_indicadores.innerHTML = '';
 
     // Crear elementos para cada imagen del carrusel
-    datos_carrusel.forEach((imagen, indice) => {
+    Datos_carrusel.forEach((imagen, indice) => {
         // Crear el elemento de imagen del carrusel
         const elemento_imagen = document.createElement('div');
         elemento_imagen.className = `Imágen_Carrusel ${indice === 0 ? 'Activo' : ''}`;

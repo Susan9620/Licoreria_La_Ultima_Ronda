@@ -34,10 +34,10 @@ class ModeloPromociones {
 
   /**
    * Inserta una nueva promoción y devuelve su ID.
-   * @param {Object} datos
+   * @param {Object} Datos
    * @returns {Promise<number>}
    */
-  async crear(datos) {
+  async crear(Datos) {
     const permitidos = [
       'ID_Categoría',
       'Título',
@@ -47,7 +47,7 @@ class ModeloPromociones {
       'Tipo',
       'Parámetros'
     ];
-    const keys = Object.keys(datos).filter(k => permitidos.includes(k));
+    const keys = Object.keys(Datos).filter(k => permitidos.includes(k));
     if (keys.length === 0) {
       throw new Error('No se proporcionaron campos válidos para crear la promoción');
     }
@@ -55,8 +55,8 @@ class ModeloPromociones {
     const columns = keys.map(k => `"${k}"`).join(', ');
     const values = keys.map(k =>
       k === 'Parámetros'
-        ? JSON.stringify(datos[k])
-        : datos[k]
+        ? JSON.stringify(Datos[k])
+        : Datos[k]
     );
     const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
 

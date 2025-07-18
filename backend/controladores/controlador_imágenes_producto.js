@@ -10,7 +10,7 @@ const obtenerPorProducto = async (req, res) => {
 
     res.json({
       éxito: true,
-      datos: imagenes,
+      Datos: imagenes,
       mensaje: "Imágenes obtenidas exitosamente",
     })
   } catch (error) {
@@ -44,7 +44,7 @@ const obtenerPrincipal = async (req, res) => {
 
     res.json({
       éxito: true,
-      datos: imagen,
+      Datos: imagen,
       mensaje: "Imagen principal obtenida exitosamente",
     })
   } catch (error) {
@@ -71,7 +71,7 @@ const crearImagenProducto = async (req, res) => {
     return res.status(201).json({
       éxito: true,
       mensaje: "Imagen de producto creada correctamente",
-      datos: { idImagen: id }
+      Datos: { idImagen: id }
     })
   } catch (error) {
     console.error("Error al crear imagen de producto:", error)

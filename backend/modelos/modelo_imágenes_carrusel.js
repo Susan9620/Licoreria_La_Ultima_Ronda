@@ -63,10 +63,10 @@ class ModeloImagenesCarrusel {
 
   /**
    * Inserta una nueva imagen de carrusel y devuelve su ID.
-   * @param {Object} datos - Campos a insertar
+   * @param {Object} Datos - Campos a insertar
    * @returns {Promise<number>} ID generado
    */
-  async crear(datos) {
+  async crear(Datos) {
     const permitidos = [
       'Título',
       'Subtítulo',
@@ -75,13 +75,13 @@ class ModeloImagenesCarrusel {
       'Orden',
       'Activo'
     ];
-    const keys = Object.keys(datos).filter(k => permitidos.includes(k));
+    const keys = Object.keys(Datos).filter(k => permitidos.includes(k));
     if (keys.length === 0) {
       throw new Error('No se proporcionaron campos válidos para crear la imagen de carrusel');
     }
 
     const columns = keys.map(k => `"${k}"`).join(', ');
-    const values = keys.map(k => datos[k]);
+    const values = keys.map(k => Datos[k]);
     const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
 
     try {

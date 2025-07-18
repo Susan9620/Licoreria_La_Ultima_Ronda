@@ -3,17 +3,17 @@ const { pool } = require('../configuraciones/configuraciones_bd');
 class ModeloPedidos {
   /**
    * Crea un pedido con sus detalles, ajusta stock, y devuelve número de pedido e ID.
-   * @param {Object} datos
-   * @param {number} datos.idUsuario
-   * @param {Array<{idVariante:number,cantidad:number,precioUnitario:number,subtotal:number}>} datos.items
-   * @param {number} datos.subtotal
-   * @param {number} datos.envio
-   * @param {number} datos.descuento
-   * @param {number} datos.total
-   * @param {string} datos.metodoPago
-   * @param {string} datos.direccionEnvio
-   * @param {string} datos.codigoPostal
-   * @param {string} datos.instruccionesEnvio
+   * @param {Object} Datos
+   * @param {number} Datos.idUsuario
+   * @param {Array<{idVariante:number,cantidad:number,precioUnitario:number,subtotal:number}>} Datos.items
+   * @param {number} Datos.subtotal
+   * @param {number} Datos.envio
+   * @param {number} Datos.descuento
+   * @param {number} Datos.total
+   * @param {string} Datos.metodoPago
+   * @param {string} Datos.direccionEnvio
+   * @param {string} Datos.codigoPostal
+   * @param {string} Datos.instruccionesEnvio
    */
   async crearConDetalles({
     idUsuario,

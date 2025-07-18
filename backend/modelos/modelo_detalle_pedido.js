@@ -3,7 +3,7 @@ const { pool } = require('../configuraciones/configuraciones_bd');
 class ModeloDetallePedido {
   /**
    * Inserta un detalle de pedido
-   * @param {{ idPedido:number, idVariante:number, cantidad:number, precioUnitario:number, subtotal:number }} datos
+   * @param {{ idPedido:number, idVariante:number, cantidad:number, precioUnitario:number, subtotal:number }} Datos
    * @returns {Promise<number>} número de filas afectadas
    */
   async insertar({ idPedido, idVariante, cantidad, precioUnitario, subtotal }) {

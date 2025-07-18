@@ -12,8 +12,8 @@ async function cargarDatosDeProductos(ids) {
       const resp = await fetch(`${API_BASE}/api/productos/${id}`)
       if (!resp.ok) continue
       const json = await resp.json()
-      if (json.éxito && json.datos) {
-        resultados.push(json.datos)
+      if (json.éxito && json.Datos) {
+        resultados.push(json.Datos)
       }
     } catch (e) {
       console.warn(`No se pudo cargar producto ${id}:`, e)
@@ -47,13 +47,13 @@ async function cargarDatosProducto() {
     if (!respuestaProducto.ok) {
       throw new Error("Producto no encontrado")
     }
-    const datosProducto = await respuestaProducto.json()
+    const DatosProducto = await respuestaProducto.json()
 
     // Verificar la estructura de la respuesta
-    if (datosProducto.éxito && datosProducto.datos) {
-      productoActual = datosProducto.datos
-    } else if (datosProducto.datos) {
-      productoActual = datosProducto.datos
+    if (DatosProducto.éxito && DatosProducto.Datos) {
+      productoActual = DatosProducto.Datos
+    } else if (DatosProducto.Datos) {
+      productoActual = DatosProducto.Datos
     } else {
       throw new Error("Estructura de datos incorrecta")
     }
@@ -85,9 +85,9 @@ async function cargarVariantesProducto(idProducto) {
   try {
     const respuestaVariantes = await fetch(`${API_BASE}/api/variantes/producto/${idProducto}`)
     if (respuestaVariantes.ok) {
-      const datosVariantes = await respuestaVariantes.json()
-      if (datosVariantes.éxito && datosVariantes.datos) {
-        variantesProducto = datosVariantes.datos
+      const DatosVariantes = await respuestaVariantes.json()
+      if (DatosVariantes.éxito && DatosVariantes.Datos) {
+        variantesProducto = DatosVariantes.Datos
       } else {
         variantesProducto = []
       }
@@ -104,9 +104,9 @@ async function cargarImagenesProducto(idProducto) {
   try {
     const respuestaImagenes = await fetch(`${API_BASE}/api/imagenes/producto/${idProducto}`)
     if (respuestaImagenes.ok) {
-      const datosImagenes = await respuestaImagenes.json()
-      if (datosImagenes.éxito && datosImagenes.datos) {
-        imagenesProducto = datosImagenes.datos
+      const DatosImagenes = await respuestaImagenes.json()
+      if (DatosImagenes.éxito && DatosImagenes.Datos) {
+        imagenesProducto = DatosImagenes.Datos
       } else {
         imagenesProducto = []
       }
@@ -246,8 +246,8 @@ async function initCalificacionUsuario() {
         headers: { 'Authorization': 'Bearer ' + token }
       });
       const json = await resp.json();
-      if (resp.ok && json.éxito && json.datos !== null) {
-        valorSeleccionado = json.datos;
+      if (resp.ok && json.éxito && json.Datos !== null) {
+        valorSeleccionado = json.Datos;
         // muestra la calificación previa
         estrellas.forEach(s => {
           const v = parseInt(s.dataset.valor, 10);
@@ -299,8 +299,8 @@ async function initCalificacionUsuario() {
         const json = await resp.json();
         if (!resp.ok || !json.éxito) throw new Error(json.mensaje || 'Error');
         // actualizar media y total en UI
-        productoActual.CalificaciónMedia = json.datos.promedio;
-        productoActual.TotalReseñas = json.datos.total;
+        productoActual.CalificaciónMedia = json.Datos.promedio;
+        productoActual.TotalReseñas = json.Datos.total;
         actualizarCalificacion();
         // bloquear definitivamente
         estrellas.forEach(s => s.style.pointerEvents = 'none');
@@ -697,14 +697,14 @@ async function cargarProductosRelacionados() {
     const respuesta = await fetch(`${API_BASE}/api/productos/all`);
     if (!respuesta.ok) return;
 
-    const datos = await respuesta.json();
+    const Datos = await respuesta.json();
     let todos = [];
-    if (datos.éxito && datos.datos) {
-      todos = datos.datos;
-    } else if (Array.isArray(datos.datos)) {
-      todos = datos.datos;
-    } else if (Array.isArray(datos)) {
-      todos = datos;
+    if (Datos.éxito && Datos.Datos) {
+      todos = Datos.Datos;
+    } else if (Array.isArray(Datos.Datos)) {
+      todos = Datos.Datos;
+    } else if (Array.isArray(Datos)) {
+      todos = Datos;
     }
 
     // 1) Eliminamos el producto actual
@@ -802,11 +802,11 @@ async function cargarYRenderizarCompradosJuntos(idProducto) {
     if (!resp.ok) return;
     const json = await resp.json();
     if (!json.éxito) return;
-    const datos = json.datos; // [{ ID_Producto, VecesCompradoJunto }, ...]
-    if (!Array.isArray(datos) || datos.length === 0) return;
+    const Datos = json.Datos; // [{ ID_Producto, VecesCompradoJunto }, ...]
+    if (!Array.isArray(Datos) || Datos.length === 0) return;
 
     // 2) IDs y detalles de cada producto
-    const ids = datos.map(item => item.ID_Producto);
+    const ids = Datos.map(item => item.ID_Producto);
     const productos = await cargarDatosDeProductos(ids);
 
     // 3) Traer variantes predeterminadas para cada producto
@@ -816,8 +816,8 @@ async function cargarYRenderizarCompradosJuntos(idProducto) {
         const r = await fetch(`${API_BASE}/api/variantes/producto/${p.ID_Producto}`);
         if (!r.ok) return;
         const j = await r.json();
-        if (j.éxito && Array.isArray(j.datos) && j.datos.length) {
-          const pred = j.datos.find(v => v.Predeterminada) || j.datos[0];
+        if (j.éxito && Array.isArray(j.Datos) && j.Datos.length) {
+          const pred = j.Datos.find(v => v.Predeterminada) || j.Datos[0];
           variantesMap[p.ID_Producto] = pred.Nombre_Variante || '';
         }
       } catch (__) { /* silencioso */ }

@@ -16,7 +16,7 @@ class ControladorImagenesCarrusel {
       res.status(200).json({
         éxito: true,
         mensaje: 'Imágenes del carrusel obtenidas correctamente',
-        datos: imagenes
+        Datos: imagenes
       });
     } catch (error) {
       console.error('Error en controlador de imágenes carrusel:', error);
@@ -56,7 +56,7 @@ class ControladorImagenesCarrusel {
       res.status(200).json({
         éxito: true,
         mensaje: 'Imagen del carrusel obtenida correctamente',
-        datos: imagen
+        Datos: imagen
       });
     } catch (error) {
       console.error(`Error al obtener imagen del carrusel:`, error);
@@ -74,7 +74,7 @@ class ControladorImagenesCarrusel {
       return res.status(201).json({
         éxito: true,
         mensaje: 'Imagen de carrusel creada correctamente',
-        datos: { idImagen: id }
+        Datos: { idImagen: id }
       });
     } catch (error) {
       console.error('Error al crear imagen de carrusel:', error);

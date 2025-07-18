@@ -19,7 +19,7 @@ class ControladorProductos {
       res.status(200).json({
         éxito: true,
         mensaje: 'Productos destacados obtenidos correctamente',
-        datos: productos
+        Datos: productos
       });
     } catch (error) {
       console.error('Error en controlador de productos destacados:', error);
@@ -41,7 +41,7 @@ class ControladorProductos {
       res.status(200).json({
         éxito: true,
         mensaje: 'Todos los productos obtenidos correctamente',
-        datos: productos
+        Datos: productos
       });
     } catch (error) {
       console.error('Error en controlador de todos los productos:', error);
@@ -72,7 +72,7 @@ class ControladorProductos {
       res.status(200).json({
         éxito: true,
         mensaje: 'Producto obtenido correctamente',
-        datos: producto
+        Datos: producto
       });
     } catch (error) {
       console.error('Error en controlador de producto por ID:', error);
@@ -108,7 +108,7 @@ class ControladorProductos {
       //    (En modelo_producto.js deberás implementar `obtenerProductosCompradosJuntos`)
       const filas = await modeloProductos.obtenerProductosCompradosJuntos(idVariantePred, 4);
 
-      return res.json({ éxito: true, datos: filas });
+      return res.json({ éxito: true, Datos: filas });
     } catch (error) {
       console.error('Error en obtenerCompradosJuntos:', error);
       return res.status(500).json({
@@ -147,7 +147,7 @@ class ControladorProductos {
       return res.status(200).json({
         éxito: true,
         mensaje: 'Calificación registrada correctamente',
-        datos: { promedio, total }
+        Datos: { promedio, total }
       });
     } catch (error) {
       console.error('Error en calificarProducto:', error);
@@ -165,7 +165,7 @@ class ControladorProductos {
       const idUsuario = req.usuario.id;
       const fila = await modeloReseñas.obtenerCalificacionUsuario(idProducto, idUsuario);
       // fila puede ser { Valoración: 4 } o undefined
-      return res.json({ éxito: true, datos: fila ? fila.valoracion : null });
+      return res.json({ éxito: true, Datos: fila ? fila.valoracion : null });
     } catch (error) {
       console.error('Error en obtenerCalificacionUsuario:', error);
       return res.status(500).json({ éxito: false, mensaje: 'Error al obtener calificación' });
@@ -178,12 +178,12 @@ class ControladorProductos {
  */
   async crearProducto(req, res) {
     try {
-      const datos = req.body;
-      const nuevoId = await modeloProductos.crear(datos);
+      const Datos = req.body;
+      const nuevoId = await modeloProductos.crear(Datos);
       return res.status(201).json({
         éxito: true,
         mensaje: 'Producto creado correctamente',
-        datos: { idProducto: nuevoId }
+        Datos: { idProducto: nuevoId }
       });
     } catch (error) {
       console.error('Error al crear producto:', error);
