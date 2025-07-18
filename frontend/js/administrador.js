@@ -1,24 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const select = document.getElementById('AdminSectionSelect');
-    const content = document.getElementById('AdminContent');
+    const select = document.getElementById('Select_Administrador');
+    const content = document.getElementById('Contenido_Administrador');
     // ---------------- Pedidos ----------------
-    const modal = document.getElementById('ModalPedido');
-    const cerrarModal = document.getElementById('CerrarModalPedido');
-    const btnGuardar = document.getElementById('BtnGuardarPedido');
-    const btnCancelar = document.getElementById('BtnCancelarPedido');
-    const modalID = document.getElementById('ModalPedidoID');
-    const detUsuario = document.getElementById('DetUsuario');
-    const detFecha = document.getElementById('DetFecha');
-    const detTotal = document.getElementById('DetTotal');
-    const detEstado = document.getElementById('DetEstado');
-    const detProductos = document.getElementById('DetProductos');
+    const modal = document.getElementById('Modal_Administrador');
+    const cerrarModal = document.getElementById('Cerrar_Modal_Pedido');
+    const btnGuardar = document.getElementById('Botón_Guardar_Pedido');
+    const btnCancelar = document.getElementById('Botón_Cancelar_Pedido');
+    const modalID = document.getElementById('ID_Modal_Pedido');
+    const detUsuario = document.getElementById('Detalle_Usuario');
+    const detFecha = document.getElementById('Detalle_Fecha');
+    const detTotal = document.getElementById('Detalle_Total');
+    const detEstado = document.getElementById('Detalle_Estado');
+    const detProductos = document.getElementById('Detalle_Productos');
 
     // ---------------- Productos ----------------
-    const prodModal = document.getElementById('ModalProducto');
-    const cerrarProdModal = document.getElementById('CerrarModalProducto');
+    const prodModal = document.getElementById('Modal_Producto');
+    const cerrarProdModal = document.getElementById('Cerrar_Modal_Producto');
     const btnNuevoProd = document.getElementById('BtnNuevoProducto');
-    const btnGuardarProd = document.getElementById('BtnGuardarProducto');
-    const btnCancelarProd = document.getElementById('BtnCancelarProducto');
+    const btnGuardarProd = document.getElementById('Botón_Guardar_Producto');
+    const btnCancelarProd = document.getElementById('Botón_Cancelar_Producto');
     let modoProducto = 'crear', idProductoActual = null;
 
     // Helper: JWT en headers
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inicial + cambio de sección
     async function loadSection(sect) {
         content.innerHTML = '';
-        if (sect === 'pedidos') {
+        if (sect === 'Pedidos') {
             await renderPedidos();
         } else if (sect === 'productos') {
             await renderProductos();
@@ -50,8 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!resp.ok || !json.éxito) {
                 throw new Error(json.mensaje || 'Error al cargar categorías');
             }
-            const sel = document.getElementById('Prod_Categoria');
-            sel.innerHTML = json.datos
+            const sel = document.getElementById('Categoría_Producto');
+            sel.innerHTML = json.Datos
                 .map(c => `<option value="${c.ID_Categoría}">${c.Nombre}</option>`)
                 .join('');
         } catch (e) {
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const json = await resp.json();
             if (!resp.ok || !json.éxito) throw new Error(json.mensaje);
             const table = document.createElement('table');
-            table.className = 'Tabla_Admin';
+            table.className = 'Tabla_Administrador';
             table.innerHTML = `
         <thead>
           <tr>
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </tr>
         </thead>
         <tbody>
-          ${json.datos.map(p => `
+          ${json.Datos.map(p => `
             <tr>
               <td>${p.idPedido}</td>
               <td>${p.idUsuario}</td>
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const resp = await fetch(`${baseUrl}/api/admin/pedidos/${id}`, { headers: authHeader() });
             const json = await resp.json();
             if (!resp.ok || !json.éxito) throw new Error(json.mensaje);
-            const { pedido, items } = json.datos;
+            const { pedido, items } = json.Datos;
             modalID.textContent = pedido.idPedido;
             detUsuario.textContent = pedido.idUsuario;
             detFecha.textContent = new Date(pedido.fecha).toLocaleString();
@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const json = await resp.json();
             if (!resp.ok || !json.éxito) throw new Error(json.mensaje);
             const table = document.createElement('table');
-            table.className = 'Tabla_Admin';
+            table.className = 'Tabla_Administrador';
             table.innerHTML = `
         <thead>
           <tr>
@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </tr>
         </thead>
         <tbody>
-          ${json.datos.map(p => `
+          ${json.Datos.map(p => `
             <tr>
               <td>${p.Nombre}</td>
               <td>${p.Categoría}</td>
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Agregar botón Nuevo Producto
             const btnNuevo = document.createElement('button');
             btnNuevo.textContent = 'Nuevo Producto'; btnNuevo.className = 'Botones';
-            btnNuevo.onclick = () => abrirModalProducto('crear');
+            btnNuevo.onclick = () => abrirModal_Producto('crear');
             content.appendChild(btnNuevo);
             content.appendChild(table);
         } catch (e) {
@@ -190,15 +190,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.viewProducto = async (id) => {
         modoProducto = 'editar'; idProductoActual = id;
-        document.getElementById('ModalProductoTitulo').textContent = 'Editar';
-        ResetearModalProducto();
+        document.getElementById('Título_Modal_Producto').textContent = 'Editar';
+        ResetearModal_Producto();
         try {
             const resp = await fetch(`${baseUrl}/api/productos/${id}`, { headers: authHeader() });
-            const { datos: prod } = await resp.json();
-            document.getElementById('Prod_Nombre').value = prod.Nombre;
-            document.getElementById('Prod_Precio').value = prod.Precio;
-            document.getElementById('Prod_Categoria').value = prod.ID_Categoría;
-            document.getElementById('Prod_Activo').checked = prod.Activo === 1;
+            const { Datos: prod } = await resp.json();
+            document.getElementById('Nombre_Producto').value = prod.Nombre;
+            document.getElementById('Precio_Producto').value = prod.Precio;
+            document.getElementById('Categoría_Producto').value = prod.ID_Categoría;
+            document.getElementById('Activo_Producto').checked = prod.Activo === 1;
             await cargarVariantes(id);
             await cargarImagenes(id);
             prodModal.classList.remove('Oculto');
@@ -207,40 +207,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    if (btnNuevoProd) btnNuevoProd.onclick = () => abrirModalProducto('crear');
+    if (btnNuevoProd) btnNuevoProd.onclick = () => abrirModal_Producto('crear');
     if (cerrarProdModal) cerrarProdModal.onclick = () => prodModal.classList.add('Oculto');
     if (btnCancelarProd) btnCancelarProd.onclick = () => prodModal.classList.add('Oculto');
 
-    async function abrirModalProducto(modo, id = null) {
+    async function abrirModal_Producto(modo, id = null) {
         modoProducto = modo; idProductoActual = id;
-        document.getElementById('ModalProductoTitulo').textContent = modo === 'crear' ? 'Nuevo' : 'Editar';
+        document.getElementById('Título_Modal_Producto').textContent = modo === 'crear' ? 'Nuevo' : 'Editar';
         // 1) Traer de nuevo las categorías (por si se han actualizado)
         await cargarCategoriasAdmin();
         // 2) Limpiar el formulario (resetear valores, variantes e imágenes) 
-        ResetearModalProducto();
+        ResetearModal_Producto();
         if (modo === 'editar' && id) window.viewProducto(id);
         else prodModal.classList.remove('Oculto');
     }
 
     btnGuardarProd.onclick = async () => {
-        const datos = {
-            Nombre: document.getElementById('Prod_Nombre').value,
-            Precio: parseFloat(document.getElementById('Prod_Precio').value),
-            Activo: document.getElementById('Prod_Activo').checked ? 1 : 0,
-            ID_Categoría: parseInt(document.getElementById('Prod_Categoria').value, 10)
+        const Datos = {
+            Nombre: document.getElementById('Nombre_Producto').value,
+            Precio: parseFloat(document.getElementById('Precio_Producto').value),
+            Activo: document.getElementById('Activo_Producto').checked ? 1 : 0,
+            ID_Categoría: parseInt(document.getElementById('Categoría_Producto').value, 10)
         };
         let res, json;
         try {
             if (modoProducto === 'crear') {
                 res = await fetch(`${baseUrl}/api/admin/productos`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeader() },
-                    body: JSON.stringify(datos)
+                    body: JSON.stringify(Datos)
                 });
-                json = await res.json(); idProductoActual = json.datos.idProducto;
+                json = await res.json(); idProductoActual = json.Datos.idProducto;
             } else {
                 await fetch(`${baseUrl}/api/admin/productos/${idProductoActual}`, {
                     method: 'PUT', headers: { 'Content-Type': 'application/json', ...authHeader() },
-                    body: JSON.stringify(datos)
+                    body: JSON.stringify(Datos)
                 });
             }
             await procesarVariantes(idProductoActual);
@@ -262,19 +262,19 @@ document.addEventListener('DOMContentLoaded', () => {
         await renderProductos();
     };
 
-    // Tabs y variantes/imagenes
-    function cambiarTab(tab) {
-        document.querySelectorAll('.Tab, .TabContent').forEach(el => el.classList.remove('Tab_Activo', 'Oculto'));
-        document.querySelector(`.Tab[data-tab="${tab}"]`).classList.add('Tab_Activo');
-        document.getElementById(`Tab_${tab}`).classList.remove('Oculto');
+    // Pestañas y Variantes/Imágenes
+    function cambiarPestaña(tab) {
+        document.querySelectorAll('.Pestaña, .Contenido_Pestaña').forEach(el => el.classList.remove('Pestaña_Activo', 'Oculto'));
+        document.querySelector(`.Pestaña[data-tab="${tab}"]`).classList.add('Pestaña_Activo');
+        document.getElementById(`Pestaña_${tab}`).classList.remove('Oculto');
     }
-    document.querySelectorAll('.Tab').forEach(tab => tab.addEventListener('click', () => cambiarTab(tab.dataset.tab)));
+    document.querySelectorAll('.Pestaña').forEach(tab => tab.addEventListener('click', () => cambiarPestaña(tab.dataset.tab)));
 
     // Variantes
     async function cargarVariantes(idProd) {
-        const { datos } = await (await fetch(`${baseUrl}/api/variantes/producto/${idProd}`, { headers: authHeader() })).json();
-        const tbody = document.getElementById('TablaVariantes'); tbody.innerHTML = '';
-        datos.forEach(v => {
+        const { Datos } = await (await fetch(`${baseUrl}/api/variantes/producto/${idProd}`, { headers: authHeader() })).json();
+        const tbody = document.getElementById('Tabla_Variantes'); tbody.innerHTML = '';
+        Datos.forEach(v => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
         <td><input name="Nombre_Variante" value="${v.Nombre_Variante}"></td>
@@ -287,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     function agregarFilaVariante() {
-        const tbody = document.getElementById('TablaVariantes');
+        const tbody = document.getElementById('Tabla_Variantes');
         const tr = document.createElement('tr');
         tr.innerHTML = `
       <td><input name="Nombre_Variante"></td>
@@ -297,12 +297,12 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
         tbody.appendChild(tr); tr.querySelector('.EliminarVariante').onclick = () => tr.remove();
     }
-    document.getElementById('BtnNuevaVariante').onclick = agregarFilaVariante;
+    document.getElementById('Botón_Nueva_Variante').onclick = agregarFilaVariante;
     async function procesarVariantes(idProd) {
-        const filas = [...document.getElementById('TablaVariantes').rows];
+        const filas = [...document.getElementById('Tabla_Variantes').rows];
         for (let fila of filas) {
             const idVar = fila.querySelector('.EliminarVariante').dataset.id;
-            const datos = {
+            const Datos = {
                 ID_Producto: idProd,
                 Nombre_Variante: fila.querySelector('input[name="Nombre_Variante"]').value,
                 SKU: fila.querySelector('input[name="SKU"]').value,
@@ -310,9 +310,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 Activo: 1
             };
             if (idVar) {
-                await fetch(`${baseUrl}/api/admin/variantes/${idVar}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(datos) });
+                await fetch(`${baseUrl}/api/admin/variantes/${idVar}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(Datos) });
             } else {
-                await fetch(`${baseUrl}/api/admin/variantes`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(datos) });
+                await fetch(`${baseUrl}/api/admin/variantes`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(Datos) });
             }
         }
     }
@@ -324,9 +324,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Imágenes (análogo a variantes)
     async function cargarImagenes(idProd) {
-        const { datos } = await (await fetch(`${baseUrl}/api/imagenes/producto/${idProd}`, { headers: authHeader() })).json();
-        const tbody = document.getElementById('TablaImagenes'); tbody.innerHTML = '';
-        datos.forEach(img => {
+        const { Datos } = await (await fetch(`${baseUrl}/api/imagenes/producto/${idProd}`, { headers: authHeader() })).json();
+        const tbody = document.getElementById('Tabla_Imágenes'); tbody.innerHTML = '';
+        Datos.forEach(img => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
         <td><input name="URL" value="${img.URL}"></td>
@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     function agregarFilaImagen() {
-        const tbody = document.getElementById('TablaImagenes');
+        const tbody = document.getElementById('Tabla_Imágenes');
         const tr = document.createElement('tr');
         tr.innerHTML = `
       <td><input name="URL" placeholder="https://..."></td>
@@ -352,12 +352,12 @@ document.addEventListener('DOMContentLoaded', () => {
         tbody.appendChild(tr);
         tr.querySelector('.EliminarImagen').onclick = () => tr.remove();
     }
-    document.getElementById('BtnNuevaImagen').onclick = agregarFilaImagen;
+    document.getElementById('Botón_Nueva_Imagen').onclick = agregarFilaImagen;
     async function procesarImagenes(idProd) {
-        const filas = [...document.getElementById('TablaImagenes').rows];
+        const filas = [...document.getElementById('Tabla_Imágenes').rows];
         for (let fila of filas) {
             const idImg = fila.querySelector('.EliminarImagen').dataset.id;
-            const datos = {
+            const Datos = {
                 ID_Producto: idProd,
                 URL: fila.querySelector('input[name="URL"]').value,
                 Alt: fila.querySelector('input[name="Alt"]').value,
@@ -365,9 +365,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 Predeterminada: fila.querySelector('input[name="Predeterminada"]').checked ? 1 : 0
             };
             if (idImg) {
-                await fetch(`${baseUrl}/api/admin/imagenes/${idImg}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(datos) });
+                await fetch(`${baseUrl}/api/admin/imagenes/${idImg}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(Datos) });
             } else {
-                await fetch(`${baseUrl}/api/admin/imagenes`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(datos) });
+                await fetch(`${baseUrl}/api/admin/imagenes`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(Datos) });
             }
         }
     }
@@ -378,18 +378,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Reset modal producto
-    function ResetearModalProducto() {
+    function ResetearModal_Producto() {
         // localiza el formulario en el DOM
-        const form = document.getElementById('FormProducto');
+        const form = document.getElementById('Formulario_Producto');
         if (form) {
             form.reset();
         } else {
-            console.warn('ResetearModalProducto: no se encontró #FormProducto');
+            console.warn('ResetearModal_Producto: no se encontró #Formulario_Producto');
         }
 
         // limpia las tablas (estos IDs sí deben existir)
-        const tv = document.getElementById('TablaVariantes');
-        const ti = document.getElementById('TablaImagenes');
+        const tv = document.getElementById('Tabla_Variantes');
+        const ti = document.getElementById('Tabla_Imágenes');
         if (tv) tv.innerHTML = '';
         if (ti) ti.innerHTML = '';
         // si tienes data-id en botones, límpialos también:

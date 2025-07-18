@@ -1,5 +1,5 @@
 /* Contenedor principal del administrador */
-.Admin_Container {
+.Contenedor_Administrador {
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 1.5rem;
@@ -7,7 +7,7 @@
 }
 
 /* Header del administrador */
-.Admin_Header {
+.Encabezado_Administrador {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -19,7 +19,7 @@
     animation: Desvanecerse 1s ease-out;
 }
 
-.Admin_Header h2 {
+.Encabezado_Administrador h2 {
     font-size: 2rem;
     color: var(--Texto_Primario);
     position: relative;
@@ -28,7 +28,7 @@
     margin: 0;
 }
 
-.Admin_Header h2::after {
+.Encabezado_Administrador h2::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -39,7 +39,7 @@
 }
 
 /* Select del administrador */
-.Admin_Select {
+.Select_Administrador {
     background-color: var(--Gris_Claro);
     border: 1px solid var(--Gris_Claro);
     border-radius: var(--Radio_Borde);
@@ -52,18 +52,18 @@
     min-width: 180px;
 }
 
-.Admin_Select:focus {
+.Select_Administrador:focus {
     outline: none;
     border-color: var(--Acento);
     box-shadow: 0 0 0 2px rgba(22, 194, 213, 0.2);
 }
 
-.Admin_Select:hover {
+.Select_Administrador:hover {
     border-color: var(--Acento);
 }
 
 /* Contenido del administrador */
-.Admin_Content {
+.Contenido_Administrador {
     background-color: var(--Gris_Oscuro);
     border-radius: var(--Radio_Borde);
     padding: 1.5rem;
@@ -73,7 +73,7 @@
 }
 
 /* Tabla del administrador */
-.Tabla_Admin {
+.Tabla_Administrador {
     width: 100%;
     border-collapse: collapse;
     background-color: transparent;
@@ -82,12 +82,12 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.Tabla_Admin thead {
+.Tabla_Administrador thead {
     background: linear-gradient(45deg, var(--Primario), var(--Secundario));
     color: var(--Blanco);
 }
 
-.Tabla_Admin th {
+.Tabla_Administrador th {
     padding: 1rem 0.75rem;
     text-align: left;
     font-weight: 600;
@@ -96,22 +96,22 @@
     letter-spacing: 0.5px;
 }
 
-.Tabla_Admin td {
+.Tabla_Administrador td {
     padding: 0.75rem;
     border-bottom: 1px solid var(--Gris_Claro);
     font-size: 0.9rem;
     vertical-align: middle;
 }
 
-.Tabla_Admin tbody tr {
+.Tabla_Administrador tbody tr {
     transition: background-color var(--Velocidad_Transición) ease;
 }
 
-.Tabla_Admin tbody tr:hover {
+.Tabla_Administrador tbody tr:hover {
     background-color: rgba(255, 255, 255, 0.05);
 }
 
-.Tabla_Admin tbody tr:last-child td {
+.Tabla_Administrador tbody tr:last-child td {
     border-bottom: none;
 }
 
@@ -137,7 +137,7 @@
     visibility: hidden;
 }
 
-.Modal_Contenido {
+.Contenido_Modal {
     background-color: var(--Gris_Oscuro);
     border-radius: var(--Radio_Borde);
     width: 90%;
@@ -161,8 +161,8 @@
     }
 }
 
-/* Header del modal */
-.Modal_Header {
+/* Encabezado del modal */
+.Encabezado_Modal {
     padding: 1.25rem;
     display: flex;
     justify-content: space-between;
@@ -172,13 +172,13 @@
     color: var(--Blanco);
 }
 
-.Modal_Header h3 {
+.Encabezado_Modal h3 {
     margin: 0;
     font-size: 1.25rem;
     font-weight: 600;
 }
 
-.Modal_Cerrar {
+.Cerrar_Modal {
     background: none;
     border: none;
     color: var(--Blanco);
@@ -193,28 +193,28 @@
     justify-content: center;
 }
 
-.Modal_Cerrar:hover {
+.Cerrar_Modal:hover {
     color: rgba(255, 255, 255, 0.7);
 }
 
 /* Cuerpo del modal */
-.Modal_Body {
+.Cuerpo_Modal {
     padding: 1.25rem;
     flex: 1;
     overflow-y: auto;
 }
 
-.Modal_Body p {
+.Cuerpo_Modal p {
     margin-bottom: 1rem;
     font-size: 0.95rem;
 }
 
-.Modal_Body strong {
+.Cuerpo_Modal strong {
     color: var(--Acento);
     font-weight: 600;
 }
 
-.Modal_Body select {
+.Cuerpo_Modal select {
     background-color: var(--Gris_Claro);
     border: 1px solid var(--Gris_Claro);
     border-radius: var(--Radio_Borde);
@@ -224,13 +224,13 @@
     margin-left: 0.5rem;
 }
 
-.Modal_Body select:focus {
+.Cuerpo_Modal select:focus {
     outline: none;
     border-color: var(--Acento);
     box-shadow: 0 0 0 2px rgba(22, 194, 213, 0.2);
 }
 
-.Modal_Body h4 {
+.Cuerpo_Modal h4 {
     color: var(--Acento);
     margin: 1.5rem 0 1rem 0;
     font-size: 1.1rem;
@@ -238,22 +238,22 @@
 }
 
 /* Tabla dentro del modal */
-.Modal_Body .Tabla_Admin {
+.Cuerpo_Modal .Tabla_Administrador {
     margin-top: 0.75rem;
     font-size: 0.85rem;
 }
 
-.Modal_Body .Tabla_Admin th {
+.Cuerpo_Modal .Tabla_Administrador th {
     padding: 0.65rem 0.5rem;
     font-size: 0.8rem;
 }
 
-.Modal_Body .Tabla_Admin td {
+.Cuerpo_Modal .Tabla_Administrador td {
     padding: 0.5rem;
 }
 
 /* Footer del modal */
-.Modal_Footer {
+.Pie_Modal {
     padding: 1rem 1.25rem;
     display: flex;
     justify-content: flex-end;
@@ -338,42 +338,42 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-    .Admin_Container {
+    .Contenedor_Administrador {
         margin-top: 80px;
         padding: 0 1rem;
     }
     
-    .Admin_Header {
+    .Encabezado_Administrador {
         flex-direction: column;
         gap: 1rem;
         text-align: center;
     }
     
-    .Admin_Header h2 {
+    .Encabezado_Administrador h2 {
         font-size: 1.5rem;
     }
     
-    .Modal_Contenido {
+    .Contenido_Modal {
         width: 95%;
         max-height: 90vh;
     }
     
-    .Modal_Header,
-    .Modal_Body,
-    .Modal_Footer {
+    .Encabezado_Modal,
+    .Cuerpo_Modal,
+    .Pie_Modal {
         padding: 1rem;
     }
     
-    .Modal_Footer {
+    .Pie_Modal {
         flex-direction: column;
     }
     
-    .Tabla_Admin {
+    .Tabla_Administrador {
         font-size: 0.8rem;
     }
     
-    .Tabla_Admin th,
-    .Tabla_Admin td {
+    .Tabla_Administrador th,
+    .Tabla_Administrador td {
         padding: 0.5rem 0.25rem;
     }
 }
