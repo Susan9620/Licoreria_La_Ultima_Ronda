@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const Botones_Filtro = document.querySelectorAll('.Botón_Filtro');
     const Ordenar_Selección = document.getElementById('Ordenar_Selección');
     const Contenedor = document.querySelector('.Cuadrícula_Productos');
-    const Template = document.querySelector('#template-producto');
+    const Template = document.querySelector('#Plantilla_Producto');
     const Modal_Vista_Rápida = document.getElementById('Modal_Vista_Rápida');
     const Botón_Cerrar_Modal = document.querySelector('.Cerrar_Modal');
     const Botón_Lista_Deseos = document.querySelector('.Botón_Lista_Deseos');

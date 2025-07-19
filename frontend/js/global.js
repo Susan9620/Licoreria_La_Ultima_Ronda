@@ -12,8 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="Contenido_Modal_Login">
           <h2>¿Estás seguro que deseas cerrar sesión?</h2>
           <div class="Controles_Modal" style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
-            <button id="cancelLogout" class="Botón_Cancelar">Cancelar</button>
-            <button id="confirmLogout" class="Botón_Confirmar">Sí, cerrar sesión</button>
+            <button id="Cancelar_Cierre_Sesión" class="Botón_Cancelar">Cancelar</button>
+            <button id="Confirmar_Cierre_Sesión" class="Botón_Confirmar">Sí, cerrar sesión</button>
           </div>
         </div>
       </div>
@@ -39,10 +39,10 @@ function setupLogoutModalEvents() {
     });
 
     // 2.2) cancelar
-    document.getElementById('cancelLogout')?.addEventListener('click', cerrarModalLogout);
+    document.getElementById('Cancelar_Cierre_Sesión')?.addEventListener('click', cerrarModalLogout);
 
     // 2.3) confirmar
-    document.getElementById('confirmLogout')?.addEventListener('click', () => {
+    document.getElementById('Confirmar_Cierre_Sesión')?.addEventListener('click', () => {
         localStorage.removeItem('token');
         localStorage.removeItem('carrito');
         localStorage.removeItem('listaDeseos');
@@ -53,10 +53,10 @@ function setupLogoutModalEvents() {
 
 // ── Delegación centralizada para los botones del modal de Logout ──
 document.body.addEventListener('click', function (e) {
-    if (e.target.id === 'cancelLogout') {
+    if (e.target.id === 'Cancelar_Cierre_Sesión') {
         cerrarModalLogout();
     }
-    else if (e.target.id === 'confirmLogout') {
+    else if (e.target.id === 'Confirmar_Cierre_Sesión') {
         localStorage.removeItem('token');
         localStorage.removeItem('carrito');
         localStorage.removeItem('listaDeseos');

@@ -17,14 +17,13 @@
 </head>
 
 <body>
-    <!-- INYECCIÓN DEL LOGIN (ahora dentro del body) -->
-    <div id="Login_Container"></div>
+    <!-- Inyección de Formulario de Registro/Inicio de Sesión -->
+    <div id="Contenedor_Login"></div>
     <script>
-        // Carga asíncrona del HTML de login
         fetch('/html/login.html')
             .then(r => r.text())
             .then(html => {
-                document.getElementById('Login_Container').innerHTML = html;
+                document.getElementById('Contenedor_Login').innerHTML = html;
                 if (window.Configurar_Eventos_Modal) Configurar_Eventos_Modal();
             })
             .catch(console.error);
@@ -128,7 +127,7 @@
                 <h1 class="Nombre_Producto">Cargando producto...</h1>
 
                 <div class="Etiquetas_Producto">
-                    <!-- Las etiquetas se cargarán dinámicamente -->
+                    <!-- Se cargan dinámicamente -->
                 </div>
 
                 <div class="Calificación_Producto">
@@ -154,7 +153,7 @@
                     <div class="Tipo_Opción">
                         <h3>Presentación</h3>
                         <div class="Selección_Opciones">
-                            <!-- Las opciones se cargarán dinámicamente -->
+                            <!-- Se cargan dinámicamente -->
                         </div>
                     </div>
                 </div>
@@ -246,7 +245,7 @@
 
             <div class="Contenedor_Relacionados">
                 <div class="Carrusel_Relacionados">
-                    <!-- Los productos relacionados se cargarán dinámicamente -->
+                    <!-- Se cargan dinámicamente -->
                 </div>
             </div>
         </div>
@@ -314,7 +313,7 @@
                 </button>
             </div>
             <div class="Elementos_Lista_Deseos">
-                <!-- Los productos se agregarán dinámicamente -->
+                <!-- Se cargan dinámicamente -->
             </div>
         </div>
 

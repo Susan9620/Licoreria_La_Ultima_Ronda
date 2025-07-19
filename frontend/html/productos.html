@@ -15,16 +15,14 @@
         rel="stylesheet">
 </head>
 
-<!-- Inyectamos el fragmento de login -->
-<div id="Login_Container"></div>
+<!-- Inyección de Formulario de Registro/Inicio de Sesión -->
+<div id="Contenedor_Login"></div>
 
 <script>
-  // Carga asíncrona del HTML de login
   fetch('/html/login.html')
     .then(res => res.text())
     .then(html => {
-      document.getElementById('Login_Container').innerHTML = html;
-      // Una vez inyectado, dispara la inicialización de eventos
+      document.getElementById('Contenedor_Login').innerHTML = html;
       if (window.Configurar_Eventos_Modal) {
         window.Configurar_Eventos_Modal();
       }
@@ -123,11 +121,11 @@
     <section class="Productos_Principal">
         <div class="Contenedor_Productos">
             <div class="Cuadrícula_Productos">
-                <!-- Aquí se inyectarán dinámicamente las tarjetas -->
+                <!-- Se cargan dinámicamente -->
               </div>
               
               <!-- Plantilla para cada producto -->
-              <template id="template-producto">
+              <template id="Plantilla_Producto">
                 <div class="Tarjeta_Producto" data-category="" data-id="">
                   <div class="Imagen_Producto">
                     <button class="Botón_Favorito" aria-label="Añadir a favoritos">
@@ -261,7 +259,7 @@
         <div class="Contenedor_Historial">
             <h2 class="Título_Historial"><i class="fas fa-history"></i> Productos vistos recientemente</h2>
             <div class="Carrusel_Historial">
-                <!-- Los productos se agregarán dinámicamente -->
+                <!-- Se cargan dinámicamente -->
             </div>
             <div class="Botones_Carrusel_Historial">
                 <button class="Botón_Carrusel Botón_Anterior" aria-label="Anterior">

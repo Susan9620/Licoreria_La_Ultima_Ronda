@@ -446,7 +446,7 @@ function Inicializar_Video_Destacado() {
 // Función para inicializar la sección de categorías
 function Inicializar_Categorías(Datos_Categorías) {
     const Contenedor_Categorías = document.querySelector('.Categorías .Contenedor_Categorías');
-    const Template_Categoría = document.querySelector('#template-categoria');
+    const Template_Categoría = document.querySelector('#Plantilla_Categoría');
 
     // Limpiar contenedor
     Contenedor_Categorías.innerHTML = '';
@@ -456,8 +456,8 @@ function Inicializar_Categorías(Datos_Categorías) {
         const Clon = Template_Categoría.content.cloneNode(true);
         const Tarjeta = Clon.querySelector('.Tarjeta_Categoría');
         const Icono = Clon.querySelector('.Ícono_Categoría i');
-        const Nombre = Clon.querySelector('.nombre-categoria');
-        const Desc = Clon.querySelector('.descripcion-categoria');
+        const Nombre = Clon.querySelector('.Nombre_Categoría');
+        const Desc = Clon.querySelector('.Descripción_Categoría');
         const Boton = Clon.querySelector('.Botón_Categoría');
 
         // Rellenar campos
@@ -475,15 +475,15 @@ function Inicializar_Categorías(Datos_Categorías) {
 // Función para inicializar la sección de promociones
 function Inicializar_Promociones(Datos_Promociones) {
     const Contenedor = document.querySelector('.Contenedor_Promociones');
-    const Template = document.querySelector('#template-promocion');
+    const Template = document.querySelector('#Plantilla_Promociones');
 
     // Limpiar
     Contenedor.innerHTML = '';
 
     Datos_Promociones.forEach(p => {
         const Clon = Template.content.cloneNode(true);
-        Clon.querySelector('.promocion-titulo').textContent = p.titulo;
-        Clon.querySelector('.promocion-descripcion').textContent = p.descripcion;
+        Clon.querySelector('.Título_Promoción').textContent = p.titulo;
+        Clon.querySelector('.Descripción_Promoción').textContent = p.descripcion;
         // puedes usar p.tipo/parametros para personalizar el botón o enlace
         Contenedor.appendChild(Clon);
     });
