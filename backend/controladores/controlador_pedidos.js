@@ -1,3 +1,4 @@
+console.log('🔍 [PUT /admin/pedidos/:id/estado] req.body =', req.body);
 const modeloPedidos = require('../modelos/modelo_pedidos');
 
 class ControladorPedidos {

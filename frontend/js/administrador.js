@@ -128,38 +128,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnGuardar?.addEventListener('click', async () => {
         const id = modalID.textContent;
+        const Nuevo_Estado = detEstado.value;
         try {
             const resp = await fetch(`${baseUrl}/api/admin/pedidos/${id}/estado`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json', ...authHeader() },
-                body: JSON.stringify({ Nuevo_Estado: detEstado.value })
+                body: JSON.stringify({ Nuevo_Estado })
             });
-
-            // 1) Clonamos la respuesta y leemos el texto bruto
-            const raw = await resp.clone().text();
-            console.error('💥 raw error:', resp.status, raw);
-
-            // 2) Intentamos parsear JSON (si es JSON)
-            let json = null;
-            try {
-                json = await resp.json();
-            } catch { }
-
-            // 3) Disparamos el error con el texto crudo
-            if (!resp.ok) {
-                throw new Error(`HTTP ${resp.status}: ${raw}`);
-            }
-            if (json && !json.Éxito) {
-                throw new Error(json.Mensaje || 'Éxito=false');
-            }
-
-            // … si todo está ok …
+            const json = await resp.json();
+            if (!resp.ok || !json.Éxito) throw new Error(json.Mensaje);
             modal.classList.add('Oculto');
             await renderPedidos();
             Mostrar_Notificación('Estado actualizado correctamente.', 'Éxito');
-
         } catch (e) {
-            console.error('🔴 fallo al guardar pedido:', e);
             Mostrar_Notificación('Error al guardar: ' + e.message, 'Error');
         }
     });
