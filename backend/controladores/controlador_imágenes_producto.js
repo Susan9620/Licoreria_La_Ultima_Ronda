@@ -67,11 +67,11 @@ const obtenerPrincipal = async (req, res) => {
  */
 const crearImagenProducto = async (req, res) => {
   try {
-    const ID = await modeloImagenesProducto.crear(req.body)
+    const id = await modeloImagenesProducto.crear(req.body)
     return res.status(201).json({
       Éxito: true,
       Mensaje: "Imagen de producto creada correctamente",
-      Datos: { idImagen: ID }
+      Datos: { idImagen: id }
     })
   } catch (error) {
     console.error("Error al crear imagen de producto:", error)
@@ -80,16 +80,16 @@ const crearImagenProducto = async (req, res) => {
 }
 
 /**
- * PUT /api/admin/imagenes/:ID
+ * PUT /api/admin/imagenes/:id
  * Actualiza una imagen de producto (solo Admin)
  */
 const actualizarImagenProducto = async (req, res) => {
   try {
-    const ID = parseInt(req.params.id, 10)
-    if (isNaN(ID)) {
+    const id = parseInt(req.params.id, 10)
+    if (isNaN(id)) {
       return res.status(400).json({ Éxito: false, Mensaje: "ID inválido." })
     }
-    const filas = await modeloImagenesProducto.actualizar(ID, req.body)
+    const filas = await modeloImagenesProducto.actualizar(id, req.body)
     if (filas === 0) {
       return res.status(404).json({ Éxito: false, Mensaje: "Imagen no encontrada." })
     }
@@ -101,16 +101,16 @@ const actualizarImagenProducto = async (req, res) => {
 }
 
 /**
- * DELETE /api/admin/imagenes/:ID
+ * DELETE /api/admin/imagenes/:id
  * Elimina una imagen de producto (solo Admin)
  */
 const eliminarImagenProducto = async (req, res) => {
   try {
-    const ID = parseInt(req.params.id, 10)
-    if (isNaN(ID)) {
+    const id = parseInt(req.params.id, 10)
+    if (isNaN(id)) {
       return res.status(400).json({ Éxito: false, Mensaje: "ID inválido." })
     }
-    const filas = await modeloImagenesProducto.eliminar(ID)
+    const filas = await modeloImagenesProducto.eliminar(id)
     if (filas === 0) {
       return res.status(404).json({ Éxito: false, Mensaje: "Imagen no encontrada." })
     }

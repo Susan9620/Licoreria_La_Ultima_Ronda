@@ -11,11 +11,11 @@ const router = express.Router()
 router.get("/producto/:idProducto", controladorVariantesProducto.obtenerPorProducto)
 
 /**
- * @route   GET /api/variantes/:ID
+ * @route   GET /api/variantes/:id
  * @desc    Obtener una variante específica por su ID
  * @access  Público
  */
-router.get("/:ID", controladorVariantesProducto.obtenerPorId)
+router.get("/:id", controladorVariantesProducto.obtenerPorId)
 
 // Ruta por defecto para testing
 router.get("/", (req, res) => {

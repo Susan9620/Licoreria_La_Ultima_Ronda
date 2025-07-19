@@ -33,11 +33,11 @@ class Controlador_Categorías {
   async Crear_Categoría(req, res) {
     try {
       const Datos = req.body; 
-      const ID = await Modelo_Categorías.crear(Datos);
+      const id = await Modelo_Categorías.crear(Datos);
       return res.status(201).json({
         Éxito: true,
         Mensaje: 'Categoría creada correctamente',
-        Datos: { IDCategoria: ID }
+        Datos: { idCategoria: id }
       });
     } catch (error) {
       console.error('Error al crear categoría:', error);
@@ -46,14 +46,14 @@ class Controlador_Categorías {
   }
 
   /**
-   * PUT /api/admin/Categorías/:ID
+   * PUT /api/admin/Categorías/:id
    * Actualiza una categoría existente (solo Admin)
    */
   async actualizarCategoria(req, res) {
     try {
-      const ID = parseInt(req.params.id, 10);
+      const id = parseInt(req.params.id, 10);
       const cambios = req.body;
-      const filas = await Modelo_Categorías.actualizar(ID, cambios);
+      const filas = await Modelo_Categorías.actualizar(id, cambios);
       if (filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Categoría no encontrada.' });
       }
@@ -65,13 +65,13 @@ class Controlador_Categorías {
   }
 
   /**
-   * DELETE /api/admin/Categorías/:ID
+   * DELETE /api/admin/Categorías/:id
    * Elimina una categoría (solo Admin)
    */
   async eliminarCategoria(req, res) {
     try {
-      const ID = parseInt(req.params.id, 10);
-      const filas = await Modelo_Categorías.eliminar(ID);
+      const id = parseInt(req.params.id, 10);
+      const filas = await Modelo_Categorías.eliminar(id);
       if (filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Categoría no encontrada.' });
       }

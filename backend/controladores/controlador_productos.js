@@ -54,13 +54,13 @@ class ControladorProductos {
   }
 
   /**
-   * GET /api/productos/:ID
+   * GET /api/productos/:id
    * Devuelve un producto por su ID
    */
   async obtenerPorId(req, res) {
     try {
-      const { id: ID } = req.params;
-      const producto = await modeloProductos.obtenerPorId(ID);
+      const { id } = req.params;
+      const producto = await modeloProductos.obtenerPorId(id);
 
       if (!producto) {
         return res.status(404).json({
@@ -85,7 +85,7 @@ class ControladorProductos {
   }
 
   /**
-   * GET /api/productos/:ID/compradosjuntos
+   * GET /api/productos/:id/compradosjuntos
    * Devuelve hasta 4 productos que suelen comprarse junto a la variante predeterminada
    */
   async obtenerCompradosJuntos(req, res) {
@@ -119,7 +119,7 @@ class ControladorProductos {
   }
 
   /**
-   * POST /api/productos/:ID/calificar
+   * POST /api/productos/:id/calificar
    * Inserta una valoración en la tabla RESEÑAS y actualiza la calificación media y total de reseñas en PRODUCTOS.
    */
   async calificarProducto(req, res) {
@@ -156,7 +156,7 @@ class ControladorProductos {
   }
 
   /**
- * GET /api/productos/:ID/calificacion
+ * GET /api/productos/:id/calificacion
  * Devuelve la valoración que este usuario dio (o null si no valoró)
  */
   async obtenerCalificacionUsuario(req, res) {
@@ -193,14 +193,14 @@ class ControladorProductos {
   }
 
   /**
-   * PUT /api/admin/productos/:ID
+   * PUT /api/admin/productos/:id
    * Actualiza un producto existente (solo Admin)
    */
   async actualizarProducto(req, res) {
     try {
-      const ID = parseInt(req.params.id, 10);
+      const id = parseInt(req.params.id, 10);
       const cambios = req.body;
-      const filas = await modeloProductos.actualizar(ID, cambios);
+      const filas = await modeloProductos.actualizar(id, cambios);
       if (filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Producto no encontrado.' });
       }
@@ -212,13 +212,13 @@ class ControladorProductos {
   }
 
   /**
-   * DELETE /api/admin/productos/:ID
+   * DELETE /api/admin/productos/:id
    * Elimina un producto (solo Admin)
    */
   async eliminarProducto(req, res) {
     try {
-      const ID = parseInt(req.params.id, 10);
-      const filas = await modeloProductos.eliminar(ID);
+      const id = parseInt(req.params.id, 10);
+      const filas = await modeloProductos.eliminar(id);
       if (filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Producto no encontrado.' });
       }

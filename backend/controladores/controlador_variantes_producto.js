@@ -34,8 +34,8 @@ const obtenerPorProducto = async (req, res) => {
  */
 const obtenerPorId = async (req, res) => {
   try {
-    const { id: ID } = req.params
-    const variante = await modeloVariantesProducto.obtenerPorId(ID)
+    const { id } = req.params
+    const variante = await modeloVariantesProducto.obtenerPorId(id)
 
     if (!variante) {
       return res.status(404).json({

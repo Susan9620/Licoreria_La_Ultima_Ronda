@@ -5,18 +5,18 @@ let productoActual = null
 let variantesProducto = []
 let imagenesProducto = []
 
-async function cargarDatosDeProductos(IDs) {
+async function cargarDatosDeProductos(ids) {
   const resultados = []
-  for (let ID of IDs) {
+  for (let id of ids) {
     try {
-      const resp = await fetch(`${API_BASE}/api/productos/${ID}`)
+      const resp = await fetch(`${API_BASE}/api/productos/${id}`)
       if (!resp.ok) continue
       const json = await resp.json()
       if (json.Éxito && json.Datos) {
         resultados.push(json.Datos)
       }
     } catch (e) {
-      console.warn(`No se pudo cargar producto ${ID}:`, e)
+      console.warn(`No se pudo cargar producto ${id}:`, e)
     }
   }
   return resultados

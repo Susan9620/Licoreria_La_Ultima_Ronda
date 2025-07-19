@@ -4,16 +4,16 @@ class ControladorContacto {
   // POST /api/contacto
   async crear(req, res) {
     try {
-      // Si el usuario está logueado, req.usuario.ID; si no, null
-      const IDUsuario = req.usuario?.id || null;
+      // Si el usuario está logueado, req.usuario.id; si no, null
+      const idUsuario = req.usuario?.id || null;
       const { Mensaje } = req.body;
 
       if (!Mensaje || !Mensaje.trim()) {
         return res.status(400).json({ Éxito: false, Mensaje: 'El mensaje no puede estar vacío' });
       }
 
-      const ID = await ModeloContacto.crear(IDUsuario, Mensaje.trim());
-      return res.status(201).json({ Éxito: true, Mensaje: 'Mensaje guardado', Datos: { ID: ID } });
+      const id = await ModeloContacto.crear(idUsuario, Mensaje.trim());
+      return res.status(201).json({ Éxito: true, Mensaje: 'Mensaje guardado', Datos: { id } });
     } catch (e) {
       console.error('Error creando mensaje de contacto:', e);
       return res.status(500).json({ Éxito: false, Mensaje: 'Error interno al guardar el mensaje' });

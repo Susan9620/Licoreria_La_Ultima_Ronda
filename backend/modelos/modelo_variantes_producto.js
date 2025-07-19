@@ -37,10 +37,10 @@ async function obtenerPorProducto(idProducto) {
 
 /**
  * Obtiene una variante específica por su ID
- * @param {number} ID
+ * @param {number} id
  * @returns {Promise<Object|null>}
  */
-async function obtenerPorId(ID) {
+async function obtenerPorId(id) {
   try {
     const result = await pool.query(
       `SELECT
@@ -58,7 +58,7 @@ async function obtenerPorId(ID) {
        FROM "VARIANTES_PRODUCTO"
        WHERE "ID_Variante_Producto" = $1
          AND "Activo" = TRUE`,
-      [ID]
+      [id]
     );
     return result.rows[0] || null;
   } catch (error) {

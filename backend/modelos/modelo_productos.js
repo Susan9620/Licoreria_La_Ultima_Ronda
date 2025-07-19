@@ -118,10 +118,10 @@ class ModeloProductos {
 
   /**
    * Obtiene los datos completos de un producto por su ID
-   * @param {number} ID
+   * @param {number} id
    * @returns {Promise<Object|null>}
    */
-  async obtenerPorId(ID) {
+  async obtenerPorId(id) {
     try {
       const result = await pool.query(
         `SELECT
@@ -166,7 +166,7 @@ class ModeloProductos {
            v."ID_Variante_Producto", v."Nombre_Variante", v."Graduación",
            v."Precio", v."Precio_Oferta", v."Stock", i."URL",
            rr."CalificaciónMedia", rr."TotalReseñas"`,
-        [ID]
+        [id]
       );
       return result.rows[0] || null;
     } catch (error) {

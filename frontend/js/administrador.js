@@ -97,9 +97,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Detalle Pedido
-    window.viewPedido = async (ID) => {
+    window.viewPedido = async (id) => {
         try {
-            const resp = await fetch(`${baseUrl}/api/admin/pedidos/${ID}`, { headers: authHeader() });
+            const resp = await fetch(`${baseUrl}/api/admin/pedidos/${id}`, { headers: authHeader() });
             const json = await resp.json();
             if (!resp.ok || !json.Éxito) throw new Error(json.Mensaje);
             const { pedido, items } = json.Datos;
@@ -127,10 +127,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     btnGuardar?.addEventListener('click', async () => {
-        const ID = modalID.textContent;
+        const id = modalID.textContent;
         const nuevoEstado = detEstado.value;
         try {
-            const resp = await fetch(`${baseUrl}/api/admin/pedidos/${ID}/estado`, {
+            const resp = await fetch(`${baseUrl}/api/admin/pedidos/${id}/estado`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json', ...authHeader() },
                 body: JSON.stringify({ nuevoEstado })
@@ -188,19 +188,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    window.viewProducto = async (ID) => {
-        modoProducto = 'editar'; idProductoActual = ID;
+    window.viewProducto = async (id) => {
+        modoProducto = 'editar'; idProductoActual = id;
         document.getElementById('Título_Modal_Producto').textContent = 'Editar';
         ResetearModal_Producto();
         try {
-            const resp = await fetch(`${baseUrl}/api/productos/${ID}`, { headers: authHeader() });
+            const resp = await fetch(`${baseUrl}/api/productos/${id}`, { headers: authHeader() });
             const { Datos: prod } = await resp.json();
             document.getElementById('Nombre_Producto').value = prod.Nombre;
             document.getElementById('Precio_Producto').value = prod.Precio;
             document.getElementById('Categoría_Producto').value = prod.ID_Categoría;
             document.getElementById('Activo_Producto').checked = prod.Activo === 1;
-            await cargarVariantes(ID);
-            await cargarImagenes(ID);
+            await cargarVariantes(id);
+            await cargarImagenes(id);
             prodModal.classList.remove('Oculto');
         } catch (e) {
             Mostrar_Notificación('Error al cargar producto: ' + e.message, 'Error');
@@ -211,14 +211,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cerrarProdModal) cerrarProdModal.onclick = () => prodModal.classList.add('Oculto');
     if (btnCancelarProd) btnCancelarProd.onclick = () => prodModal.classList.add('Oculto');
 
-    async function abrirModal_Producto(modo, ID = null) {
-        modoProducto = modo; idProductoActual = ID;
+    async function abrirModal_Producto(modo, id = null) {
+        modoProducto = modo; idProductoActual = id;
         document.getElementById('Título_Modal_Producto').textContent = modo === 'crear' ? 'Nuevo' : 'Editar';
         // 1) Traer de nuevo las categorías (por si se han actualizado)
         await cargarCategoriasAdmin();
         // 2) Limpiar el formulario (resetear valores, variantes e imágenes) 
         ResetearModal_Producto();
-        if (modo === 'editar' && ID) window.viewProducto(ID);
+        if (modo === 'editar' && id) window.viewProducto(id);
         else prodModal.classList.remove('Oculto');
     }
 
@@ -256,9 +256,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    window.eliminarProducto = async (ID) => {
+    window.eliminarProducto = async (id) => {
         if (!confirm('¿Seguro que quieres eliminar este producto?')) return;
-        await fetch(`${baseUrl}/api/admin/productos/${ID}`, { method: 'DELETE', headers: authHeader() });
+        await fetch(`${baseUrl}/api/admin/productos/${id}`, { method: 'DELETE', headers: authHeader() });
         await renderProductos();
     };
 
@@ -316,9 +316,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
-    async function eliminarVariante(ID) {
+    async function eliminarVariante(id) {
         if (!confirm('¿Eliminar variante?')) return;
-        await fetch(`${baseUrl}/api/admin/variantes/${ID}`, { method: 'DELETE', headers: authHeader() });
+        await fetch(`${baseUrl}/api/admin/variantes/${id}`, { method: 'DELETE', headers: authHeader() });
         await cargarVariantes(idProductoActual);
     }
 
@@ -371,9 +371,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
-    async function eliminarImagen(ID) {
+    async function eliminarImagen(id) {
         if (!confirm('¿Eliminar imagen?')) return;
-        await fetch(`${baseUrl}/api/admin/imagenes/${ID}`, { method: 'DELETE', headers: authHeader() });
+        await fetch(`${baseUrl}/api/admin/imagenes/${id}`, { method: 'DELETE', headers: authHeader() });
         await cargarImagenes(idProductoActual);
     }
 

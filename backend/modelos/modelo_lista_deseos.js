@@ -45,7 +45,7 @@ class ModeloListaDeseos {
    * Añade un producto a la lista de deseos de un usuario
    * @param {number} idUsuario
    * @param {number} idProducto
-   * @returns {Promise<Object>} - { ID, productoId }
+   * @returns {Promise<Object>} - { id, productoId }
    */
   async agregar(idUsuario, idProducto) {
     try {
@@ -58,7 +58,7 @@ class ModeloListaDeseos {
         [idUsuario, idProducto]
       );
       return {
-        ID: result.rows[0].id,
+        id: result.rows[0].id,
         productoId: idProducto
       };
     } catch (error) {

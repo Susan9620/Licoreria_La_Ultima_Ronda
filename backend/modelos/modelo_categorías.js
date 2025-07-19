@@ -53,7 +53,7 @@ class Modelo_Categorías {
   /**
    * Actualiza campos de una categoría dado su ID.
    */
-  async actualizar(ID, cambios) {
+  async actualizar(id, cambios) {
     try {
       const campos = [];
       const valores = [];
@@ -65,8 +65,8 @@ class Modelo_Categorías {
         idx++;
       }
 
-      // El último placeholder es para el ID
-      valores.push(ID);
+      // El último placeholder es para el id
+      valores.push(id);
 
       const result = await pool.query(
         `UPDATE "CATEGORÍAS"
@@ -84,12 +84,12 @@ class Modelo_Categorías {
   /**
    * Elimina una categoría.
    */
-  async eliminar(ID) {
+  async eliminar(id) {
     try {
       const result = await pool.query(
         `DELETE FROM "CATEGORÍAS"
          WHERE "ID_Categoría" = $1`,
-        [ID]
+        [id]
       );
       return result.rowCount;
     } catch (error) {

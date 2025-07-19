@@ -32,11 +32,11 @@ class ControladorPromociones {
    */
   async crearPromocion(req, res) {
     try {
-      const ID = await modeloPromociones.crear(req.body);
+      const id = await modeloPromociones.crear(req.body);
       return res.status(201).json({
         Éxito: true,
         Mensaje: 'Promoción creada correctamente',
-        Datos: { idPromoción: ID }
+        Datos: { idPromoción: id }
       });
     } catch (error) {
       console.error('Error al crear promoción:', error);
@@ -45,17 +45,17 @@ class ControladorPromociones {
   }
 
   /**
-   * PUT /api/admin/promociones/:ID
+   * PUT /api/admin/promociones/:id
    * Actualiza una promoción existente (solo Admin)
    */
   async actualizarPromocion(req, res) {
     try {
-      const ID = parseInt(req.params.id, 10);
-      if (isNaN(ID)) {
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id)) {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
 
-      const filas = await modeloPromociones.actualizar(ID, req.body);
+      const filas = await modeloPromociones.actualizar(id, req.body);
       if (filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Promoción no encontrada.' });
       }
@@ -68,17 +68,17 @@ class ControladorPromociones {
   }
 
   /**
-   * DELETE /api/admin/promociones/:ID
+   * DELETE /api/admin/promociones/:id
    * Elimina una promoción (solo Admin)
    */
   async eliminarPromocion(req, res) {
     try {
-      const ID = parseInt(req.params.id, 10);
-      if (isNaN(ID)) {
+      const id = parseInt(req.params.id, 10);
+      if (isNaN(id)) {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
 
-      const filas = await modeloPromociones.eliminar(ID);
+      const filas = await modeloPromociones.eliminar(id);
       if (filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Promoción no encontrada.' });
       }

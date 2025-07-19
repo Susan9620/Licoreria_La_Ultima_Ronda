@@ -48,10 +48,10 @@ class ModeloUsuarios {
 
   /**
    * Obtiene un usuario activo por su ID
-   * @param {number} ID
+   * @param {number} id
    * @returns {Promise<Object|null>}
    */
-  async obtenerPorId(ID) {
+  async obtenerPorId(id) {
     try {
       const result = await pool.query(
         `SELECT
@@ -63,7 +63,7 @@ class ModeloUsuarios {
         WHERE "ID_Usuario" = $1
           AND "Activo" = TRUE
         LIMIT 1`,
-        [ID]
+        [id]
       );
       return result.rows[0] || null;
     } catch (error) {

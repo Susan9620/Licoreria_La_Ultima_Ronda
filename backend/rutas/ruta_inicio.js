@@ -34,7 +34,7 @@ router.get('/', async (req, res) => {
     res.status(500).json({
       Éxito: false,
       Mensaje: 'Error al cargar los datos de la página de inicio',
-      error: process.env.NODE_ENV === 'development' ? error.message : null
+      Error: process.env.NODE_ENV === 'development' ? error.message : null
     });
   }
 });

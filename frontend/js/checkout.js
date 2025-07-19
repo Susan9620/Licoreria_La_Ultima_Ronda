@@ -455,7 +455,7 @@ const Checkout = {
             const json = await res.json();
             if (!res.ok || !json.Éxito) throw new Error(json.Mensaje || `Error ${res.status}`);
 
-            // 2) Tomamos el ID del pedido que acaba de crear el backend
+            // 2) Tomamos el id del pedido que acaba de crear el backend
             const idPedido = json.Datos.idPedido;
 
             // 3) Vaciamos el carrito

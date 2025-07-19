@@ -5,9 +5,9 @@
  * @param {Function} next - Función para continuar al siguiente middleware
  */
 const notFoundHandler = (req, res, next) => {
-  const error = new Error(`Ruta no encontrada: ${req.originalUrl}`);
+  const Error = new Error(`Ruta no encontrada: ${req.originalUrl}`);
   res.status(404);
-  next(error);
+  next(Error);
 };
 
 /**
@@ -60,7 +60,7 @@ const errorHandler = (err, req, res, next) => {
 
   // Respuesta de error genérica
   res.status(statusCode).json({
-    error: err.name || 'Error interno',
+    Error: err.name || 'Error interno',
     Mensaje: err.message || 'Ha ocurrido un error inesperado',
     ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
   });
