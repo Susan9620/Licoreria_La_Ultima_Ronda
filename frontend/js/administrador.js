@@ -136,7 +136,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ Nuevo_Estado })
             });
             const json = await resp.json();
-            if (!resp.ok || !json.Éxito) throw new Error(json.Mensaje);
+            if (!resp.ok) {
+                // Lee el cuerpo de la respuesta (texto o JSON)
+                let detalle;
+                try {
+                    detalle = await resp.text();
+                    console.error('💥 PUT /api/admin/pedidos/:id/estado ERROR', resp.status, detalle);
+                } catch (err) {
+                    console.error('💥 No pude leer body de error:', err);
+                }
+                throw new Error(`Error en servidor (${resp.status})`);
+            }
+            if (!json.Éxito) {
+                console.error('💥 API devolvió éxito=false', json);
+                throw new Error(json.Mensaje || 'Error desconocido');
+            }
             modal.classList.add('Oculto');
             await renderPedidos();
             Mostrar_Notificación('Estado actualizado correctamente.', 'Éxito');
