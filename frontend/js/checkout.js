@@ -453,7 +453,7 @@ const Checkout = {
             });
             // 1) Parseamos la respuesta JSON
             const json = await res.json();
-            if (!res.ok || !json.éxito) throw new Error(json.mensaje || `Error ${res.status}`);
+            if (!res.ok || !json.Éxito) throw new Error(json.Mensaje || `Error ${res.status}`);
 
             // 2) Tomamos el id del pedido que acaba de crear el backend
             const idPedido = json.Datos.idPedido;

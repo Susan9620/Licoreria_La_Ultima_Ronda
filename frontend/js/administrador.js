@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const prodModal = document.getElementById('Modal_Producto');
     const cerrarProdModal = document.getElementById('Cerrar_Modal_Producto');
     const btnNuevoProd = document.getElementById('BtnNuevoProducto');
-    const btnGuardarProd = document.getElementById('Botón_Guardar_Producto');
+    const Botón_Guardar_Producto = document.getElementById('Botón_Guardar_Producto');
     const btnCancelarProd = document.getElementById('Botón_Cancelar_Producto');
     let modoProducto = 'crear', idProductoActual = null;
 
@@ -43,12 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // ------------- Carga categorías para el formulario de Productos -------------
     async function cargarCategoriasAdmin() {
         try {
-            const resp = await fetch(`${baseUrl}/api/categorias`, {
+            const resp = await fetch(`${baseUrl}/api/Categorías`, {
                 headers: authHeader()
             });
             const json = await resp.json();
-            if (!resp.ok || !json.éxito) {
-                throw new Error(json.mensaje || 'Error al cargar categorías');
+            if (!resp.ok || !json.Éxito) {
+                throw new Error(json.Mensaje || 'Error al cargar categorías');
             }
             const sel = document.getElementById('Categoría_Producto');
             sel.innerHTML = json.Datos
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const resp = await fetch(`${baseUrl}/api/admin/pedidos`, { headers: authHeader() });
             const json = await resp.json();
-            if (!resp.ok || !json.éxito) throw new Error(json.mensaje);
+            if (!resp.ok || !json.Éxito) throw new Error(json.Mensaje);
             const table = document.createElement('table');
             table.className = 'Tabla_Administrador';
             table.innerHTML = `
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const resp = await fetch(`${baseUrl}/api/admin/pedidos/${id}`, { headers: authHeader() });
             const json = await resp.json();
-            if (!resp.ok || !json.éxito) throw new Error(json.mensaje);
+            if (!resp.ok || !json.Éxito) throw new Error(json.Mensaje);
             const { pedido, items } = json.Datos;
             modalID.textContent = pedido.idPedido;
             detUsuario.textContent = pedido.idUsuario;
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ nuevoEstado })
             });
             const json = await resp.json();
-            if (!resp.ok || !json.éxito) throw new Error(json.mensaje);
+            if (!resp.ok || !json.Éxito) throw new Error(json.Mensaje);
             modal.classList.add('Oculto');
             await renderPedidos();
             Mostrar_Notificación('Estado actualizado correctamente.', 'Éxito');
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const resp = await fetch(`${baseUrl}/api/admin/productos`, { headers: authHeader() });
             const json = await resp.json();
-            if (!resp.ok || !json.éxito) throw new Error(json.mensaje);
+            if (!resp.ok || !json.Éxito) throw new Error(json.Mensaje);
             const table = document.createElement('table');
             table.className = 'Tabla_Administrador';
             table.innerHTML = `
@@ -222,7 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
         else prodModal.classList.remove('Oculto');
     }
 
-    btnGuardarProd.onclick = async () => {
+    Botón_Guardar_Producto.onclick = async () => {
         const Datos = {
             Nombre: document.getElementById('Nombre_Producto').value,
             Precio: parseFloat(document.getElementById('Precio_Producto').value),

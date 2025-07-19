@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         body: JSON.stringify({ Nombre_Completo, Correo_Electrónico, Contraseña })
                     });
                     const json = await resp.json();
-                    if (!json.éxito) throw new Error(json.mensaje);
+                    if (!json.Éxito) throw new Error(json.Mensaje);
                     Mostrar_Notificación('Usuario registrado ✅', 'Éxito');
                     // pasar a login
                     Modal.querySelector('#Interruptor_Login').checked = true;
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         body: JSON.stringify({ Correo_Electrónico: correo, Contraseña: contraseña })
                     });
                     const json = await resp.json();
-                    if (!json.éxito) throw new Error(json.mensaje);
+                    if (!json.Éxito) throw new Error(json.Mensaje);
                     console.log("Respuesta del login:", json);
                     localStorage.setItem('token', json.token);
                     console.log("Token guardado en localStorage:", localStorage.getItem('token'));

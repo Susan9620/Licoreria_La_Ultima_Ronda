@@ -68,7 +68,7 @@ const Gestión_Pedidos = {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const json = await resp.json();
-            if (resp.ok && json.éxito) {
+            if (resp.ok && json.Éxito) {
                 // Asegúrate que el controller devuelve { Nombre_Completo, Correo_Electrónico, Teléfono }
                 this.Estado.Datos_Sesión = {
                     Nombre_Completo: json.Datos.Nombre_Completo,
@@ -76,7 +76,7 @@ const Gestión_Pedidos = {
                     Teléfono: json.Datos.Teléfono
                 };
             } else {
-                throw new Error(json.mensaje || 'No se pudo cargar perfil');
+                throw new Error(json.Mensaje || 'No se pudo cargar perfil');
             }
         } catch (e) {
             console.error('Error cargando perfil de usuario:', e);
@@ -113,7 +113,7 @@ const Gestión_Pedidos = {
             console.log('📡 Fetch /api/pedidos/:', resp.status);
 
             const json = await resp.json();
-            if (!json.éxito) throw new Error('Pedido no exitoso');
+            if (!json.Éxito) throw new Error('Pedido no exitoso');
 
             // 1️⃣ Asigna el pedido y sus items al estado
             this.Estado.Pedido_Actual = json.Datos.pedido;
@@ -124,8 +124,8 @@ const Gestión_Pedidos = {
             console.log('📋 JSON recibido:', json);
             console.log('📝 Pedido completo (campos):', JSON.stringify(json.Datos.pedido, null, 2));
 
-            if (!resp.ok || !json.éxito) {
-                throw new Error(json.mensaje || resp.statusText);
+            if (!resp.ok || !json.Éxito) {
+                throw new Error(json.Mensaje || resp.statusText);
             }
 
             this.Renderizar_Detalles_Pedido();
@@ -314,8 +314,8 @@ const Gestión_Pedidos = {
             });
             const json = await resp.json();
 
-            if (!resp.ok || !json.éxito) {
-                throw new Error(json.mensaje || resp.statusText);
+            if (!resp.ok || !json.Éxito) {
+                throw new Error(json.Mensaje || resp.statusText);
             }
 
             // aquí tu array de pedidos reales:
@@ -504,8 +504,8 @@ const Gestión_Pedidos = {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const json = await resp.json();
-                if (!resp.ok || !json.éxito) {
-                    throw new Error(json.mensaje || 'Error cargando detalles del pedido');
+                if (!resp.ok || !json.Éxito) {
+                    throw new Error(json.Mensaje || 'Error cargando detalles del pedido');
                 }
                 // json.Datos.pedido  y json.Datos.items
                 p = {

@@ -3,7 +3,7 @@ const { verificarToken, esAdministrador } = require('../middleware/middleware_au
 const ControladorPedidos = require('../controladores/controlador_pedidos');
 const ControladorProductos = require('../controladores/controlador_productos');
 const ControladorImagenesProducto = require('../controladores/controlador_imágenes_producto');
-const ControladorCategorias = require('../controladores/controlador_categorías');
+const Controlador_Categorías = require('../controladores/controlador_categorías');
 const ControladorCarrusel = require('../controladores/controlador_imágenes_carrusel');
 const ControladorUsuarios = require('../controladores/controlador_usuarios');
 const ControladorPromociones = require('../controladores/controlador_promociones');
@@ -41,11 +41,11 @@ router.delete('/imagenes/:id', ControladorImagenesProducto.eliminarImagenProduct
 
 // CATEGORÍAS
 // Crear categoría
-router.post('/categorias', ControladorCategorias.crearCategoria);
+router.post('/Categorías', Controlador_Categorías.crearCategoria);
 // Actualizar categoría
-router.put('/categorias/:id', ControladorCategorias.actualizarCategoria);
+router.put('/Categorías/:id', Controlador_Categorías.actualizarCategoria);
 // Eliminar categoría
-router.delete('/categorias/:id', ControladorCategorias.eliminarCategoria);
+router.delete('/Categorías/:id', Controlador_Categorías.eliminarCategoria);
 
 // CARRUSEL
 // Crear imagen de carrusel

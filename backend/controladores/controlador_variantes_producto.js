@@ -9,9 +9,9 @@ const obtenerPorProducto = async (req, res) => {
     const variantes = await modeloVariantesProducto.obtenerPorProducto(idProducto)
 
     res.json({
-      éxito: true,
+      Éxito: true,
       Datos: variantes,
-      mensaje: "Variantes obtenidas exitosamente",
+      Mensaje: "Variantes obtenidas exitosamente",
     })
   } catch (error) {
     // imprime en consola el mensaje y la consulta que falló
@@ -22,8 +22,8 @@ const obtenerPorProducto = async (req, res) => {
     )
     // devuelve al cliente el mensaje real para depuración
     res.status(500).json({
-      éxito: false,
-      mensaje: error.message,
+      Éxito: false,
+      Mensaje: error.message,
       sql: error.sql
     })
   }
@@ -39,15 +39,15 @@ const obtenerPorId = async (req, res) => {
 
     if (!variante) {
       return res.status(404).json({
-        éxito: false,
-        mensaje: "Variante no encontrada",
+        Éxito: false,
+        Mensaje: "Variante no encontrada",
       })
     }
 
     res.json({
-      éxito: true,
+      Éxito: true,
       Datos: variante,
-      mensaje: "Variante obtenida exitosamente",
+      Mensaje: "Variante obtenida exitosamente",
     })
   } catch (error) {
     // imprime en consola el mensaje y la consulta que falló
@@ -58,8 +58,8 @@ const obtenerPorId = async (req, res) => {
     )
     // devuelve al cliente el mensaje real para depuración
     res.status(500).json({
-      éxito: false,
-      mensaje: error.message,
+      Éxito: false,
+      Mensaje: error.message,
       sql: error.sql
     })
   }

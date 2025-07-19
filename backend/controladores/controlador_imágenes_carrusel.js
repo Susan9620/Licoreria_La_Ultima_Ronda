@@ -14,16 +14,16 @@ class ControladorImagenesCarrusel {
       const imagenes = await modeloImagenesCarrusel.obtenerImagenesCarrusel();
 
       res.status(200).json({
-        éxito: true,
-        mensaje: 'Imágenes del carrusel obtenidas correctamente',
+        Éxito: true,
+        Mensaje: 'Imágenes del carrusel obtenidas correctamente',
         Datos: imagenes
       });
     } catch (error) {
       console.error('Error en controlador de imágenes carrusel:', error);
       res.status(500).json({
-        éxito: false,
-        mensaje: 'Error al obtener las imágenes del carrusel',
-        error: process.env.NODE_ENV === 'development' ? error.message : null
+        Éxito: false,
+        Mensaje: 'Error al obtener las imágenes del carrusel',
+        Error: process.env.NODE_ENV === 'development' ? error.message : null
       });
     }
   }
@@ -39,8 +39,8 @@ class ControladorImagenesCarrusel {
 
       if (isNaN(id)) {
         return res.status(400).json({
-          éxito: false,
-          mensaje: 'ID de imagen inválido'
+          Éxito: false,
+          Mensaje: 'ID de imagen inválido'
         });
       }
 
@@ -48,22 +48,22 @@ class ControladorImagenesCarrusel {
 
       if (!imagen) {
         return res.status(404).json({
-          éxito: false,
-          mensaje: `No se encontró la imagen con ID ${id}`
+          Éxito: false,
+          Mensaje: `No se encontró la imagen con ID ${id}`
         });
       }
 
       res.status(200).json({
-        éxito: true,
-        mensaje: 'Imagen del carrusel obtenida correctamente',
+        Éxito: true,
+        Mensaje: 'Imagen del carrusel obtenida correctamente',
         Datos: imagen
       });
     } catch (error) {
       console.error(`Error al obtener imagen del carrusel:`, error);
       res.status(500).json({
-        éxito: false,
-        mensaje: 'Error al obtener la imagen del carrusel',
-        error: process.env.NODE_ENV === 'development' ? error.message : null
+        Éxito: false,
+        Mensaje: 'Error al obtener la imagen del carrusel',
+        Error: process.env.NODE_ENV === 'development' ? error.message : null
       });
     }
   }
@@ -72,13 +72,13 @@ class ControladorImagenesCarrusel {
     try {
       const id = await modeloImagenesCarrusel.crear(req.body);
       return res.status(201).json({
-        éxito: true,
-        mensaje: 'Imagen de carrusel creada correctamente',
+        Éxito: true,
+        Mensaje: 'Imagen de carrusel creada correctamente',
         Datos: { idImagen: id }
       });
     } catch (error) {
       console.error('Error al crear imagen de carrusel:', error);
-      return res.status(500).json({ éxito: false, mensaje: error.message });
+      return res.status(500).json({ Éxito: false, Mensaje: error.message });
     }
   }
 
@@ -90,18 +90,18 @@ class ControladorImagenesCarrusel {
     try {
       const id = parseInt(req.params.id, 10);
       if (isNaN(id)) {
-        return res.status(400).json({ éxito: false, mensaje: 'ID inválido.' });
+        return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
 
       const filas = await modeloImagenesCarrusel.actualizar(id, req.body);
       if (filas === 0) {
-        return res.status(404).json({ éxito: false, mensaje: 'Imagen no encontrada.' });
+        return res.status(404).json({ Éxito: false, Mensaje: 'Imagen no encontrada.' });
       }
 
-      return res.json({ éxito: true, mensaje: 'Imagen de carrusel actualizada correctamente.' });
+      return res.json({ Éxito: true, Mensaje: 'Imagen de carrusel actualizada correctamente.' });
     } catch (error) {
       console.error('Error al actualizar imagen de carrusel:', error);
-      return res.status(500).json({ éxito: false, mensaje: error.message });
+      return res.status(500).json({ Éxito: false, Mensaje: error.message });
     }
   }
 
@@ -113,18 +113,18 @@ class ControladorImagenesCarrusel {
     try {
       const id = parseInt(req.params.id, 10);
       if (isNaN(id)) {
-        return res.status(400).json({ éxito: false, mensaje: 'ID inválido.' });
+        return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
 
       const filas = await modeloImagenesCarrusel.eliminar(id);
       if (filas === 0) {
-        return res.status(404).json({ éxito: false, mensaje: 'Imagen no encontrada.' });
+        return res.status(404).json({ Éxito: false, Mensaje: 'Imagen no encontrada.' });
       }
 
-      return res.json({ éxito: true, mensaje: 'Imagen de carrusel eliminada correctamente.' });
+      return res.json({ Éxito: true, Mensaje: 'Imagen de carrusel eliminada correctamente.' });
     } catch (error) {
       console.error('Error al eliminar imagen de carrusel:', error);
-      return res.status(500).json({ éxito: false, mensaje: error.message });
+      return res.status(500).json({ Éxito: false, Mensaje: error.message });
     }
   }
 }

@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { configurarServidor } = require('./configuraciones/configuraciones_servidor');
 const { testConnection } = require('./configuraciones/configuraciones_bd');
-const { notFoundHandler, errorHandler } = require('./middleware/middleware_error');
+const { notFoundHandler, errorHandler: Error_Manajador } = require('./middleware/middleware_error');
 const fs = require('fs');
 const path = require('path');
 
@@ -51,7 +51,7 @@ app.get('/api/estado', (req, res) => {
 });
 
 // Registrar rutas de la API
-app.use('/api/categorias', require('./rutas/ruta_categorías'));
+app.use('/api/Categorías', require('./rutas/ruta_categorías'));
 app.use('/api/carrusel', require('./rutas/ruta_imágenes_carrusel'));
 app.use('/api/productos', require('./rutas/ruta_productos'));
 app.use('/api/variantes', require('./rutas/ruta_variantes_producto'));
@@ -64,10 +64,6 @@ app.use('/api/reseñas', require('./rutas/ruta_reseñas'));
 app.use('/api/pedidos', require('./rutas/ruta_pedidos'));
 app.use('/api/contacto', require('./rutas/ruta_contacto'));
 app.use('/api/admin', require('./rutas/ruta_administrador'));
-
-// Rutas temporales para endpoints que aún no están implementados
-// app.use('/api/pedidos', express.Router().get('/', (req, res) => res.json({ mensaje: 'API de pedidos' })));
-// app.use('/api/contacto', express.Router().get('/', (req, res) => res.json({ mensaje: 'API de contacto' })));
 
 // Servir frontend en desarrollo
 if (process.env.NODE_ENV === 'development') {
@@ -92,6 +88,6 @@ if (process.env.NODE_ENV === 'production') {
 app.use(notFoundHandler);
 
 // Middleware para manejar errores
-app.use(errorHandler);
+app.use(Error_Manajador);
 
 module.exports = app;

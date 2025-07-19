@@ -37,7 +37,7 @@ class ControladorPedidos {
       }
 
       if (!Array.isArray(items) || items.length === 0) {
-        return res.status(400).json({ éxito: false, mensaje: 'No hay ítems en el pedido' });
+        return res.status(400).json({ Éxito: false, Mensaje: 'No hay ítems en el pedido' });
       }
 
       // 🔍 Verificar que todos los items tengan idVariante válido
@@ -52,8 +52,8 @@ class ControladorPedidos {
       if (itemsSinVariante.length > 0) {
         console.error("❌ Items sin idVariante válido encontrados:", itemsSinVariante);
         return res.status(400).json({
-          éxito: false,
-          mensaje: 'Algunos items no tienen ID_Variante válido',
+          Éxito: false,
+          Mensaje: 'Algunos items no tienen ID_Variante válido',
           itemsProblematicos: itemsSinVariante
         });
       }
@@ -72,28 +72,28 @@ class ControladorPedidos {
       });
 
       return res.status(201).json({
-        éxito: true,
-        mensaje: 'Pedido y detalle guardados',
+        Éxito: true,
+        Mensaje: 'Pedido y detalle guardados',
         Datos: { idPedido, númeroPedido: numeroPedido }
       });
     } catch (err) {
       console.error('Error al crear pedido con detalle:', err);
-      return res.status(500).json({ éxito: false, mensaje: 'Error al procesar el pedido' });
+      return res.status(500).json({ Éxito: false, Mensaje: 'Error al procesar el pedido' });
     }
   }
 
   async obtenerPedidoPorId(req, res) {
     try {
       const id = parseInt(req.params.id, 10);
-      if (isNaN(id)) return res.status(400).json({ éxito: false, mensaje: 'ID inválido' });
+      if (isNaN(id)) return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido' });
 
       const pedido = await modeloPedidos.obtenerPorId(id);
-      if (!pedido) return res.status(404).json({ éxito: false, mensaje: 'Pedido no encontrado' });
+      if (!pedido) return res.status(404).json({ Éxito: false, Mensaje: 'Pedido no encontrado' });
 
-      res.json({ éxito: true, Datos: pedido });
+      res.json({ Éxito: true, Datos: pedido });
     } catch (err) {
       console.error('Error al obtener pedido:', err);
-      res.status(500).json({ éxito: false, mensaje: 'Error al recuperar pedido' });
+      res.status(500).json({ Éxito: false, Mensaje: 'Error al recuperar pedido' });
     }
   }
 
@@ -101,10 +101,10 @@ class ControladorPedidos {
     try {
       const idPedido = parseInt(req.params.id, 10);
       const { pedido, items } = await modeloPedidos.obtenerConDetalles(idPedido);
-      return res.json({ éxito: true, Datos: { pedido, items } });
+      return res.json({ Éxito: true, Datos: { pedido, items } });
     } catch (err) {
       console.error(err);
-      return res.status(404).json({ éxito: false, mensaje: err.message });
+      return res.status(404).json({ Éxito: false, Mensaje: err.message });
     }
   }
 
@@ -116,10 +116,10 @@ class ControladorPedidos {
     try {
       const idUsuario = req.usuario.id;
       const pedidos = await modeloPedidos.obtenerPorUsuario(idUsuario);
-      return res.json({ éxito: true, Datos: pedidos });
+      return res.json({ Éxito: true, Datos: pedidos });
     } catch (err) {
       console.error('Error al obtener historial de pedidos:', err);
-      return res.status(500).json({ éxito: false, mensaje: 'Error al recuperar historial de pedidos' });
+      return res.status(500).json({ Éxito: false, Mensaje: 'Error al recuperar historial de pedidos' });
     }
   }
 
@@ -134,25 +134,25 @@ class ControladorPedidos {
 
       // Validar ID
       if (isNaN(idPedido)) {
-        return res.status(400).json({ éxito: false, mensaje: 'ID de pedido inválido.' });
+        return res.status(400).json({ Éxito: false, Mensaje: 'ID de pedido inválido.' });
       }
 
       // Validar estado
       const estadosPermitidos = ['Pendiente', 'Pagado', 'Entregado', 'Cancelado'];
       if (!estadosPermitidos.includes(nuevoEstado)) {
-        return res.status(400).json({ éxito: false, mensaje: 'Estado inválido.' });
+        return res.status(400).json({ Éxito: false, Mensaje: 'Estado inválido.' });
       }
 
       // Llamada al modelo
       const filasAfectadas = await modeloPedidos.actualizarEstado(idPedido, nuevoEstado);
       if (filasAfectadas === 0) {
-        return res.status(404).json({ éxito: false, mensaje: 'Pedido no encontrado.' });
+        return res.status(404).json({ Éxito: false, Mensaje: 'Pedido no encontrado.' });
       }
 
-      return res.json({ éxito: true, mensaje: 'Estado del pedido actualizado correctamente.' });
+      return res.json({ Éxito: true, Mensaje: 'Estado del pedido actualizado correctamente.' });
     } catch (error) {
       console.error('Error al cambiar estado de pedido:', error);
-      return res.status(500).json({ éxito: false, mensaje: 'Error interno del servidor.' });
+      return res.status(500).json({ Éxito: false, Mensaje: 'Error interno del servidor.' });
     }
   }
 
@@ -163,10 +163,10 @@ class ControladorPedidos {
   async obtenerTodos(req, res) {
     try {
       const pedidos = await modeloPedidos.obtenerTodos();
-      return res.json({ éxito: true, Datos: pedidos });
+      return res.json({ Éxito: true, Datos: pedidos });
     } catch (error) {
       console.error('Error al listar pedidos:', error);
-      return res.status(500).json({ éxito: false, mensaje: 'Error interno del servidor.' });
+      return res.status(500).json({ Éxito: false, Mensaje: 'Error interno del servidor.' });
     }
   }
 }

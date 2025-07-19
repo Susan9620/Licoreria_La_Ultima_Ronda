@@ -3,14 +3,14 @@ const { pool } = require('../configuraciones/configuraciones_bd');
 /**
  * Modelo para gestionar las categorías en la base de datos
  */
-class ModeloCategorias {
+class Modelo_Categorías {
   /**
    * Obtiene todas las categorías activas
    * @returns {Promise<Array>} - Lista de categorías
    */
-  async obtenerCategorias() {
+  async Obtener_Categorías() {
     try {
-      const categorias = await pool.query(
+      const Categorías = await pool.query(
         `SELECT 
          "ID_Categoría",
          "Nombre",
@@ -24,7 +24,7 @@ class ModeloCategorias {
        ORDER BY 
          "Nombre" ASC`
       );
-      return categorias.rows;
+      return Categorías.rows;
     } catch (error) {
       console.error('Error al obtener categorías:', error);
       throw new Error('Error al obtener las categorías');
@@ -99,4 +99,4 @@ class ModeloCategorias {
   }
 }
 
-module.exports = new ModeloCategorias();
+module.exports = new Modelo_Categorías();

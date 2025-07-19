@@ -1,7 +1,7 @@
 const express = require('express');
 const modeloImagenesCarrusel = require('../modelos/modelo_imágenes_carrusel');
 const modeloProductosDestacados = require('../modelos/modelo_productos');
-const modeloCategorias = require('../modelos/modelo_categorías');
+const Modelo_Categorías = require('../modelos/modelo_categorías');
 
 const router = express.Router();
 
@@ -19,25 +19,22 @@ router.get('/', async (req, res) => {
     const productosDestacados = await modeloProductosDestacados.obtenerProductosDestacados(4);
 
     // Obtener categorías de productos
-    const categorias = await modeloCategorias.obtenerCategorias();
+    const Categorías = await Modelo_Categorías.Obtener_Categorías();
 
     
     res.status(200).json({
-      éxito: true,
-      mensaje: 'Datos de página de inicio obtenidos correctamente',
+      Éxito: true,
+      Mensaje: 'Datos de página de inicio obtenidos correctamente',
       carrusel: carrusel,
       productosDestacados: productosDestacados,
-      categorias
-      // Otros datos que podrías incluir en el futuro:
-      // categorias: categorias,
-      // promociones: promociones
+      Categorías
     });
   } catch (error) {
     console.error('Error al obtener datos de la página de inicio:', error);
     res.status(500).json({
-      éxito: false,
-      mensaje: 'Error al cargar los datos de la página de inicio',
-      error: process.env.NODE_ENV === 'development' ? error.message : null
+      Éxito: false,
+      Mensaje: 'Error al cargar los datos de la página de inicio',
+      Error: process.env.NODE_ENV === 'development' ? error.message : null
     });
   }
 });

@@ -12,16 +12,16 @@ class ControladorPromociones {
     try {
       const promociones = await modeloPromociones.obtenerPromocionesActivas();
       res.status(200).json({
-        éxito: true,
-        mensaje: 'Promociones obtenidas correctamente',
+        Éxito: true,
+        Mensaje: 'Promociones obtenidas correctamente',
         Datos: promociones
       });
     } catch (error) {
       console.error('Error en controlador de promociones:', error);
       res.status(500).json({
-        éxito: false,
-        mensaje: 'Error al obtener las promociones',
-        error: process.env.NODE_ENV === 'development' ? error.message : null
+        Éxito: false,
+        Mensaje: 'Error al obtener las promociones',
+        Error: process.env.NODE_ENV === 'development' ? error.message : null
       });
     }
   }
@@ -34,13 +34,13 @@ class ControladorPromociones {
     try {
       const id = await modeloPromociones.crear(req.body);
       return res.status(201).json({
-        éxito: true,
-        mensaje: 'Promoción creada correctamente',
+        Éxito: true,
+        Mensaje: 'Promoción creada correctamente',
         Datos: { idPromoción: id }
       });
     } catch (error) {
       console.error('Error al crear promoción:', error);
-      return res.status(500).json({ éxito: false, mensaje: error.message });
+      return res.status(500).json({ Éxito: false, Mensaje: error.message });
     }
   }
 
@@ -52,18 +52,18 @@ class ControladorPromociones {
     try {
       const id = parseInt(req.params.id, 10);
       if (isNaN(id)) {
-        return res.status(400).json({ éxito: false, mensaje: 'ID inválido.' });
+        return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
 
       const filas = await modeloPromociones.actualizar(id, req.body);
       if (filas === 0) {
-        return res.status(404).json({ éxito: false, mensaje: 'Promoción no encontrada.' });
+        return res.status(404).json({ Éxito: false, Mensaje: 'Promoción no encontrada.' });
       }
 
-      return res.json({ éxito: true, mensaje: 'Promoción actualizada correctamente.' });
+      return res.json({ Éxito: true, Mensaje: 'Promoción actualizada correctamente.' });
     } catch (error) {
       console.error('Error al actualizar promoción:', error);
-      return res.status(500).json({ éxito: false, mensaje: error.message });
+      return res.status(500).json({ Éxito: false, Mensaje: error.message });
     }
   }
 
@@ -75,18 +75,18 @@ class ControladorPromociones {
     try {
       const id = parseInt(req.params.id, 10);
       if (isNaN(id)) {
-        return res.status(400).json({ éxito: false, mensaje: 'ID inválido.' });
+        return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
 
       const filas = await modeloPromociones.eliminar(id);
       if (filas === 0) {
-        return res.status(404).json({ éxito: false, mensaje: 'Promoción no encontrada.' });
+        return res.status(404).json({ Éxito: false, Mensaje: 'Promoción no encontrada.' });
       }
 
-      return res.json({ éxito: true, mensaje: 'Promoción eliminada correctamente.' });
+      return res.json({ Éxito: true, Mensaje: 'Promoción eliminada correctamente.' });
     } catch (error) {
       console.error('Error al eliminar promoción:', error);
-      return res.status(500).json({ éxito: false, mensaje: error.message });
+      return res.status(500).json({ Éxito: false, Mensaje: error.message });
     }
   }
 }

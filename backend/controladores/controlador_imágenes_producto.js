@@ -9,9 +9,9 @@ const obtenerPorProducto = async (req, res) => {
     const imagenes = await modeloImagenesProducto.obtenerPorProducto(idProducto)
 
     res.json({
-      éxito: true,
+      Éxito: true,
       Datos: imagenes,
-      mensaje: "Imágenes obtenidas exitosamente",
+      Mensaje: "Imágenes obtenidas exitosamente",
     })
   } catch (error) {
     console.error(
@@ -20,8 +20,8 @@ const obtenerPorProducto = async (req, res) => {
       "\nSQL:", error.sql
     )
     res.status(500).json({
-      éxito: false,
-      mensaje: error.message,
+      Éxito: false,
+      Mensaje: error.message,
       sql: error.sql
     })
   }
@@ -37,15 +37,15 @@ const obtenerPrincipal = async (req, res) => {
 
     if (!imagen) {
       return res.status(404).json({
-        éxito: false,
-        mensaje: "Imagen principal no encontrada",
+        Éxito: false,
+        Mensaje: "Imagen principal no encontrada",
       })
     }
 
     res.json({
-      éxito: true,
+      Éxito: true,
       Datos: imagen,
-      mensaje: "Imagen principal obtenida exitosamente",
+      Mensaje: "Imagen principal obtenida exitosamente",
     })
   } catch (error) {
     console.error(
@@ -54,8 +54,8 @@ const obtenerPrincipal = async (req, res) => {
       "\nSQL:", error.sql
     )
     res.status(500).json({
-      éxito: false,
-      mensaje: error.message,
+      Éxito: false,
+      Mensaje: error.message,
       sql: error.sql
     })
   }
@@ -69,13 +69,13 @@ const crearImagenProducto = async (req, res) => {
   try {
     const id = await modeloImagenesProducto.crear(req.body)
     return res.status(201).json({
-      éxito: true,
-      mensaje: "Imagen de producto creada correctamente",
+      Éxito: true,
+      Mensaje: "Imagen de producto creada correctamente",
       Datos: { idImagen: id }
     })
   } catch (error) {
     console.error("Error al crear imagen de producto:", error)
-    return res.status(500).json({ éxito: false, mensaje: error.message })
+    return res.status(500).json({ Éxito: false, Mensaje: error.message })
   }
 }
 
@@ -87,16 +87,16 @@ const actualizarImagenProducto = async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10)
     if (isNaN(id)) {
-      return res.status(400).json({ éxito: false, mensaje: "ID inválido." })
+      return res.status(400).json({ Éxito: false, Mensaje: "ID inválido." })
     }
     const filas = await modeloImagenesProducto.actualizar(id, req.body)
     if (filas === 0) {
-      return res.status(404).json({ éxito: false, mensaje: "Imagen no encontrada." })
+      return res.status(404).json({ Éxito: false, Mensaje: "Imagen no encontrada." })
     }
-    return res.json({ éxito: true, mensaje: "Imagen de producto actualizada correctamente." })
+    return res.json({ Éxito: true, Mensaje: "Imagen de producto actualizada correctamente." })
   } catch (error) {
     console.error("Error al actualizar imagen de producto:", error)
-    return res.status(500).json({ éxito: false, mensaje: error.message })
+    return res.status(500).json({ Éxito: false, Mensaje: error.message })
   }
 }
 
@@ -108,16 +108,16 @@ const eliminarImagenProducto = async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10)
     if (isNaN(id)) {
-      return res.status(400).json({ éxito: false, mensaje: "ID inválido." })
+      return res.status(400).json({ Éxito: false, Mensaje: "ID inválido." })
     }
     const filas = await modeloImagenesProducto.eliminar(id)
     if (filas === 0) {
-      return res.status(404).json({ éxito: false, mensaje: "Imagen no encontrada." })
+      return res.status(404).json({ Éxito: false, Mensaje: "Imagen no encontrada." })
     }
-    return res.json({ éxito: true, mensaje: "Imagen de producto eliminada correctamente." })
+    return res.json({ Éxito: true, Mensaje: "Imagen de producto eliminada correctamente." })
   } catch (error) {
     console.error("Error al eliminar imagen de producto:", error)
-    return res.status(500).json({ éxito: false, mensaje: error.message })
+    return res.status(500).json({ Éxito: false, Mensaje: error.message })
   }
 }
 

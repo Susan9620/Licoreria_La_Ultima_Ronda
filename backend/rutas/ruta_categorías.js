@@ -1,13 +1,13 @@
 const express = require('express');
-const controladorCategorias = require('../controladores/controlador_categorías');
+const Controlador_Categorías = require('../controladores/controlador_categorías');
 
 const router = express.Router();
 
 /**
- * @route   GET /api/categorias
+ * @route   GET /api/Categorías
  * @desc    Obtener todas las categorías activas
  * @access  Público
  */
-router.get('/', controladorCategorias.obtenerCategorias);
+router.get('/', Controlador_Categorías.Obtener_Categorías);
 
 module.exports = router;

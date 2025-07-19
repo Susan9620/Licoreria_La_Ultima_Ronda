@@ -19,7 +19,7 @@ router.get("/principal/:idProducto", controladorImagenesProducto.obtenerPrincipa
 
 // Ruta por defecto para testing
 router.get("/", (req, res) => {
-  res.json({ mensaje: "API de imágenes de producto" })
+  res.json({ Mensaje: "API de imágenes de producto" })
 })
 
 module.exports = router

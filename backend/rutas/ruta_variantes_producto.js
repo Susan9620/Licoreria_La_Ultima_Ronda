@@ -19,7 +19,7 @@ router.get("/:id", controladorVariantesProducto.obtenerPorId)
 
 // Ruta por defecto para testing
 router.get("/", (req, res) => {
-  res.json({ mensaje: "API de variantes de producto" })
+  res.json({ Mensaje: "API de variantes de producto" })
 })
 
 module.exports = router

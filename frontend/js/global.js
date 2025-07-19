@@ -693,11 +693,11 @@ document.addEventListener('DOMContentLoaded', async function () {
                 headers: { 'Authorization': `Bearer ${tuJwt}` }
             });
             const json = await resp.json();
-            if (resp.ok && json.éxito) {
+            if (resp.ok && json.Éxito) {
                 if (nombreElem) nombreElem.textContent = json.Datos.Nombre_Completo;
                 if (emailElem) emailElem.textContent = json.Datos.Correo_Electrónico;
             } else {
-                throw new Error(json.mensaje || 'Error al cargar perfil');
+                throw new Error(json.Mensaje || 'Error al cargar perfil');
             }
         } catch (e) {
             console.error('Perfil:', e);
@@ -743,7 +743,7 @@ const Lista_Deseos = {
             });
             const json = await resp.json();
 
-            if (json.éxito) {
+            if (json.Éxito) {
                 const Datos = json.Datos;  // array de variantes
 
                 // 1) Agrupar variantes por productoId
@@ -935,9 +935,9 @@ const Lista_Deseos = {
                             const body = await resp.json();                   // parsea como JSON
                             console.log('🗒️ Body:', body);
 
-                            // comprueba tanto el status HTTP como tu campo "éxito"
-                            if (!resp.ok || !body.éxito) {
-                                throw new Error(body.mensaje || `HTTP ${resp.status}`);
+                            // comprueba tanto el status HTTP como tu campo "Éxito"
+                            if (!resp.ok || !body.Éxito) {
+                                throw new Error(body.Mensaje || `HTTP ${resp.status}`);
                             }
 
                             // si todo OK, elimina localmente y refresca UI
@@ -1294,14 +1294,14 @@ async function Cargar_Datos_Usuario_Global() {
         });
         const json = await resp.json();
 
-        if (resp.ok && json.éxito) {
+        if (resp.ok && json.Éxito) {
             window.Historial_Global.Datos_Usuario = {
                 Nombre_Completo: json.Datos.Nombre_Completo,
                 Correo_Electrónico: json.Datos.Correo_Electrónico,
                 Teléfono: json.Datos.Teléfono
             };
         } else {
-            throw new Error(json.mensaje || 'No se pudo cargar perfil');
+            throw new Error(json.Mensaje || 'No se pudo cargar perfil');
         }
     } catch (e) {
         console.error('Error cargando perfil de usuario:', e);
@@ -1329,8 +1329,8 @@ async function Cargar_Historial_Pedidos_Global() {
         });
         const json = await resp.json();
 
-        if (!resp.ok || !json.éxito) {
-            throw new Error(json.mensaje || resp.statusText);
+        if (!resp.ok || !json.Éxito) {
+            throw new Error(json.Mensaje || resp.statusText);
         }
 
         window.Historial_Global.Pedidos = json.Datos;
@@ -1416,8 +1416,8 @@ async function Ver_Factura_Global(idPedido) {
             });
             const json = await resp.json();
 
-            if (!resp.ok || !json.éxito) {
-                throw new Error(json.mensaje || 'Error cargando detalles del pedido');
+            if (!resp.ok || !json.Éxito) {
+                throw new Error(json.Mensaje || 'Error cargando detalles del pedido');
             }
 
             pedido = {
@@ -1703,11 +1703,11 @@ async function actualizarUsuarioLogueado() {
             headers: { 'Authorization': `Bearer ${tuJwt}` }
         });
         const json = await resp.json();
-        if (resp.ok && json.éxito) {
+        if (resp.ok && json.Éxito) {
             if (nombreElem) nombreElem.textContent = json.Datos.Nombre_Completo;
             if (emailElem) emailElem.textContent = json.Datos.Correo_Electrónico;
         } else {
-            throw new Error(json.mensaje || 'Error al cargar perfil');
+            throw new Error(json.Mensaje || 'Error al cargar perfil');
         }
         // Mostrar opción de Administrador solo si existe el contenedor
         if (menuUsuario) {

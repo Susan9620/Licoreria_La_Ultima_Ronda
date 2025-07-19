@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             const resp = await fetch(`${API_BASE}/api/productos/all`);
             const json = await resp.json();
-            if (!json.éxito) throw new Error(json.mensaje || 'Error al cargar productos');
+            if (!json.Éxito) throw new Error(json.Mensaje || 'Error al cargar productos');
 
             // Vacía el contenedor
             Contenedor.innerHTML = '';

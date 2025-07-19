@@ -17,16 +17,16 @@ class ControladorProductos {
       const productos = await modeloProductos.obtenerProductosDestacados(limite);
 
       res.status(200).json({
-        éxito: true,
-        mensaje: 'Productos destacados obtenidos correctamente',
+        Éxito: true,
+        Mensaje: 'Productos destacados obtenidos correctamente',
         Datos: productos
       });
     } catch (error) {
       console.error('Error en controlador de productos destacados:', error);
       res.status(500).json({
-        éxito: false,
-        mensaje: 'Error al obtener los productos destacados',
-        error: process.env.NODE_ENV === 'development' ? error.message : null
+        Éxito: false,
+        Mensaje: 'Error al obtener los productos destacados',
+        Error: process.env.NODE_ENV === 'development' ? error.message : null
       });
     }
   }
@@ -39,16 +39,16 @@ class ControladorProductos {
     try {
       const productos = await modeloProductos.obtenerTodos();
       res.status(200).json({
-        éxito: true,
-        mensaje: 'Todos los productos obtenidos correctamente',
+        Éxito: true,
+        Mensaje: 'Todos los productos obtenidos correctamente',
         Datos: productos
       });
     } catch (error) {
       console.error('Error en controlador de todos los productos:', error);
       res.status(500).json({
-        éxito: false,
-        mensaje: 'Error al obtener todos los productos',
-        error: process.env.NODE_ENV === 'development' ? error.message : null
+        Éxito: false,
+        Mensaje: 'Error al obtener todos los productos',
+        Error: process.env.NODE_ENV === 'development' ? error.message : null
       });
     }
   }
@@ -64,22 +64,22 @@ class ControladorProductos {
 
       if (!producto) {
         return res.status(404).json({
-          éxito: false,
-          mensaje: 'Producto no encontrado'
+          Éxito: false,
+          Mensaje: 'Producto no encontrado'
         });
       }
 
       res.status(200).json({
-        éxito: true,
-        mensaje: 'Producto obtenido correctamente',
+        Éxito: true,
+        Mensaje: 'Producto obtenido correctamente',
         Datos: producto
       });
     } catch (error) {
       console.error('Error en controlador de producto por ID:', error);
       res.status(500).json({
-        éxito: false,
-        mensaje: 'Error al obtener el producto',
-        error: process.env.NODE_ENV === 'development' ? error.message : null
+        Éxito: false,
+        Mensaje: 'Error al obtener el producto',
+        Error: process.env.NODE_ENV === 'development' ? error.message : null
       });
     }
   }
@@ -92,7 +92,7 @@ class ControladorProductos {
     try {
       const idProducto = parseInt(req.params.id, 10);
       if (isNaN(idProducto)) {
-        return res.status(400).json({ éxito: false, mensaje: 'ID de producto inválido' });
+        return res.status(400).json({ Éxito: false, Mensaje: 'ID de producto inválido' });
       }
 
       // 1) Obtener el producto y su variante predeterminada
@@ -100,7 +100,7 @@ class ControladorProductos {
       if (!prod || !prod.ID_Variante) {
         return res
           .status(404)
-          .json({ éxito: false, mensaje: 'Producto o variante predeterminada no encontrada' });
+          .json({ Éxito: false, Mensaje: 'Producto o variante predeterminada no encontrada' });
       }
       const idVariantePred = prod.ID_Variante;
 
@@ -108,12 +108,12 @@ class ControladorProductos {
       //    (En modelo_producto.js deberás implementar `obtenerProductosCompradosJuntos`)
       const filas = await modeloProductos.obtenerProductosCompradosJuntos(idVariantePred, 4);
 
-      return res.json({ éxito: true, Datos: filas });
+      return res.json({ Éxito: true, Datos: filas });
     } catch (error) {
       console.error('Error en obtenerCompradosJuntos:', error);
       return res.status(500).json({
-        éxito: false,
-        mensaje: 'Error al obtener productos comprados juntos'
+        Éxito: false,
+        Mensaje: 'Error al obtener productos comprados juntos'
       });
     }
   }
@@ -128,13 +128,13 @@ class ControladorProductos {
       const { calificacion } = req.body;
 
       if (isNaN(idProducto) || typeof calificacion !== 'number' || calificacion < 1 || calificacion > 5) {
-        return res.status(400).json({ éxito: false, mensaje: 'Parámetros inválidos' });
+        return res.status(400).json({ Éxito: false, Mensaje: 'Parámetros inválidos' });
       }
 
       // ¡Aquí!: extrae el usuario YA VERIFICADO
       const idUsuario = req.usuario?.id;
       if (!idUsuario) {
-        return res.status(401).json({ éxito: false, mensaje: 'Usuario no autenticado' });
+        return res.status(401).json({ Éxito: false, Mensaje: 'Usuario no autenticado' });
       }
 
       // 1) Insertar la reseña
@@ -145,13 +145,13 @@ class ControladorProductos {
       await modeloProductos.actualizarCalificacionYTotal(idProducto, promedio, total);
 
       return res.status(200).json({
-        éxito: true,
-        mensaje: 'Calificación registrada correctamente',
+        Éxito: true,
+        Mensaje: 'Calificación registrada correctamente',
         Datos: { promedio, total }
       });
     } catch (error) {
       console.error('Error en calificarProducto:', error);
-      res.status(500).json({ éxito: false, mensaje: 'Error al guardar la calificación' });
+      res.status(500).json({ Éxito: false, Mensaje: 'Error al guardar la calificación' });
     }
   }
 
@@ -165,10 +165,10 @@ class ControladorProductos {
       const idUsuario = req.usuario.id;
       const fila = await modeloReseñas.obtenerCalificacionUsuario(idProducto, idUsuario);
       // fila puede ser { Valoración: 4 } o undefined
-      return res.json({ éxito: true, Datos: fila ? fila.valoracion : null });
+      return res.json({ Éxito: true, Datos: fila ? fila.valoracion : null });
     } catch (error) {
       console.error('Error en obtenerCalificacionUsuario:', error);
-      return res.status(500).json({ éxito: false, mensaje: 'Error al obtener calificación' });
+      return res.status(500).json({ Éxito: false, Mensaje: 'Error al obtener calificación' });
     }
   }
 
@@ -181,14 +181,14 @@ class ControladorProductos {
       const Datos = req.body;
       const nuevoId = await modeloProductos.crear(Datos);
       return res.status(201).json({
-        éxito: true,
-        mensaje: 'Producto creado correctamente',
+        Éxito: true,
+        Mensaje: 'Producto creado correctamente',
         Datos: { idProducto: nuevoId }
       });
     } catch (error) {
       console.error('Error al crear producto:', error);
       // Temporal: enviamos el mensaje real al cliente para depurar
-      return res.status(500).json({ éxito: false, mensaje: error.message });
+      return res.status(500).json({ Éxito: false, Mensaje: error.message });
     }
   }
 
@@ -202,12 +202,12 @@ class ControladorProductos {
       const cambios = req.body;
       const filas = await modeloProductos.actualizar(id, cambios);
       if (filas === 0) {
-        return res.status(404).json({ éxito: false, mensaje: 'Producto no encontrado.' });
+        return res.status(404).json({ Éxito: false, Mensaje: 'Producto no encontrado.' });
       }
-      return res.json({ éxito: true, mensaje: 'Producto actualizado correctamente.' });
+      return res.json({ Éxito: true, Mensaje: 'Producto actualizado correctamente.' });
     } catch (error) {
       console.error('Error al actualizar producto:', error);
-      return res.status(500).json({ éxito: false, mensaje: 'Error del servidor.' });
+      return res.status(500).json({ Éxito: false, Mensaje: 'Error del servidor.' });
     }
   }
 
@@ -220,12 +220,12 @@ class ControladorProductos {
       const id = parseInt(req.params.id, 10);
       const filas = await modeloProductos.eliminar(id);
       if (filas === 0) {
-        return res.status(404).json({ éxito: false, mensaje: 'Producto no encontrado.' });
+        return res.status(404).json({ Éxito: false, Mensaje: 'Producto no encontrado.' });
       }
-      return res.json({ éxito: true, mensaje: 'Producto eliminado correctamente.' });
+      return res.json({ Éxito: true, Mensaje: 'Producto eliminado correctamente.' });
     } catch (error) {
       console.error('Error al eliminar producto:', error);
-      return res.status(500).json({ éxito: false, mensaje: 'Error del servidor.' });
+      return res.status(500).json({ Éxito: false, Mensaje: 'Error del servidor.' });
     }
   }
 }

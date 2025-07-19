@@ -18,8 +18,8 @@ class ControladorReseñas {
         valoracion > 5
       ) {
         return res.status(400).json({
-          éxito: false,
-          mensaje: 'Parámetros inválidos',
+          Éxito: false,
+          Mensaje: 'Parámetros inválidos',
         });
       }
 
@@ -43,15 +43,15 @@ class ControladorReseñas {
       );
 
       return res.status(200).json({
-        éxito: true,
-        mensaje: 'Reseña registrada correctamente',
+        Éxito: true,
+        Mensaje: 'Reseña registrada correctamente',
         Datos: { promedio, total },
       });
     } catch (error) {
       console.error('Error en insertarReseña:', error);
       return res.status(500).json({
-        éxito: false,
-        mensaje: 'Error al guardar la reseña',
+        Éxito: false,
+        Mensaje: 'Error al guardar la reseña',
       });
     }
   }
@@ -65,8 +65,8 @@ class ControladorReseñas {
       const idProducto = parseInt(req.params.idProducto, 10);
       if (isNaN(idProducto)) {
         return res.status(400).json({
-          éxito: false,
-          mensaje: 'ID de producto inválido',
+          Éxito: false,
+          Mensaje: 'ID de producto inválido',
         });
       }
 
@@ -74,15 +74,15 @@ class ControladorReseñas {
         idProducto
       );
       return res.status(200).json({
-        éxito: true,
+        Éxito: true,
         Datos: reseñas,
-        mensaje: 'Reseñas obtenidas correctamente',
+        Mensaje: 'Reseñas obtenidas correctamente',
       });
     } catch (error) {
       console.error('Error en obtenerReseñasPorProducto:', error);
       return res.status(500).json({
-        éxito: false,
-        mensaje: 'Error al obtener reseñas',
+        Éxito: false,
+        Mensaje: 'Error al obtener reseñas',
       });
     }
   }

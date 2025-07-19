@@ -4,16 +4,16 @@ class ModeloContacto {
   /**
    * Inserta un mensaje de contacto en la BD y devuelve su ID generado.
    * @param {number|null} idUsuario 
-   * @param {string} mensaje 
+   * @param {string} Mensaje 
    * @returns {Promise<number>} el ID generado
    */
-  static async crear(idUsuario, mensaje) {
+  static async crear(idUsuario, Mensaje) {
     try {
       const result = await pool.query(
         `INSERT INTO "CONTACTO" ("ID_Usuario", "Mensaje")
          VALUES ($1, $2)
          RETURNING "ID_Contacto"`,
-        [idUsuario, mensaje]
+        [idUsuario, Mensaje]
       );
       return result.rows[0]['ID_Contacto'];
     } catch (error) {

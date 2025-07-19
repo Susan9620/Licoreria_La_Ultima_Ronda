@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         console.log('Respuesta completa:', Datos);
 
-        if (Datos.éxito) {
+        if (Datos.Éxito) {
             // Inicializar componentes con los datos recibidos
             Inicializar_Carrusel(Datos.carrusel);
 
@@ -31,20 +31,20 @@ document.addEventListener('DOMContentLoaded', async function () {
             */
 
             Inicializar_Video_Destacado();
-            console.log('Categorías recibidas:', Datos.categorias);
-            Inicializar_Categorías(Datos.categorias);
+            console.log('Categorías recibidas:', Datos.Categorías);
+            Inicializar_Categorías(Datos.Categorías);
 
             // Cargar promociones desde el API
             const respPromo = await fetch(`${API_BASE}/api/promociones`);
             const promJson = await respPromo.json();
             console.log('Promociones recibidas:', promJson.Datos);
-            if (promJson.éxito) {
+            if (promJson.Éxito) {
                 Inicializar_Promociones(promJson.Datos);
             }
         }
         else {
-            console.error('Error en la respuesta del servidor:', Datos.mensaje);
-            Mostrar_Error(Datos.mensaje || 'Error al cargar los datos.');
+            console.error('Error en la respuesta del servidor:', Datos.Mensaje);
+            Mostrar_Error(Datos.Mensaje || 'Error al cargar los datos.');
         }
     } catch (error) {
         console.error('Error al cargar la página de inicio:', error);
@@ -193,12 +193,12 @@ function Configurar_Carrusel() {
 }
 
 // Función para mostrar errores
-function Mostrar_Error(mensaje) {
+function Mostrar_Error(Mensaje) {
     const contenedor = document.querySelector('.Contenedor_Carrusel');
     if (contenedor) {
         const alerta = document.createElement('div');
         alerta.className = 'Alerta Error';
-        alerta.textContent = mensaje;
+        alerta.textContent = Mensaje;
 
         // Insertar la alerta antes del contenedor de imágenes
         contenedor.insertBefore(alerta, contenedor.firstChild);
@@ -585,7 +585,7 @@ function Agregar_Al_Carrito(ID_Producto, ID_Variante, Cantidad) {
     Actualizar_Contador_Carrito();
 
     // Mostrar mensaje de confirmación
-    Mostrar_Mensaje('Producto agregado al carrito', 'éxito');
+    Mostrar_Mensaje('Producto agregado al carrito', 'Éxito');
 }
 
 // Función para actualizar el contador de productos en el carrito
@@ -632,7 +632,7 @@ document.getElementById('Formulario_Contacto').addEventListener('submit', async 
   e.preventDefault();
   const txt = document.getElementById('Mensaje').value.trim();
   if (!txt) {
-    Mostrar_Notificación('Por favor escribe un mensaje', 'Error');
+    Mostrar_Notificación('Por favor escriba un mensaje', 'Error');
     return;
   }
 
@@ -644,18 +644,18 @@ document.getElementById('Formulario_Contacto').addEventListener('submit', async 
     const resp = await fetch(`${API_BASE}/api/contacto`, {
       method: 'POST',
       headers,
-      body: JSON.stringify({ mensaje: txt })
+      body: JSON.stringify({ Mensaje: txt })
     });
     const json = await resp.json();
 
-    if (resp.ok && json.éxito) {
-      Mostrar_Notificación('¡Gracias! Tu mensaje ha sido enviado.', 'Éxito');
+    if (resp.ok && json.Éxito) {
+      Mostrar_Notificación('¡Gracias! Su mensaje ha sido enviado.', 'Éxito');
       this.reset();
     } else {
-      throw new Error(json.mensaje || resp.statusText);
+      throw new Error(json.Mensaje || resp.statusText);
     }
   } catch (err) {
     console.error('Error enviando mensaje de contacto:', err);
-    Mostrar_Notificación('No se pudo enviar tu mensaje. Intenta de nuevo.', 'Error');
+    Mostrar_Notificación('No se pudo enviar su mensaje. Intente de nuevo.', 'Error');
   }
 });

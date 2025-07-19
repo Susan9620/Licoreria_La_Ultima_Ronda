@@ -12,7 +12,7 @@ async function cargarDatosDeProductos(ids) {
       const resp = await fetch(`${API_BASE}/api/productos/${id}`)
       if (!resp.ok) continue
       const json = await resp.json()
-      if (json.éxito && json.Datos) {
+      if (json.Éxito && json.Datos) {
         resultados.push(json.Datos)
       }
     } catch (e) {
@@ -50,7 +50,7 @@ async function cargarDatosProducto() {
     const DatosProducto = await respuestaProducto.json()
 
     // Verificar la estructura de la respuesta
-    if (DatosProducto.éxito && DatosProducto.Datos) {
+    if (DatosProducto.Éxito && DatosProducto.Datos) {
       productoActual = DatosProducto.Datos
     } else if (DatosProducto.Datos) {
       productoActual = DatosProducto.Datos
@@ -86,7 +86,7 @@ async function cargarVariantesProducto(idProducto) {
     const respuestaVariantes = await fetch(`${API_BASE}/api/variantes/producto/${idProducto}`)
     if (respuestaVariantes.ok) {
       const DatosVariantes = await respuestaVariantes.json()
-      if (DatosVariantes.éxito && DatosVariantes.Datos) {
+      if (DatosVariantes.Éxito && DatosVariantes.Datos) {
         variantesProducto = DatosVariantes.Datos
       } else {
         variantesProducto = []
@@ -105,7 +105,7 @@ async function cargarImagenesProducto(idProducto) {
     const respuestaImagenes = await fetch(`${API_BASE}/api/imagenes/producto/${idProducto}`)
     if (respuestaImagenes.ok) {
       const DatosImagenes = await respuestaImagenes.json()
-      if (DatosImagenes.éxito && DatosImagenes.Datos) {
+      if (DatosImagenes.Éxito && DatosImagenes.Datos) {
         imagenesProducto = DatosImagenes.Datos
       } else {
         imagenesProducto = []
@@ -246,7 +246,7 @@ async function initCalificacionUsuario() {
         headers: { 'Authorization': 'Bearer ' + token }
       });
       const json = await resp.json();
-      if (resp.ok && json.éxito && json.Datos !== null) {
+      if (resp.ok && json.Éxito && json.Datos !== null) {
         valorSeleccionado = json.Datos;
         // muestra la calificación previa
         estrellas.forEach(s => {
@@ -297,7 +297,7 @@ async function initCalificacionUsuario() {
           body: JSON.stringify({ calificacion: v })
         });
         const json = await resp.json();
-        if (!resp.ok || !json.éxito) throw new Error(json.mensaje || 'Error');
+        if (!resp.ok || !json.Éxito) throw new Error(json.Mensaje || 'Error');
         // actualizar media y total en UI
         productoActual.CalificaciónMedia = json.Datos.promedio;
         productoActual.TotalReseñas = json.Datos.total;
@@ -699,7 +699,7 @@ async function cargarProductosRelacionados() {
 
     const Datos = await respuesta.json();
     let todos = [];
-    if (Datos.éxito && Datos.Datos) {
+    if (Datos.Éxito && Datos.Datos) {
       todos = Datos.Datos;
     } else if (Array.isArray(Datos.Datos)) {
       todos = Datos.Datos;
@@ -801,7 +801,7 @@ async function cargarYRenderizarCompradosJuntos(idProducto) {
     const resp = await fetch(`${API_BASE}/api/productos/${idProducto}/compradosjuntos`);
     if (!resp.ok) return;
     const json = await resp.json();
-    if (!json.éxito) return;
+    if (!json.Éxito) return;
     const Datos = json.Datos; // [{ ID_Producto, VecesCompradoJunto }, ...]
     if (!Array.isArray(Datos) || Datos.length === 0) return;
 
@@ -816,7 +816,7 @@ async function cargarYRenderizarCompradosJuntos(idProducto) {
         const r = await fetch(`${API_BASE}/api/variantes/producto/${p.ID_Producto}`);
         if (!r.ok) return;
         const j = await r.json();
-        if (j.éxito && Array.isArray(j.Datos) && j.Datos.length) {
+        if (j.Éxito && Array.isArray(j.Datos) && j.Datos.length) {
           const pred = j.Datos.find(v => v.Predeterminada) || j.Datos[0];
           variantesMap[p.ID_Producto] = pred.Nombre_Variante || '';
         }
@@ -971,14 +971,14 @@ function mostrarIndicadorCarga(mostrar) {
 }
 
 // Mostrar mensaje de error
-function mostrarError(mensaje) {
+function mostrarError(Mensaje) {
   const contenedorDetalle = document.querySelector(".Detalle_Producto")
   if (contenedorDetalle) {
     contenedorDetalle.innerHTML = `
       <div class="Error_Producto" style="text-align: center; padding: 50px;">
         <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #e74c3c; margin-bottom: 20px;"></i>
         <h2>Error al cargar el producto</h2>
-        <p>${mensaje}</p>
+        <p>${Mensaje}</p>
         <button class="Botones Botón_Primario" onclick="window.location.href='../html/productos.html'">
           Volver a Productos
         </button>
@@ -988,11 +988,11 @@ function mostrarError(mensaje) {
 }
 
 // Función de notificación
-function mostrarNotificacion(mensaje, tipo) {
+function mostrarNotificacion(Mensaje, tipo) {
   if (typeof window.Mostrar_Notificación === "function") {
-    window.Mostrar_Notificación(mensaje, tipo)
+    window.Mostrar_Notificación(Mensaje, tipo)
   } else {
-    console.log(`${tipo}: ${mensaje}`)
+    console.log(`${tipo}: ${Mensaje}`)
   }
 }
 

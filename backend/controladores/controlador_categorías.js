@@ -1,86 +1,86 @@
-const modeloCategorias = require('../modelos/modelo_categorías');
+const Modelo_Categorías = require('../modelos/modelo_categorías');
 
 /**
  * Controlador para gestionar las categorías
  */
-class ControladorCategorias {
+class Controlador_Categorías {
   /**
-   * GET /api/categorias
+   * GET /api/Categorías
    * Devuelve todas las categorías activas
    */
-  async obtenerCategorias(req, res) {
+  async Obtener_Categorías(req, res) {
     try {
-      const categorias = await modeloCategorias.obtenerCategorias();
+      const Categorías = await Modelo_Categorías.Obtener_Categorías();
       res.status(200).json({
-        éxito: true,
-        mensaje: 'Categorías obtenidas correctamente',
-        Datos: categorias
+        Éxito: true,
+        Mensaje: 'Categorías obtenidas correctamente',
+        Datos: Categorías
       });
     } catch (error) {
       console.error('Error en controlador de categorías:', error);
       res.status(500).json({
-        éxito: false,
-        mensaje: 'Error al obtener las categorías',
-        error: process.env.NODE_ENV === 'development' ? error.message : null
+        Éxito: false,
+        Mensaje: 'Error al obtener las categorías',
+        Error: process.env.NODE_ENV === 'development' ? error.message : null
       });
     }
   }
 
   /**
-   * POST /api/admin/categorias
+   * POST /api/admin/Categorías
    * Crea una nueva categoría (solo Admin)
    */
   async crearCategoria(req, res) {
     try {
       const Datos = req.body; 
-      const id = await modeloCategorias.crear(Datos);
+      const id = await Modelo_Categorías.crear(Datos);
       return res.status(201).json({
-        éxito: true,
-        mensaje: 'Categoría creada correctamente',
+        Éxito: true,
+        Mensaje: 'Categoría creada correctamente',
         Datos: { idCategoria: id }
       });
     } catch (error) {
       console.error('Error al crear categoría:', error);
-      return res.status(500).json({ éxito: false, mensaje: 'Error interno del servidor.' });
+      return res.status(500).json({ Éxito: false, Mensaje: 'Error interno del servidor.' });
     }
   }
 
   /**
-   * PUT /api/admin/categorias/:id
+   * PUT /api/admin/Categorías/:id
    * Actualiza una categoría existente (solo Admin)
    */
   async actualizarCategoria(req, res) {
     try {
       const id = parseInt(req.params.id, 10);
       const cambios = req.body;
-      const filas = await modeloCategorias.actualizar(id, cambios);
+      const filas = await Modelo_Categorías.actualizar(id, cambios);
       if (filas === 0) {
-        return res.status(404).json({ éxito: false, mensaje: 'Categoría no encontrada.' });
+        return res.status(404).json({ Éxito: false, Mensaje: 'Categoría no encontrada.' });
       }
-      return res.json({ éxito: true, mensaje: 'Categoría actualizada correctamente.' });
+      return res.json({ Éxito: true, Mensaje: 'Categoría actualizada correctamente.' });
     } catch (error) {
       console.error('Error al actualizar categoría:', error);
-      return res.status(500).json({ éxito: false, mensaje: 'Error interno del servidor.' });
+      return res.status(500).json({ Éxito: false, Mensaje: 'Error interno del servidor.' });
     }
   }
 
   /**
-   * DELETE /api/admin/categorias/:id
+   * DELETE /api/admin/Categorías/:id
    * Elimina una categoría (solo Admin)
    */
   async eliminarCategoria(req, res) {
     try {
       const id = parseInt(req.params.id, 10);
-      const filas = await modeloCategorias.eliminar(id);
+      const filas = await Modelo_Categorías.eliminar(id);
       if (filas === 0) {
-        return res.status(404).json({ éxito: false, mensaje: 'Categoría no encontrada.' });
+        return res.status(404).json({ Éxito: false, Mensaje: 'Categoría no encontrada.' });
       }
-      return res.json({ éxito: true, mensaje: 'Categoría eliminada correctamente.' });
+      return res.json({ Éxito: true, Mensaje: 'Categoría eliminada correctamente.' });
     } catch (error) {
       console.error('Error al eliminar categoría:', error);
-      return res.status(500).json({ éxito: false, mensaje: 'Error interno del servidor.' });
+      return res.status(500).json({ Éxito: false, Mensaje: 'Error interno del servidor.' });
     }
   }
 }
 
-module.exports = new ControladorCategorias();
+module.exports = new Controlador_Categorías();

@@ -15,8 +15,8 @@ const verificarToken = (req, res, next) => {
     
     if (!tokenHeader) {
       return res.status(401).json({ 
-        error: 'Acceso denegado',
-        mensaje: 'No se proporcionó token de autenticación' 
+        Error: 'Acceso denegado',
+        Mensaje: 'No se proporcionó token de autenticación' 
       });
     }
 
@@ -24,8 +24,8 @@ const verificarToken = (req, res, next) => {
     const token = tokenHeader.split(' ')[1];
     if (!token) {
       return res.status(401).json({ 
-        error: 'Acceso denegado',
-        mensaje: 'Formato de token inválido'
+        Error: 'Acceso denegado',
+        Mensaje: 'Formato de token inválido'
       });
     }
 
@@ -36,13 +36,13 @@ const verificarToken = (req, res, next) => {
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({ 
-        error: 'Sesión expirada',
-        mensaje: 'Su sesión ha expirado, inicie sesión nuevamente' 
+        Error: 'Sesión expirada',
+        Mensaje: 'Su sesión ha expirado, inicie sesión nuevamente' 
       });
     }
     return res.status(401).json({ 
-      error: 'Token inválido',
-      mensaje: 'Token de autenticación inválido'
+      Error: 'Token inválido',
+      Mensaje: 'Token de autenticación inválido'
     });
   }
 };
@@ -59,8 +59,8 @@ const esAdministrador = (req, res, next) => {
     return next();
   }
   return res.status(403).json({ 
-    error: 'Acceso prohibido',
-    mensaje: 'No tiene permisos suficientes para esta acción'
+    Error: 'Acceso prohibido',
+    Mensaje: 'No tiene permisos suficientes para esta acción'
   });
 };
 
@@ -77,8 +77,8 @@ const esPropietarioOAdmin = (req, res, next) => {
     next();
   } else {
     return res.status(403).json({ 
-      error: 'Acceso prohibido',
-      mensaje: 'No tiene permisos para acceder a este recurso'
+      Error: 'Acceso prohibido',
+      Mensaje: 'No tiene permisos para acceder a este recurso'
     });
   }
 };
