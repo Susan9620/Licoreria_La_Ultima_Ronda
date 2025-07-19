@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         const descripcion = tarjeta.querySelector('.Descripción').textContent.trim();
                         const imagen = tarjeta.querySelector('img').src;
                         localStorage.setItem('Producto_Detalle', JSON.stringify({
-                            id: ID,
+                            ID: ID,
                             Nombre: nombre,
                             Precio: precio,
                             Descripción: descripcion,
@@ -241,7 +241,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Función para Abrir el Modal 
     window.Abrir_Modal = function (Producto) {
         // 1) Leer datos del dataset
-        const id = Producto.dataset.id;
+        const ID = Producto.dataset.id;
         const calif = parseFloat(Producto.dataset.calificacionMedia) || 0;
         const volumen = Producto.dataset.volumen || '—';
         const grad = Producto.dataset.graduacion || '—';
@@ -378,9 +378,9 @@ document.addEventListener('DOMContentLoaded', function () {
             // window.location.href = '/html/checkout.html';
         });
 
-        // 6) Añadir al historial **con id**
+        // 6) Añadir al historial **con ID**
         if (window.Historial) {
-            window.Historial.Añadir_Producto(Nombre_Producto, Imagen_Producto, Precio_Producto, id);
+            window.Historial.Añadir_Producto(Nombre_Producto, Imagen_Producto, Precio_Producto, ID);
         }
     };
 

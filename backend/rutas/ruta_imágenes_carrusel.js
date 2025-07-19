@@ -12,11 +12,11 @@ const router = express.Router();
 router.get('/', controladorImagenesCarrusel.obtenerImagenesCarrusel);
 
 /**
- * @route   GET /api/carrusel/:id
+ * @route   GET /api/carrusel/:ID
  * @desc    Obtener una imagen del carrusel por su ID
  * @access  Público
  */
-router.get('/:id', controladorImagenesCarrusel.obtenerImagenPorId);
+router.get('/:ID', controladorImagenesCarrusel.obtenerImagenPorId);
 
 // Aquí podrías añadir rutas para crear, actualizar y eliminar imágenes del carrusel
 // Estas rutas deberían estar protegidas con middleware de autenticación y autorización

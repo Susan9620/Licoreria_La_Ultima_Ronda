@@ -3,7 +3,7 @@ const modeloProductos = require('../modelos/modelo_productos');
 
 class ControladorReseñas {
   /**
-   * POST /api/reseñas/:idProducto
+   * POST /api/reseñas/:IDProducto
    * Inserta una nueva reseña y actualiza la calificación del producto.
    */
   async insertarReseña(req, res) {
@@ -57,7 +57,7 @@ class ControladorReseñas {
   }
 
   /**
-   * GET /api/reseñas/:idProducto
+   * GET /api/reseñas/:IDProducto
    * Obtiene todas las reseñas de un producto (opcional).
    */
   async obtenerReseñasPorProducto(req, res) {

@@ -15,9 +15,9 @@ router.use(verificarToken, esAdministrador);
 
 // PEDIDOS
 // Obtener un pedido con detalles (pedido + items)
-router.get('/pedidos/:id', ControladorPedidos.obtenerPedido);
+router.get('/pedidos/:ID', ControladorPedidos.obtenerPedido);
 // Cambiar estado de un pedido
-router.put('/pedidos/:id/estado', ControladorPedidos.cambiarEstado);
+router.put('/pedidos/:ID/estado', ControladorPedidos.cambiarEstado);
 // Listar todos los pedidos
 router.get('/pedidos', ControladorPedidos.obtenerTodos);
 
@@ -27,48 +27,48 @@ router.get('/productos', ControladorProductos.obtenerTodos);
 // Crear producto
 router.post('/productos', ControladorProductos.crearProducto);
 // Actualizar producto
-router.put('/productos/:id', ControladorProductos.actualizarProducto);
+router.put('/productos/:ID', ControladorProductos.actualizarProducto);
 // Eliminar producto
-router.delete('/productos/:id', ControladorProductos.eliminarProducto);
+router.delete('/productos/:ID', ControladorProductos.eliminarProducto);
 
 // IMÁGENES DE PRODUCTO
 // Crear imagen de producto
 router.post('/imagenes', ControladorImagenesProducto.crearImagenProducto);
 // Actualizar imagen de producto
-router.put('/imagenes/:id', ControladorImagenesProducto.actualizarImagenProducto);
+router.put('/imagenes/:ID', ControladorImagenesProducto.actualizarImagenProducto);
 // Eliminar imagen de producto
-router.delete('/imagenes/:id', ControladorImagenesProducto.eliminarImagenProducto);
+router.delete('/imagenes/:ID', ControladorImagenesProducto.eliminarImagenProducto);
 
 // CATEGORÍAS
 // Crear categoría
-router.post('/Categorías', Controlador_Categorías.crearCategoria);
+router.post('/Categorías', Controlador_Categorías.Crear_Categoría);
 // Actualizar categoría
-router.put('/Categorías/:id', Controlador_Categorías.actualizarCategoria);
+router.put('/Categorías/:ID', Controlador_Categorías.actualizarCategoria);
 // Eliminar categoría
-router.delete('/Categorías/:id', Controlador_Categorías.eliminarCategoria);
+router.delete('/Categorías/:ID', Controlador_Categorías.eliminarCategoria);
 
 // CARRUSEL
 // Crear imagen de carrusel
 router.post('/carrusel',    ControladorCarrusel.crearImagenCarrusel);
 // Actualizar imagen de carrusel
-router.put('/carrusel/:id', ControladorCarrusel.actualizarImagenCarrusel);
+router.put('/carrusel/:ID', ControladorCarrusel.actualizarImagenCarrusel);
 // Eliminar imagen de carrusel
-router.delete('/carrusel/:id', ControladorCarrusel.eliminarImagenCarrusel);
+router.delete('/carrusel/:ID', ControladorCarrusel.eliminarImagenCarrusel);
 
 // USUARIOS
 // Crear usuario
 router.post('/usuarios', ControladorUsuarios.crearUsuario);
 // Actualizar usuario
-router.put('/usuarios/:id', ControladorUsuarios.actualizarUsuario);
+router.put('/usuarios/:ID', ControladorUsuarios.actualizarUsuario);
 // Eliminar usuario
-router.delete('/usuarios/:id', ControladorUsuarios.eliminarUsuario);
+router.delete('/usuarios/:ID', ControladorUsuarios.eliminarUsuario);
 
 // PROMOCIONES
 // Crear promoción
 router.post('/promociones', ControladorPromociones.crearPromocion);
 // Actualizar promoción
-router.put('/promociones/:id', ControladorPromociones.actualizarPromocion);
+router.put('/promociones/:ID', ControladorPromociones.actualizarPromocion);
 // Eliminar promoción
-router.delete('/promociones/:id', ControladorPromociones.eliminarPromocion);
+router.delete('/promociones/:ID', ControladorPromociones.eliminarPromocion);
 
 module.exports = router;

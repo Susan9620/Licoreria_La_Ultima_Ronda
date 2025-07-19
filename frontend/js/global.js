@@ -789,9 +789,9 @@ const Lista_Deseos = {
         console.log('Artículos de Lista de Deseos guardados en localStorage');
     },
 
-    Alternar_Favorito: async function (id, nombre, imagen, precio) {
+    Alternar_Favorito: async function (ID, nombre, imagen, precio) {
         try {
-            const existe = Lista_Deseos.Artículos.some(x => x.ID == id);
+            const existe = Lista_Deseos.Artículos.some(x => x.ID == ID);
 
             if (!existe) {
                 // Añadir a BD
@@ -801,20 +801,20 @@ const Lista_Deseos = {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + tuJwt
                     },
-                    body: JSON.stringify({ productoId: parseInt(id, 10) })
+                    body: JSON.stringify({ productoId: parseInt(ID, 10) })
                 });
                 // Actualiza local
-                Lista_Deseos.Artículos.push({ ID: id, Nombre: nombre, Imagen: imagen, Precio: precio });
+                Lista_Deseos.Artículos.push({ ID: ID, Nombre: nombre, Imagen: imagen, Precio: precio });
             } else {
                 // Eliminar de BD
-                await fetch(`${baseUrl}/api/deseos/${id}`, {
+                await fetch(`${baseUrl}/api/deseos/${ID}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': 'Bearer ' + tuJwt
                     }
                 });
                 // Actualiza local
-                Lista_Deseos.Artículos = this.Artículos.filter(x => x.ID != id);
+                Lista_Deseos.Artículos = this.Artículos.filter(x => x.ID != ID);
             }
 
             Lista_Deseos.Actualizar_Contador();
@@ -838,11 +838,11 @@ const Lista_Deseos = {
         // 1) Actualizar botones de favoritos en las tarjetas existentes
         const Tarjetas = document.querySelectorAll('.Tarjeta_Producto');
         Tarjetas.forEach(tarjeta => {
-            const id = tarjeta.dataset.id;
-            if (id) {
+            const ID = tarjeta.dataset.id;
+            if (ID) {
                 const btnFav = tarjeta.querySelector('.Botón_Favorito');
                 if (btnFav) {
-                    const estaEnFavoritos = Lista_Deseos.Artículos.some(item => item.ID == id);
+                    const estaEnFavoritos = Lista_Deseos.Artículos.some(item => item.ID == ID);
                     if (estaEnFavoritos) {
                         btnFav.classList.add('Activo');
                     } else {
@@ -984,7 +984,7 @@ const Lista_Deseos = {
 
                     const tarjeta = btnFav.closest('.Tarjeta_Producto');
                     if (tarjeta) {
-                        const id = tarjeta.dataset.id;
+                        const ID = tarjeta.dataset.id;
                         const nombreBase = tarjeta.querySelector('h3')?.textContent.trim() || '';
                         const nombreVariante = tarjeta.dataset.volumen || '';
                         const nombre = nombreVariante
@@ -994,8 +994,8 @@ const Lista_Deseos = {
                         const img = tarjeta.querySelector('img')?.src || '';
                         const precio = tarjeta.querySelector('.Precio')?.textContent.trim() || '';
 
-                        if (id && nombre && img && precio) {
-                            const añadido = Lista_Deseos.Alternar_Favorito(id, nombre, img, precio);
+                        if (ID && nombre && img && precio) {
+                            const añadido = Lista_Deseos.Alternar_Favorito(ID, nombre, img, precio);
                             btnFav.classList.toggle('Activo', añadido);
                         }
                     }
@@ -1042,15 +1042,15 @@ const Historial = {
     },
 
     // ❸ Sólo guarda en memoria, no en localStorage
-    Añadir_Producto: function (nombre, imagen, precio, id) {
-        console.log('Añadiendo al historial:', nombre, id);
+    Añadir_Producto: function (nombre, imagen, precio, ID) {
+        console.log('Añadiendo al historial:', nombre, ID);
 
         // Quita duplicados por ID
-        const idx = this.Productos.findIndex(item => item.ID === id);
+        const idx = this.Productos.findIndex(item => item.ID === ID);
         if (idx !== -1) this.Productos.splice(idx, 1);
 
         // Inserta al frente
-        this.Productos.unshift({ Nombre: nombre, Imagen: imagen, Precio: precio, ID: id });
+        this.Productos.unshift({ Nombre: nombre, Imagen: imagen, Precio: precio, ID: ID });
 
         // Máximo 10 items
         if (this.Productos.length > 10) this.Productos.pop();

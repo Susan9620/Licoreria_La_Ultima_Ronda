@@ -23,7 +23,7 @@ class ControladorUsuarios {
         Correo_Electrónico,
         Contraseña: hash
       });
-      return res.status(201).json({ Éxito: true, Datos: { id: nuevo.insertId, Correo_Electrónico } });
+      return res.status(201).json({ Éxito: true, Datos: { ID: nuevo.insertId, Correo_Electrónico } });
     } catch (err) {
       console.error('Error al registrar usuario:', err);
       // Duplicado de correo
@@ -57,7 +57,7 @@ class ControladorUsuarios {
         return res.status(401).json({ Éxito: false, Mensaje: 'Credenciales inválidas' });
       }
       // Generar token
-      const payload = { id: usuario.ID_Usuario, email: usuario.Correo_Electrónico, rol: usuario.Rol };
+      const payload = { ID: usuario.ID_Usuario, email: usuario.Correo_Electrónico, rol: usuario.Rol };
       const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN || '8h' });
       return res.json({ Éxito: true, token });
     } catch (err) {
@@ -131,7 +131,7 @@ class ControladorUsuarios {
       const hash = await bcrypt.hash(Contraseña, 10);
 
       // Pasa un objeto con todas las claves a tu modelo
-      const id = await modeloUsuarios.crear({
+      const ID = await modeloUsuarios.crear({
         Nombre_Completo,
         Correo_Electrónico,
         Contraseña: hash,
@@ -146,7 +146,7 @@ class ControladorUsuarios {
       return res.status(201).json({
         Éxito: true,
         Mensaje: 'Usuario creado correctamente',
-        Datos: { idUsuario: id }
+        Datos: { idUsuario: ID }
       });
     } catch (error) {
       console.error('Error al crear usuario:', error);
@@ -155,13 +155,13 @@ class ControladorUsuarios {
   }
 
   /**
-   * PUT /api/admin/usuarios/:id
+   * PUT /api/admin/usuarios/:ID
    * Actualiza un usuario existente (solo Admin)
    */
   async actualizarUsuario(req, res) {
     try {
-      const id = parseInt(req.params.id, 10);
-      if (isNaN(id)) {
+      const ID = parseInt(req.params.id, 10);
+      if (isNaN(ID)) {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
       const cambios = { ...req.body };
@@ -169,7 +169,7 @@ class ControladorUsuarios {
       if (cambios.Contraseña) {
         cambios.Contraseña = await bcrypt.hash(cambios.Contraseña, 10);
       }
-      const filas = await modeloUsuarios.actualizar(id, cambios);
+      const filas = await modeloUsuarios.actualizar(ID, cambios);
       if (filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Usuario no encontrado.' });
       }
@@ -181,16 +181,16 @@ class ControladorUsuarios {
   }
 
   /**
-   * DELETE /api/admin/usuarios/:id
+   * DELETE /api/admin/usuarios/:ID
    * Elimina un usuario (solo Admin)
    */
   async eliminarUsuario(req, res) {
     try {
-      const id = parseInt(req.params.id, 10);
-      if (isNaN(id)) {
+      const ID = parseInt(req.params.id, 10);
+      if (isNaN(ID)) {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
-      const filas = await modeloUsuarios.eliminar(id);
+      const filas = await modeloUsuarios.eliminar(ID);
       if (filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Usuario no encontrado.' });
       }

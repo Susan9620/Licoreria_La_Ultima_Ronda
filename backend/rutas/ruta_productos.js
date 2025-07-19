@@ -17,28 +17,28 @@ router.get('/', controladorProductos.obtenerProductosDestacados);
 router.get('/all', controladorProductos.obtenerTodos);
 
 /**
- * @route   GET /api/productos/:id/compradosjuntos
+ * @route   GET /api/productos/:ID/compradosjuntos
  * @desc    Obtener hasta 4 productos comprados junto a la variante predeterminada
  */
-router.get('/:id/compradosjuntos', controladorProductos.obtenerCompradosJuntos);
+router.get('/:ID/compradosjuntos', controladorProductos.obtenerCompradosJuntos);
 
 /**
- * @route   POST /api/productos/:id/calificar
+ * @route   POST /api/productos/:ID/calificar
  * @desc    Registrar una nueva valoración para el producto
  */
-router.post('/:id/calificar', verificarToken, controladorProductos.calificarProducto);
+router.post('/:ID/calificar', verificarToken, controladorProductos.calificarProducto);
 
 /**
- * @route   GET /api/productos/:id/calificacion
+ * @route   GET /api/productos/:ID/calificacion
  * @desc    Obtener la valoración del usuario
  */
-router.get('/:id/calificacion', verificarToken, controladorProductos.obtenerCalificacionUsuario);
+router.get('/:ID/calificacion', verificarToken, controladorProductos.obtenerCalificacionUsuario);
 
 
 /**
- * @route   GET /api/productos/:id
+ * @route   GET /api/productos/:ID
  * @desc    Obtener un producto por su ID
  */
-router.get('/:id', controladorProductos.obtenerPorId);
+router.get('/:ID', controladorProductos.obtenerPorId);
 
 module.exports = router;

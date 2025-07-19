@@ -84,10 +84,10 @@ class ControladorPedidos {
 
   async obtenerPedidoPorId(req, res) {
     try {
-      const id = parseInt(req.params.id, 10);
-      if (isNaN(id)) return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido' });
+      const ID = parseInt(req.params.id, 10);
+      if (isNaN(ID)) return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido' });
 
-      const pedido = await modeloPedidos.obtenerPorId(id);
+      const pedido = await modeloPedidos.obtenerPorId(ID);
       if (!pedido) return res.status(404).json({ Éxito: false, Mensaje: 'Pedido no encontrado' });
 
       res.json({ Éxito: true, Datos: pedido });
@@ -124,7 +124,7 @@ class ControladorPedidos {
   }
 
   /**
-   * PUT /api/admin/pedidos/:id/estado
+   * PUT /api/admin/pedidos/:ID/estado
    * Cambia el Estado_Pedido de un pedido (solo Admin)
    */
   async cambiarEstado(req, res) {

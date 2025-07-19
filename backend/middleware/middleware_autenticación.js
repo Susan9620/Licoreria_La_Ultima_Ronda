@@ -91,7 +91,7 @@ const esPropietarioOAdmin = (req, res, next) => {
 const generarToken = (usuario) => {
   // Crear el payload con los datos mínimos necesarios
   const payload = {
-    id: usuario.ID_Usuario,
+    ID: usuario.ID_Usuario,
     nombre: usuario.Nombre_Completo,
     correo: usuario.Correo_Electrónico,
     rol: usuario.Rol

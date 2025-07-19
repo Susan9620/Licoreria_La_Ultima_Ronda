@@ -25,11 +25,11 @@ router.get(
 );
 
 /**
- * @route   GET /api/pedidos/:id
+ * @route   GET /api/pedidos/:ID
  * @desc    Obtener pedido con detalle
  */
 router.get(
-    '/:id',
+    '/:ID',
     verificarToken,
     (req, res, next) => {
         console.log(`→ [Pedidos] Llega GET /api/pedidos/${req.params.id}`);

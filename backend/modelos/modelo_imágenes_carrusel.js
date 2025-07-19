@@ -34,10 +34,10 @@ class ModeloImagenesCarrusel {
 
   /**
    * Obtiene una imagen específica del carrusel por su ID
-   * @param {number} id - ID de la imagen a obtener
+   * @param {number} ID - ID de la imagen a obtener
    * @returns {Promise<Object|null>} - Imagen del carrusel o null si no existe
    */
-  async obtenerImagenPorId(id) {
+  async obtenerImagenPorId(ID) {
     try {
       const result = await pool.query(
         `SELECT
@@ -52,11 +52,11 @@ class ModeloImagenesCarrusel {
            "IMÁGENES_CARRUSEL"
          WHERE
            "ID_Imagen" = $1`,
-        [id]
+        [ID]
       );
       return result.rows[0] || null;
     } catch (error) {
-      console.error(`Error al obtener imagen del carrusel con ID ${id}:`, error);
+      console.error(`Error al obtener imagen del carrusel con ID ${ID}:`, error);
       throw new Error('Error al obtener la imagen del carrusel');
     }
   }
@@ -122,7 +122,7 @@ class ModeloImagenesCarrusel {
       .map((k, i) => `"${k}" = $${i + 1}`)
       .join(', ');
     const values = keys.map(k => cambios[k]);
-    // último placeholder para el id
+    // último placeholder para el ID
     values.push(idImagen);
 
     try {

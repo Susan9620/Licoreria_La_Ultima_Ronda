@@ -21,7 +21,7 @@ class Controlador_Categorías {
       res.status(500).json({
         Éxito: false,
         Mensaje: 'Error al obtener las categorías',
-        Error: process.env.NODE_ENV === 'development' ? error.message : null
+        error: process.env.NODE_ENV === 'development' ? error.message : null
       });
     }
   }
@@ -30,14 +30,14 @@ class Controlador_Categorías {
    * POST /api/admin/Categorías
    * Crea una nueva categoría (solo Admin)
    */
-  async crearCategoria(req, res) {
+  async Crear_Categoría(req, res) {
     try {
       const Datos = req.body; 
-      const id = await Modelo_Categorías.crear(Datos);
+      const ID = await Modelo_Categorías.crear(Datos);
       return res.status(201).json({
         Éxito: true,
         Mensaje: 'Categoría creada correctamente',
-        Datos: { idCategoria: id }
+        Datos: { IDCategoria: ID }
       });
     } catch (error) {
       console.error('Error al crear categoría:', error);
@@ -46,14 +46,14 @@ class Controlador_Categorías {
   }
 
   /**
-   * PUT /api/admin/Categorías/:id
+   * PUT /api/admin/Categorías/:ID
    * Actualiza una categoría existente (solo Admin)
    */
   async actualizarCategoria(req, res) {
     try {
-      const id = parseInt(req.params.id, 10);
+      const ID = parseInt(req.params.id, 10);
       const cambios = req.body;
-      const filas = await Modelo_Categorías.actualizar(id, cambios);
+      const filas = await Modelo_Categorías.actualizar(ID, cambios);
       if (filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Categoría no encontrada.' });
       }
@@ -65,13 +65,13 @@ class Controlador_Categorías {
   }
 
   /**
-   * DELETE /api/admin/Categorías/:id
+   * DELETE /api/admin/Categorías/:ID
    * Elimina una categoría (solo Admin)
    */
   async eliminarCategoria(req, res) {
     try {
-      const id = parseInt(req.params.id, 10);
-      const filas = await Modelo_Categorías.eliminar(id);
+      const ID = parseInt(req.params.id, 10);
+      const filas = await Modelo_Categorías.eliminar(ID);
       if (filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Categoría no encontrada.' });
       }
