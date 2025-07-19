@@ -13,7 +13,7 @@ class ControladorPedidos {
       console.log("   - Body completo:", JSON.stringify(req.body, null, 2));
 
       const {
-        items,
+        Items: Items,
         Subtotal,
         envio,
         descuento,
@@ -25,9 +25,9 @@ class ControladorPedidos {
       } = req.body;
 
       // 🔍 DEBUG: Verificar items específicamente
-      console.log("📋 Items recibidos:", items);
-      if (Array.isArray(items)) {
-        items.forEach((item, index) => {
+      console.log("📋 Items recibidos:", Items);
+      if (Array.isArray(Items)) {
+        Items.forEach((item, index) => {
           console.log(`📦 Item ${index + 1}:`);
           console.log(`   - ID_Variante: ${item.ID_Variante} (tipo: ${typeof item.ID_Variante})`);
           console.log(`   - Cantidad: ${item.Cantidad}`);
@@ -36,12 +36,12 @@ class ControladorPedidos {
         });
       }
 
-      if (!Array.isArray(items) || items.length === 0) {
+      if (!Array.isArray(Items) || Items.length === 0) {
         return res.status(400).json({ Éxito: false, Mensaje: 'No hay ítems en el pedido' });
       }
 
       // 🔍 Verificar que todos los items tengan ID_Variante válido
-      const itemsSinVariante = items.filter(item =>
+      const itemsSinVariante = Items.filter(item =>
         !item.ID_Variante ||
         item.ID_Variante === null ||
         item.ID_Variante === undefined ||
@@ -58,9 +58,9 @@ class ControladorPedidos {
         });
       }
 
-      const { numeroPedido, ID_Pedido } = await modeloPedidos.crearConDetalles({
+      const { numeroPedido, ID_Pedido } = await modeloPedidos.Crear_Con_Detalles({
         ID_Usuario,
-        items,
+        Items: Items,
         Subtotal,
         envio,
         descuento,
@@ -100,8 +100,8 @@ class ControladorPedidos {
   async obtenerPedido(req, res) {
     try {
       const ID_Pedido = parseInt(req.params.id, 10);
-      const { pedido, items } = await modeloPedidos.obtenerConDetalles(ID_Pedido);
-      return res.json({ Éxito: true, Datos: { pedido, items } });
+      const { pedido, Items } = await modeloPedidos.obtenerConDetalles(ID_Pedido);
+      return res.json({ Éxito: true, Datos: { pedido, Items } });
     } catch (err) {
       console.error(err);
       return res.status(404).json({ Éxito: false, Mensaje: err.message });
@@ -115,7 +115,7 @@ class ControladorPedidos {
   async obtenerPedidosPorUsuario(req, res) {
     try {
       const ID_Usuario = req.usuario.id;
-      const pedidos = await modeloPedidos.obtenerPorUsuario(ID_Usuario);
+      const pedidos = await modeloPedidos.Obtener_Por_Usuario(ID_Usuario);
       return res.json({ Éxito: true, Datos: pedidos });
     } catch (err) {
       console.error('Error al obtener historial de pedidos:', err);

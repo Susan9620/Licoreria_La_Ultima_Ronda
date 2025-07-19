@@ -102,13 +102,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const resp = await fetch(`${baseUrl}/api/admin/pedidos/${id}`, { headers: authHeader() });
             const json = await resp.json();
             if (!resp.ok || !json.Éxito) throw new Error(json.Mensaje);
-            const { pedido, items } = json.Datos;
+            const { pedido, Items } = json.Datos;
             modalID.textContent = pedido.ID_Pedido;
             detUsuario.textContent = pedido.ID_Usuario;
             detFecha.textContent = new Date(pedido.fecha).toLocaleString();
             detTotal.textContent = parseFloat(pedido.total).toFixed(2);
             detEstado.value = pedido.estadoPedido;
-            detProductos.innerHTML = items.map(item => {
+            detProductos.innerHTML = Items.map(item => {
                 const nombre = item.nombreVariante
                     ? `${item.nombreProducto} – ${item.nombreVariante}`
                     : item.nombreProducto;
@@ -236,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeader() },
                     body: JSON.stringify(Datos)
                 });
-                json = await res.json(); idProductoActual = json.Datos.idProducto;
+                json = await res.json(); idProductoActual = json.Datos.ID_Producto;
             } else {
                 await fetch(`${baseUrl}/api/admin/productos/${idProductoActual}`, {
                     method: 'PUT', headers: { 'Content-Type': 'application/json', ...authHeader() },

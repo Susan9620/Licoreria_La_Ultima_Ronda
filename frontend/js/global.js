@@ -746,9 +746,9 @@ const Lista_Deseos = {
             if (json.Éxito) {
                 const Datos = json.Datos;  // array de variantes
 
-                // 1) Agrupar variantes por productoId
+                // 1) Agrupar variantes por Producto_ID
                 const grupos = Datos.reduce((acc, item) => {
-                    const pid = item.productoId;
+                    const pid = item.Producto_ID;
                     if (!acc[pid]) acc[pid] = [];
                     acc[pid].push(item);
                     return acc;
@@ -758,9 +758,9 @@ const Lista_Deseos = {
                 Lista_Deseos.Artículos = Object.values(grupos).map(variants => {
                     const variantePred = variants.find(v => v.Predeterminada == 1) || variants[0];
                     return {
-                        ID: variantePred.productoId,
+                        ID: variantePred.Producto_ID,
                         Nombre: variantePred.Nombre,
-                        Imagen: variantePred.imagen,
+                        Imagen: variantePred.Imagen,
                         Precio: variantePred.Precio
                     };
                 });
@@ -789,7 +789,7 @@ const Lista_Deseos = {
         console.log('Artículos de Lista de Deseos guardados en localStorage');
     },
 
-    Alternar_Favorito: async function (ID, nombre, imagen, precio) {
+    Alternar_Favorito: async function (ID, nombre, Imagen, precio) {
         try {
             const existe = Lista_Deseos.Artículos.some(x => x.ID == ID);
 
@@ -801,10 +801,10 @@ const Lista_Deseos = {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + tuJwt
                     },
-                    body: JSON.stringify({ productoId: parseInt(ID, 10) })
+                    body: JSON.stringify({ Producto_ID: parseInt(ID, 10) })
                 });
                 // Actualiza local
-                Lista_Deseos.Artículos.push({ ID: ID, Nombre: nombre, Imagen: imagen, Precio: precio });
+                Lista_Deseos.Artículos.push({ ID: ID, Nombre: nombre, Imagen: Imagen, Precio: precio });
             } else {
                 // Eliminar de BD
                 await fetch(`${baseUrl}/api/deseos/${ID}`, {
@@ -922,7 +922,7 @@ const Lista_Deseos = {
                     if (!isNaN(idx) && idx >= 0 && idx < Lista_Deseos.Artículos.length) {
                         const item = Lista_Deseos.Artículos[idx];          // aquí tus props: item.ID, item.Nombre, etc.
                         const token = localStorage.getItem('token');
-                        const url = `${baseUrl}/api/deseos/${item.ID}`;     // <— usa item.ID, no productoId
+                        const url = `${baseUrl}/api/deseos/${item.ID}`;     // <— usa item.ID, no Producto_ID
                         console.log('🗑️ Llamando a DELETE en:', url);
 
                         try {
@@ -1042,7 +1042,7 @@ const Historial = {
     },
 
     // ❸ Sólo guarda en memoria, no en localStorage
-    Añadir_Producto: function (nombre, imagen, precio, id) {
+    Añadir_Producto: function (nombre, Imagen, precio, id) {
         console.log('Añadiendo al historial:', nombre, id);
 
         // Quita duplicados por ID
@@ -1050,7 +1050,7 @@ const Historial = {
         if (idx !== -1) this.Productos.splice(idx, 1);
 
         // Inserta al frente
-        this.Productos.unshift({ Nombre: nombre, Imagen: imagen, Precio: precio, ID: id });
+        this.Productos.unshift({ Nombre: nombre, Imagen: Imagen, Precio: precio, ID: id });
 
         // Máximo 10 items
         if (this.Productos.length > 10) this.Productos.pop();
@@ -1409,7 +1409,7 @@ async function Ver_Factura_Global(ID_Pedido) {
         }
 
         // Si no tiene items, cargarlos desde la API
-        if (!Array.isArray(pedido.items) || pedido.items.length === 0) {
+        if (!Array.isArray(pedido.Items) || pedido.Items.length === 0) {
             const token = localStorage.getItem('token');
             const resp = await fetch(`${baseUrl}/api/pedidos/${ID_Pedido}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -1422,7 +1422,7 @@ async function Ver_Factura_Global(ID_Pedido) {
 
             pedido = {
                 ...json.Datos.pedido,
-                items: json.Datos.items
+                Items: json.Datos.Items
             };
         }
 
@@ -1470,9 +1470,9 @@ function Actualizar_Modal_Factura_Global(pedido) {
 
     // Productos
     const tablaItems = document.getElementById('Factura_Artículos');
-    if (tablaItems && pedido.items) {
+    if (tablaItems && pedido.Items) {
         tablaItems.innerHTML = '';
-        pedido.items.forEach(item => {
+        pedido.Items.forEach(item => {
             const precio = parseFloat(item.Precio_Unitario) || 0;
             const subtotalProducto = precio * item.Cantidad;
 

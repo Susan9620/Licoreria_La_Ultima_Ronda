@@ -71,11 +71,11 @@ function Inicializar_Carrusel(Datos_carrusel) {
     contenedor_indicadores.innerHTML = '';
 
     // Crear elementos para cada imagen del carrusel
-    Datos_carrusel.forEach((imagen, indice) => {
+    Datos_carrusel.forEach((Imagen, indice) => {
         // Crear el elemento de imagen del carrusel
         const elemento_imagen = document.createElement('div');
         elemento_imagen.className = `Imágen_Carrusel ${indice === 0 ? 'Activo' : ''}`;
-        elemento_imagen.style.backgroundImage = `url('${imagen.URL_Imagen}')`;
+        elemento_imagen.style.backgroundImage = `url('${Imagen.URL_Imagen}')`;
 
         // Crear la sombra
         const elemento_sombra = document.createElement('div');
@@ -86,7 +86,7 @@ function Inicializar_Carrusel(Datos_carrusel) {
         elemento_contenido.className = 'Contenido_Carrusel';
 
         // Crear el título con formato HTML para el span
-        const titulo_partes = imagen.Título.split(' ');
+        const titulo_partes = Imagen.Título.split(' ');
         const ultima_palabra = titulo_partes.pop();
         const texto_titulo = titulo_partes.length > 0
             ? `${titulo_partes.join(' ')} <span>${ultima_palabra}</span>`
@@ -94,10 +94,10 @@ function Inicializar_Carrusel(Datos_carrusel) {
 
         elemento_contenido.innerHTML = `
             <h1>${texto_titulo}</h1>
-            <p>${imagen.Subtítulo || ''}</p>
+            <p>${Imagen.Subtítulo || ''}</p>
             <div class="Botones_Carrusel">
-                ${imagen.Enlace_Principal ?
-                `<a href="${imagen.Enlace_Principal}" class="Botones Botón_Primario">Ver más</a>` : ''}
+                ${Imagen.Enlace_Principal ?
+                `<a href="${Imagen.Enlace_Principal}" class="Botones Botón_Primario">Ver más</a>` : ''}
             </div>
         `;
 

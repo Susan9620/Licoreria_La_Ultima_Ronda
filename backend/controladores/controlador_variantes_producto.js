@@ -3,10 +3,10 @@ const modeloVariantesProducto = require("../modelos/modelo_variantes_producto")
 /**
  * Obtener todas las variantes de un producto específico
  */
-const obtenerPorProducto = async (req, res) => {
+const Obtener_Por_Producto = async (req, res) => {
   try {
-    const { idProducto } = req.params
-    const variantes = await modeloVariantesProducto.obtenerPorProducto(idProducto)
+    const { ID_Producto } = req.params
+    const variantes = await modeloVariantesProducto.Obtener_Por_Producto(ID_Producto)
 
     res.json({
       Éxito: true,
@@ -66,6 +66,6 @@ const obtenerPorId = async (req, res) => {
 }
 
 module.exports = {
-  obtenerPorProducto,
+  Obtener_Por_Producto,
   obtenerPorId,
 }

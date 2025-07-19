@@ -410,8 +410,8 @@ const Checkout = {
         try {
             // 4.2) Resolver ID_Variante para cada artículo
             console.log('📦 window.Carrito.Artículos en Completar_Pedido:', window.Carrito.Artículos);
-            const items = await this.prepararItemsParaCheckout();
-            console.log("📋 Items procesados para enviar:", items);
+            const Items = await this.prepararItemsParaCheckout();
+            console.log("📋 Items procesados para enviar:", Items);
 
             const { direccion, codigoPostal, instrucciones } = Datos;
             const Subtotal = window.Carrito.Calcular_Total();
@@ -425,7 +425,7 @@ const Checkout = {
             ).toFixed(2);
 
             const payload = {
-                items,              // tu array de { ID_Variante, Cantidad, Precio_Unitario, Subtotal }
+                Items,              // tu array de { ID_Variante, Cantidad, Precio_Unitario, Subtotal }
                 Subtotal,           // número
                 envio,              // número
                 descuento,          // número

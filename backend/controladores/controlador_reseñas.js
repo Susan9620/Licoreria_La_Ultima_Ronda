@@ -3,16 +3,16 @@ const modeloProductos = require('../modelos/modelo_productos');
 
 class ControladorReseñas {
   /**
-   * POST /api/reseñas/:idProducto
+   * POST /api/reseñas/:ID_Producto
    * Inserta una nueva reseña y actualiza la calificación del producto.
    */
   async insertarReseña(req, res) {
     try {
-      const idProducto = parseInt(req.params.idProducto, 10);
+      const ID_Producto = parseInt(req.params.ID_Producto, 10);
       const { valoracion, ID_Usuario = null } = req.body;
 
       if (
-        isNaN(idProducto) ||
+        isNaN(ID_Producto) ||
         typeof valoracion !== 'number' ||
         valoracion < 1 ||
         valoracion > 5
@@ -25,19 +25,19 @@ class ControladorReseñas {
 
       // 1) Insertar la reseña en la tabla RESEÑAS
       await modeloReseñas.insertarReseña({
-        idProducto,
+        ID_Producto,
         ID_Usuario,
         valoracion,
       });
 
       // 2) Recalcular promedio y total de reseñas para ese producto
       const { promedio, total } = await modeloReseñas.obtenerPromedioYTotal(
-        idProducto
+        ID_Producto
       );
 
       // 3) Actualizar ese producto en su propia tabla (PRODUCTOS)
       await modeloProductos.actualizarCalificacionYTotal(
-        idProducto,
+        ID_Producto,
         promedio,
         total
       );
@@ -57,13 +57,13 @@ class ControladorReseñas {
   }
 
   /**
-   * GET /api/reseñas/:idProducto
+   * GET /api/reseñas/:ID_Producto
    * Obtiene todas las reseñas de un producto (opcional).
    */
   async obtenerReseñasPorProducto(req, res) {
     try {
-      const idProducto = parseInt(req.params.idProducto, 10);
-      if (isNaN(idProducto)) {
+      const ID_Producto = parseInt(req.params.ID_Producto, 10);
+      if (isNaN(ID_Producto)) {
         return res.status(400).json({
           Éxito: false,
           Mensaje: 'ID de producto inválido',
@@ -71,7 +71,7 @@ class ControladorReseñas {
       }
 
       const reseñas = await modeloReseñas.obtenerReseñasPorProducto(
-        idProducto
+        ID_Producto
       );
       return res.status(200).json({
         Éxito: true,

@@ -4,18 +4,18 @@ const controladorImagenesProducto = require("../controladores/controlador_imáge
 const router = express.Router()
 
 /**
- * @route   GET /api/imagenes/producto/:idProducto
+ * @route   GET /api/imagenes/producto/:ID_Producto
  * @desc    Obtener todas las imágenes de un producto específico
  * @access  Público
  */
-router.get("/producto/:idProducto", controladorImagenesProducto.obtenerPorProducto)
+router.get("/producto/:ID_Producto", controladorImagenesProducto.Obtener_Por_Producto)
 
 /**
- * @route   GET /api/imagenes/principal/:idProducto
+ * @route   GET /api/imagenes/principal/:ID_Producto
  * @desc    Obtener la imagen principal de un producto
  * @access  Público
  */
-router.get("/principal/:idProducto", controladorImagenesProducto.obtenerPrincipal)
+router.get("/principal/:ID_Producto", controladorImagenesProducto.obtenerPrincipal)
 
 // Ruta por defecto para testing
 router.get("/", (req, res) => {

@@ -90,13 +90,13 @@ class ControladorProductos {
    */
   async obtenerCompradosJuntos(req, res) {
     try {
-      const idProducto = parseInt(req.params.id, 10);
-      if (isNaN(idProducto)) {
+      const ID_Producto = parseInt(req.params.id, 10);
+      if (isNaN(ID_Producto)) {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID de producto inválido' });
       }
 
       // 1) Obtener el producto y su variante predeterminada
-      const prod = await modeloProductos.obtenerPorId(idProducto);
+      const prod = await modeloProductos.obtenerPorId(ID_Producto);
       if (!prod || !prod.ID_Variante) {
         return res
           .status(404)
@@ -124,10 +124,10 @@ class ControladorProductos {
    */
   async calificarProducto(req, res) {
     try {
-      const idProducto = parseInt(req.params.id, 10);
+      const ID_Producto = parseInt(req.params.id, 10);
       const { calificacion } = req.body;
 
-      if (isNaN(idProducto) || typeof calificacion !== 'number' || calificacion < 1 || calificacion > 5) {
+      if (isNaN(ID_Producto) || typeof calificacion !== 'number' || calificacion < 1 || calificacion > 5) {
         return res.status(400).json({ Éxito: false, Mensaje: 'Parámetros inválidos' });
       }
 
@@ -138,11 +138,11 @@ class ControladorProductos {
       }
 
       // 1) Insertar la reseña
-      await modeloReseñas.insertarReseña({ idProducto, ID_Usuario, valoracion: calificacion });
+      await modeloReseñas.insertarReseña({ ID_Producto, ID_Usuario, valoracion: calificacion });
 
       // 2) Recalcular y 3) actualizar
-      const { promedio, total } = await modeloReseñas.obtenerPromedioYTotal(idProducto);
-      await modeloProductos.actualizarCalificacionYTotal(idProducto, promedio, total);
+      const { promedio, total } = await modeloReseñas.obtenerPromedioYTotal(ID_Producto);
+      await modeloProductos.actualizarCalificacionYTotal(ID_Producto, promedio, total);
 
       return res.status(200).json({
         Éxito: true,
@@ -161,9 +161,9 @@ class ControladorProductos {
  */
   async obtenerCalificacionUsuario(req, res) {
     try {
-      const idProducto = parseInt(req.params.id, 10);
+      const ID_Producto = parseInt(req.params.id, 10);
       const ID_Usuario = req.usuario.id;
-      const fila = await modeloReseñas.obtenerCalificacionUsuario(idProducto, ID_Usuario);
+      const fila = await modeloReseñas.obtenerCalificacionUsuario(ID_Producto, ID_Usuario);
       // fila puede ser { Valoración: 4 } o undefined
       return res.json({ Éxito: true, Datos: fila ? fila.valoracion : null });
     } catch (error) {
@@ -183,7 +183,7 @@ class ControladorProductos {
       return res.status(201).json({
         Éxito: true,
         Mensaje: 'Producto creado correctamente',
-        Datos: { idProducto: nuevoId }
+        Datos: { ID_Producto: nuevoId }
       });
     } catch (error) {
       console.error('Error al crear producto:', error);

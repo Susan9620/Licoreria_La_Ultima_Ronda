@@ -19,10 +19,10 @@ router.get('/', verificarToken, controladorListaDeseos.obtenerLista);
 router.post('/', verificarToken, controladorListaDeseos.agregar);
 
 /**
- * @route   DELETE /api/deseos/:productoId
+ * @route   DELETE /api/deseos/:Producto_ID
  * @desc    Eliminar un producto de la lista de deseos
  * @access  Privado
  */
-router.delete('/:productoId', verificarToken, controladorListaDeseos.Eliminar);
+router.delete('/:Producto_ID', verificarToken, controladorListaDeseos.Eliminar);
 
 module.exports = router;

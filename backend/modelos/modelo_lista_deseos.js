@@ -1,24 +1,21 @@
 const { pool } = require('../configuraciones/configuraciones_bd');
 
-/**
- * Modelo para gestionar la lista de deseos en PostgreSQL
- */
-class ModeloListaDeseos {
+class Modelo_Lista_Deseos {
   /**
-   * Obtiene todos los productos en la lista de un usuario
+   * Obtener todos los productos en la lista de un usuario
    * @param {number} ID_Usuario
    * @returns {Promise<Array>}
    */
-  async obtenerPorUsuario(ID_Usuario) {
+  async Obtener_Por_Usuario(ID_Usuario) {
     try {
       const Resultado = await pool.query(
         `
           SELECT
             ld."ID_Lista_Deseos"   AS id,
-            ld."ID_Producto"       AS productoId,
+            ld."ID_Producto"       AS Producto_ID,
             p."Nombre",
             v."Precio",
-            i."URL"                AS imagen
+            i."URL"                AS Imagen
           FROM "LISTA_DESEOS" ld
           JOIN "PRODUCTOS" p
             ON ld."ID_Producto" = p."ID_Producto"
@@ -42,12 +39,12 @@ class ModeloListaDeseos {
   }
 
   /**
-   * Añade un producto a la lista de deseos de un usuario
+   * Añadir un producto a la lista de deseos de un usuario
    * @param {number} ID_Usuario
-   * @param {number} idProducto
-   * @returns {Promise<Object>} - { id, productoId }
+   * @param {number} ID_Producto
+   * @returns {Promise<Object>} - { id, Producto_ID }
    */
-  async agregar(ID_Usuario, idProducto) {
+  async agregar(ID_Usuario, ID_Producto) {
     try {
       const Resultado = await pool.query(
         `
@@ -55,11 +52,11 @@ class ModeloListaDeseos {
           VALUES ($1, $2)
           RETURNING "ID_Lista_Deseos" AS id
         `,
-        [ID_Usuario, idProducto]
+        [ID_Usuario, ID_Producto]
       );
       return {
         id: Resultado.rows[0].id,
-        productoId: idProducto
+        Producto_ID: ID_Producto
       };
     } catch (error) {
       console.error('Error al agregar a lista de deseos:', error);
@@ -68,12 +65,12 @@ class ModeloListaDeseos {
   }
 
   /**
-   * Elimina un producto de la lista de deseos de un usuario
+   * Eliminar un producto de la lista de deseos de un usuario
    * @param {number} ID_Usuario
-   * @param {number} idProducto
-   * @returns {Promise<number>} filas afectadas
+   * @param {number} ID_Producto
+   * @returns {Promise<number>}
    */
-  async Eliminar(ID_Usuario, idProducto) {
+  async Eliminar(ID_Usuario, ID_Producto) {
     try {
       const Resultado = await pool.query(
         `
@@ -81,7 +78,7 @@ class ModeloListaDeseos {
           WHERE "ID_Usuario" = $1
             AND "ID_Producto" = $2
         `,
-        [ID_Usuario, idProducto]
+        [ID_Usuario, ID_Producto]
       );
       return Resultado.rowCount;
     } catch (error) {
@@ -91,4 +88,4 @@ class ModeloListaDeseos {
   }
 }
 
-module.exports = new ModeloListaDeseos();
+module.exports = new Modelo_Lista_Deseos();

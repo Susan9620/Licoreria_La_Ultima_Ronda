@@ -30,9 +30,9 @@ function obtenerIdProductoDesdeURL() {
 
 // Cargar datos del producto desde la API
 async function cargarDatosProducto() {
-  const idProducto = obtenerIdProductoDesdeURL()
+  const ID_Producto = obtenerIdProductoDesdeURL()
 
-  if (!idProducto) {
+  if (!ID_Producto) {
     console.error("No se encontró ID de producto en la URL")
     window.location.href = "../html/productos.html"
     return
@@ -43,7 +43,7 @@ async function cargarDatosProducto() {
     mostrarIndicadorCarga(true)
 
     // Obtener datos del producto
-    const respuestaProducto = await fetch(`${API_BASE}/api/productos/${idProducto}`)
+    const respuestaProducto = await fetch(`${API_BASE}/api/productos/${ID_Producto}`)
     if (!respuestaProducto.ok) {
       throw new Error("Producto no encontrado")
     }
@@ -62,8 +62,8 @@ async function cargarDatosProducto() {
 
     // Cargar variantes y imágenes en paralelo
     await Promise.allSettled([
-      cargarVariantesProducto(idProducto),
-      cargarImagenesProducto(idProducto)
+      cargarVariantesProducto(ID_Producto),
+      cargarImagenesProducto(ID_Producto)
     ])
 
     // Renderizar el producto
@@ -81,9 +81,9 @@ async function cargarDatosProducto() {
 }
 
 // Cargar variantes del producto
-async function cargarVariantesProducto(idProducto) {
+async function cargarVariantesProducto(ID_Producto) {
   try {
-    const respuestaVariantes = await fetch(`${API_BASE}/api/variantes/producto/${idProducto}`)
+    const respuestaVariantes = await fetch(`${API_BASE}/api/variantes/producto/${ID_Producto}`)
     if (respuestaVariantes.ok) {
       const DatosVariantes = await respuestaVariantes.json()
       if (DatosVariantes.Éxito && DatosVariantes.Datos) {
@@ -100,9 +100,9 @@ async function cargarVariantesProducto(idProducto) {
 }
 
 // Cargar imágenes del producto
-async function cargarImagenesProducto(idProducto) {
+async function cargarImagenesProducto(ID_Producto) {
   try {
-    const respuestaImagenes = await fetch(`${API_BASE}/api/imagenes/producto/${idProducto}`)
+    const respuestaImagenes = await fetch(`${API_BASE}/api/imagenes/producto/${ID_Producto}`)
     if (respuestaImagenes.ok) {
       const DatosImagenes = await respuestaImagenes.json()
       if (DatosImagenes.Éxito && DatosImagenes.Datos) {
@@ -147,7 +147,7 @@ function renderizarProducto() {
   const btnFloat = document.querySelector('.Botón_Lista');
   if (btnFloat && window.Lista_Deseos) {
     // 1) Le damos el ID del producto 
-    btnFloat.dataset.productoId = productoActual.ID_Producto;
+    btnFloat.dataset.Producto_ID = productoActual.ID_Producto;
 
     // 2) Actualizamos visual (contador y corazones activos) 
     Lista_Deseos.Actualizar_Contador();
@@ -160,7 +160,7 @@ function renderizarProducto() {
   const btnLista = document.querySelector('.Botón_Lista');
   if (btnLista && window.Lista_Deseos) {
     // 1) asignamos el ID al botón (útil si en un futuro lo necesitas)
-    btnLista.dataset.productoId = productoActual.ID_Producto;
+    btnLista.dataset.Producto_ID = productoActual.ID_Producto;
 
     // 2) al renderizar, comprobamos si ya está en deseos y marcamos
     const yaEnDeseos = Lista_Deseos.Artículos.some(
@@ -524,13 +524,13 @@ function actualizarImagenes() {
   // 4. Renderizar miniaturas
   const contenedorMiniaturas = document.querySelector(".Miniaturas_Producto");
   contenedorMiniaturas.innerHTML = "";
-  imgs.slice(0, 4).forEach((imagen, index) => {
+  imgs.slice(0, 4).forEach((Imagen, index) => {
     const miniatura = document.createElement("div");
     miniatura.className = `Miniatura ${index === 0 ? "Activo" : ""}`;
     miniatura.innerHTML = `
       <img
-        src="${imagen.URL}"
-        alt="${imagen.Alt || productoActual.Nombre}"
+        src="${Imagen.URL}"
+        alt="${Imagen.Alt || productoActual.Nombre}"
       >
     `;
     contenedorMiniaturas.appendChild(miniatura);
@@ -795,10 +795,10 @@ function renderizarProductosRelacionados(productos) {
   })
 }
 
-async function cargarYRenderizarCompradosJuntos(idProducto) {
+async function cargarYRenderizarCompradosJuntos(ID_Producto) {
   try {
     // 1) Traer los IDs de "comprados juntos"
-    const resp = await fetch(`${API_BASE}/api/productos/${idProducto}/compradosjuntos`);
+    const resp = await fetch(`${API_BASE}/api/productos/${ID_Producto}/compradosjuntos`);
     if (!resp.ok) return;
     const json = await resp.json();
     if (!json.Éxito) return;
@@ -1172,14 +1172,14 @@ document.addEventListener("DOMContentLoaded", () => {
         ? `${productoActual.Nombre} – ${nombreVariante}`
         : productoActual.Nombre;
 
-      const imagen = document.querySelector('.Imagen_Principal img')?.src || '';
+      const Imagen = document.querySelector('.Imagen_Principal img')?.src || '';
       const textoPrecio = document.querySelector('.Precio_Producto .Precio_Actual').textContent;
       const precio = parseFloat(textoPrecio.replace(/[^0-9.,]/g, '').replace(',', '.')) || 0;
 
       window.Carrito.Agregar_Elemento(
         nombreCompleto,
         precio,
-        imagen,
+        Imagen,
         Cantidad
       );
     }, true);

@@ -2,15 +2,15 @@ const { pool } = require('../configuraciones/configuraciones_bd');
 
 /**
  * Inserta una nueva reseña para un producto
- * @param {{ idProducto: number, ID_Usuario: number, valoracion: number }} Datos
+ * @param {{ ID_Producto: number, ID_Usuario: number, valoracion: number }} Datos
  * @returns {Promise<void>}
  */
-async function insertarReseña({ idProducto, ID_Usuario, valoracion }) {
+async function insertarReseña({ ID_Producto, ID_Usuario, valoracion }) {
   try {
     await pool.query(
       `INSERT INTO "RESEÑAS" ("ID_Producto", "ID_Usuario", "Valoración")
        VALUES ($1, $2, $3)`,
-      [idProducto, ID_Usuario, valoracion]
+      [ID_Producto, ID_Usuario, valoracion]
     );
   } catch (error) {
     console.error('Error al insertar reseña:', error);
@@ -20,10 +20,10 @@ async function insertarReseña({ idProducto, ID_Usuario, valoracion }) {
 
 /**
  * Obtiene el promedio y total de reseñas para un producto
- * @param {number} idProducto
+ * @param {number} ID_Producto
  * @returns {Promise<{ promedio: number, total: number }>}
  */
-async function obtenerPromedioYTotal(idProducto) {
+async function obtenerPromedioYTotal(ID_Producto) {
   try {
     const Resultado = await pool.query(
       `SELECT
@@ -31,7 +31,7 @@ async function obtenerPromedioYTotal(idProducto) {
          COUNT(*)                           AS total
        FROM "RESEÑAS"
        WHERE "ID_Producto" = $1`,
-      [idProducto]
+      [ID_Producto]
     );
     const row = Resultado.rows[0] || {};
     return {
@@ -46,10 +46,10 @@ async function obtenerPromedioYTotal(idProducto) {
 
 /**
  * Obtiene todas las reseñas de un producto, con datos de usuario
- * @param {number} idProducto
+ * @param {number} ID_Producto
  * @returns {Promise<Array>}
  */
-async function obtenerReseñasPorProducto(idProducto) {
+async function obtenerReseñasPorProducto(ID_Producto) {
   try {
     const Resultado = await pool.query(
       `SELECT
@@ -63,7 +63,7 @@ async function obtenerReseñasPorProducto(idProducto) {
          ON r."ID_Usuario" = u."ID_Usuario"
        WHERE r."ID_Producto" = $1
        ORDER BY r."Fecha_Creación" DESC`,
-      [idProducto]
+      [ID_Producto]
     );
     return Resultado.rows;
   } catch (error) {
@@ -74,18 +74,18 @@ async function obtenerReseñasPorProducto(idProducto) {
 
 /**
  * Obtiene la reseña de un usuario en un producto (si existe)
- * @param {number} idProducto
+ * @param {number} ID_Producto
  * @param {number} ID_Usuario
  * @returns {Promise<{ valoracion: number }|null>}
  */
-async function obtenerCalificacionUsuario(idProducto, ID_Usuario) {
+async function obtenerCalificacionUsuario(ID_Producto, ID_Usuario) {
   try {
     const Resultado = await pool.query(
       `SELECT "Valoración" AS valoracion
        FROM "RESEÑAS"
        WHERE "ID_Producto" = $1
          AND "ID_Usuario"  = $2`,
-      [idProducto, ID_Usuario]
+      [ID_Producto, ID_Usuario]
     );
     return Resultado.rows[0] || null;
   } catch (error) {

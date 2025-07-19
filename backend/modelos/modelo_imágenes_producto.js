@@ -1,15 +1,12 @@
 const { pool } = require("../configuraciones/configuraciones_bd");
 
-/**
- * Modelo para gestionar las imágenes de producto en PostgreSQL
- */
-const ModeloImagenesProducto = {
+const Modelo_Imágenes_Producto = {
   /**
-   * Obtiene todas las imágenes de un producto específico
-   * @param {number} idProducto
+   * Obtener todas las imágenes de un producto específico
+   * @param {number} ID_Producto
    * @returns {Promise<Array>}
    */
-  async obtenerPorProducto(idProducto) {
+  async Obtener_Por_Producto(ID_Producto) {
     try {
       const Resultado = await pool.query(
         `SELECT
@@ -27,21 +24,21 @@ const ModeloImagenesProducto = {
          ORDER BY
            "Principal" DESC,
            "Orden" ASC`,
-        [idProducto]
+        [ID_Producto]
       );
       return Resultado.rows;
     } catch (error) {
-      console.error("Error en modelo obtenerPorProducto:", error);
+      console.error("Error en modelo Obtener_Por_Producto:", error);
       throw error;
     }
   },
 
   /**
-   * Obtiene la imagen principal de un producto
-   * @param {number} idProducto
+   * Obtener la imagen principal de un producto
+   * @param {number} ID_Producto
    * @returns {Promise<Object|null>}
    */
-  async obtenerPrincipal(idProducto) {
+  async obtenerPrincipal(ID_Producto) {
     try {
       const Resultado = await pool.query(
         `SELECT
@@ -58,7 +55,7 @@ const ModeloImagenesProducto = {
            "ID_Producto" = $1
            AND "Principal" = TRUE
          LIMIT 1`,
-        [idProducto]
+        [ID_Producto]
       );
       return Resultado.rows[0] || null;
     } catch (error) {
@@ -68,7 +65,7 @@ const ModeloImagenesProducto = {
   },
 
   /**
-   * Inserta una nueva imagen de producto y devuelve su ID.
+   * Insertar una nueva imagen de producto y devolver su ID.
    * @param {Object} Datos
    * @returns {Promise<number>}
    */
@@ -88,12 +85,12 @@ const ModeloImagenesProducto = {
 
     const Columnas      = Claves.map(k => `"${k}"`).join(", ");
     const Valores       = Claves.map(k => Datos[k]);
-    const placeholders = Valores.map((_, i) => `$${i + 1}`).join(", ");
+    const Marcadores = Valores.map((_, i) => `$${i + 1}`).join(", ");
 
     try {
       const Resultado = await pool.query(
         `INSERT INTO "IMÁGENES_PRODUCTO" (${Columnas})
-         VALUES (${placeholders})
+         VALUES (${Marcadores})
          RETURNING "ID_Imagen"`,
         Valores
       );
@@ -105,28 +102,28 @@ const ModeloImagenesProducto = {
   },
 
   /**
-   * Actualiza una imagen de producto por su ID.
-   * @param {number} idImagen
+   * Actualizar una imagen de producto por su ID
+   * @param {number} ID_Imagen
    * @param {Object} Cambios
-   * @returns {Promise<number>} filas afectadas
+   * @returns {Promise<number>}
    */
-  async Actualizar(idImagen, Cambios) {
+  async Actualizar(ID_Imagen, Cambios) {
     const Permitidos = ["URL", "Alt", "Principal", "Orden"];
     const Claves = Object.keys(Cambios).filter(k => Permitidos.includes(k));
     if (Claves.length === 0) {
       throw new Error("No se proporcionaron campos válidos para actualizar la imagen de producto");
     }
 
-    const sets = Claves
+    const Conjuntos = Claves
       .map((k, i) => `"${k}" = $${i + 1}`)
       .join(", ");
     const Valores = Claves.map(k => Cambios[k]);
-    Valores.push(idImagen); // último placeholder
+    Valores.push(ID_Imagen);
 
     try {
       const Resultado = await pool.query(
         `UPDATE "IMÁGENES_PRODUCTO"
-         SET ${sets}
+         SET ${Conjuntos}
          WHERE "ID_Imagen" = $${Valores.length}`,
         Valores
       );
@@ -138,16 +135,16 @@ const ModeloImagenesProducto = {
   },
 
   /**
-   * Elimina una imagen de producto por su ID.
-   * @param {number} idImagen
-   * @returns {Promise<number>} filas afectadas
+   * Eliminar una imagen de producto por su ID
+   * @param {number} ID_Imagen
+   * @returns {Promise<number>}
    */
-  async Eliminar(idImagen) {
+  async Eliminar(ID_Imagen) {
     try {
       const Resultado = await pool.query(
         `DELETE FROM "IMÁGENES_PRODUCTO"
          WHERE "ID_Imagen" = $1`,
-        [idImagen]
+        [ID_Imagen]
       );
       return Resultado.rowCount;
     } catch (error) {
@@ -157,4 +154,4 @@ const ModeloImagenesProducto = {
   }
 };
 
-module.exports = ModeloImagenesProducto;
+module.exports = Modelo_Imágenes_Producto;

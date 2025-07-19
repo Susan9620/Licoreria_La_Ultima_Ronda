@@ -96,12 +96,12 @@ class ModeloUsuarios {
 
     const Columnas = Claves.map(k => `"${k}"`).join(', ');
     const Valores = Claves.map(k => Datos[k]);
-    const placeholders = Valores.map((_, i) => `$${i + 1}`).join(', ');
+    const Marcadores = Valores.map((_, i) => `$${i + 1}`).join(', ');
 
     try {
       const Resultado = await pool.query(
         `INSERT INTO "USUARIOS" (${Columnas})
-         VALUES (${placeholders})
+         VALUES (${Marcadores})
          RETURNING "ID_Usuario"`,
         Valores
       );
@@ -133,7 +133,7 @@ class ModeloUsuarios {
     const Claves = Object.keys(Cambios).filter(k => Permitidos.includes(k));
     if (Claves.length === 0) return 0;
 
-    const sets = Claves
+    const Conjuntos = Claves
       .map((k, i) => `"${k}" = $${i + 1}`)
       .join(', ');
     const Valores = Claves.map(k => Cambios[k]);
@@ -142,7 +142,7 @@ class ModeloUsuarios {
     try {
       const Resultado = await pool.query(
         `UPDATE "USUARIOS"
-           SET ${sets}
+           SET ${Conjuntos}
          WHERE "ID_Usuario" = $${Valores.length}`,
         Valores
       );

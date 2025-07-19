@@ -44,9 +44,9 @@ class ControladorImagenesCarrusel {
         });
       }
 
-      const imagen = await modeloImagenesCarrusel.Obtener_Imagen_ID(id);
+      const Imagen = await modeloImagenesCarrusel.Obtener_Imagen_ID(id);
 
-      if (!imagen) {
+      if (!Imagen) {
         return res.status(404).json({
           Éxito: false,
           Mensaje: `No se encontró la imagen con ID ${id}`
@@ -56,7 +56,7 @@ class ControladorImagenesCarrusel {
       res.status(200).json({
         Éxito: true,
         Mensaje: 'Imagen del carrusel obtenida correctamente',
-        Datos: imagen
+        Datos: Imagen
       });
     } catch (error) {
       console.error(`Error al obtener imagen del carrusel:`, error);
@@ -74,7 +74,7 @@ class ControladorImagenesCarrusel {
       return res.status(201).json({
         Éxito: true,
         Mensaje: 'Imagen de carrusel creada correctamente',
-        Datos: { idImagen: id }
+        Datos: { ID_Imagen: id }
       });
     } catch (error) {
       console.error('Error al crear imagen de carrusel:', error);

@@ -3,10 +3,10 @@ const modeloImagenesProducto = require("../modelos/modelo_imágenes_producto")
 /**
  * Obtener todas las imágenes de un producto específico
  */
-const obtenerPorProducto = async (req, res) => {
+const Obtener_Por_Producto = async (req, res) => {
   try {
-    const { idProducto } = req.params
-    const imagenes = await modeloImagenesProducto.obtenerPorProducto(idProducto)
+    const { ID_Producto } = req.params
+    const imagenes = await modeloImagenesProducto.Obtener_Por_Producto(ID_Producto)
 
     res.json({
       Éxito: true,
@@ -32,10 +32,10 @@ const obtenerPorProducto = async (req, res) => {
  */
 const obtenerPrincipal = async (req, res) => {
   try {
-    const { idProducto } = req.params
-    const imagen = await modeloImagenesProducto.obtenerPrincipal(idProducto)
+    const { ID_Producto } = req.params
+    const Imagen = await modeloImagenesProducto.obtenerPrincipal(ID_Producto)
 
-    if (!imagen) {
+    if (!Imagen) {
       return res.status(404).json({
         Éxito: false,
         Mensaje: "Imagen principal no encontrada",
@@ -44,7 +44,7 @@ const obtenerPrincipal = async (req, res) => {
 
     res.json({
       Éxito: true,
-      Datos: imagen,
+      Datos: Imagen,
       Mensaje: "Imagen principal obtenida exitosamente",
     })
   } catch (error) {
@@ -71,7 +71,7 @@ const crearImagenProducto = async (req, res) => {
     return res.status(201).json({
       Éxito: true,
       Mensaje: "Imagen de producto creada correctamente",
-      Datos: { idImagen: id }
+      Datos: { ID_Imagen: id }
     })
   } catch (error) {
     console.error("Error al crear imagen de producto:", error)
@@ -122,7 +122,7 @@ const eliminarImagenProducto = async (req, res) => {
 }
 
 module.exports = {
-  obtenerPorProducto,
+  Obtener_Por_Producto,
   obtenerPrincipal,
   crearImagenProducto,
   actualizarImagenProducto,

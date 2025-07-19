@@ -79,12 +79,12 @@ class Modelo_Imágenes_Carrusel {
 
     const Columnas = Claves.map(k => `"${k}"`).join(', ');
     const Valores = Claves.map(k => Datos[k]);
-    const placeholders = Valores.map((_, i) => `$${i + 1}`).join(', ');
+    const Marcadores = Valores.map((_, i) => `$${i + 1}`).join(', ');
 
     try {
       const Resultado = await pool.query(
         `INSERT INTO "IMÁGENES_CARRUSEL" (${Columnas})
-         VALUES (${placeholders})
+         VALUES (${Marcadores})
          RETURNING "ID_Imagen"`,
         Valores
       );
@@ -96,12 +96,12 @@ class Modelo_Imágenes_Carrusel {
   }
 
   /**
-   * Actualiza los campos de una imagen de carrusel dado su ID.
-   * @param {number} idImagen
-   * @param {Object} Cambios - Campos a actualizar
-   * @returns {Promise<number>} número de filas afectadas
+   * Actualizar los campos de una imagen de carrusel dado su ID
+   * @param {number} ID_Imagen
+   * @param {Object} Cambios
+   * @returns {Promise<number>}
    */
-  async Actualizar(idImagen, Cambios) {
+  async Actualizar(ID_Imagen, Cambios) {
     const Permitidos = [
       'Título',
       'Subtítulo',
@@ -115,42 +115,41 @@ class Modelo_Imágenes_Carrusel {
       throw new Error('No se proporcionaron campos válidos para actualizar');
     }
 
-    const sets = Claves
+    const Conjuntos = Claves
       .map((k, i) => `"${k}" = $${i + 1}`)
       .join(', ');
     const Valores = Claves.map(k => Cambios[k]);
-    // último placeholder para el id
-    Valores.push(idImagen);
+    Valores.push(ID_Imagen);
 
     try {
       const Resultado = await pool.query(
         `UPDATE "IMÁGENES_CARRUSEL"
-         SET ${sets}
+         SET ${Conjuntos}
          WHERE "ID_Imagen" = $${Valores.length}`,
         Valores
       );
       return Resultado.rowCount;
     } catch (error) {
-      console.error(`Error al actualizar imagen ${idImagen}:`, error);
+      console.error(`Error al actualizar imagen ${ID_Imagen}:`, error);
       throw new Error('Error al actualizar la imagen de carrusel');
     }
   }
 
   /**
-   * Elimina una imagen de carrusel por su ID.
-   * @param {number} idImagen
-   * @returns {Promise<number>} número de filas afectadas
+   * Eliminar una imagen de carrusel por su ID
+   * @param {number} ID_Imagen
+   * @returns {Promise<number>}
    */
-  async Eliminar(idImagen) {
+  async Eliminar(ID_Imagen) {
     try {
       const Resultado = await pool.query(
         `DELETE FROM "IMÁGENES_CARRUSEL"
          WHERE "ID_Imagen" = $1`,
-        [idImagen]
+        [ID_Imagen]
       );
       return Resultado.rowCount;
     } catch (error) {
-      console.error(`Error al eliminar imagen ${idImagen}:`, error);
+      console.error(`Error al eliminar imagen ${ID_Imagen}:`, error);
       throw new Error('Error al eliminar la imagen de carrusel');
     }
   }

@@ -208,18 +208,18 @@ class ModeloProductos {
 
   /**
    * Actualiza Calificación y TotalReseñas de un producto
-   * @param {number} idProducto
+   * @param {number} ID_Producto
    * @param {number} promedio
    * @param {number} total
    */
-  async actualizarCalificacionYTotal(idProducto, promedio, total) {
+  async actualizarCalificacionYTotal(ID_Producto, promedio, total) {
     try {
       await pool.query(
         `UPDATE "PRODUCTOS"
            SET "Calificación" = $1,
                "TotalReseñas" = $2
          WHERE "ID_Producto" = $3`,
-        [promedio, total, idProducto]
+        [promedio, total, ID_Producto]
       );
     } catch (error) {
       console.error('Error al actualizar calificación y total de reseñas:', error);
@@ -252,12 +252,12 @@ class ModeloProductos {
 
     const Columnas = Claves.map(k => `"${k}"`).join(', ');
     const Valores = Claves.map(k => Datos[k]);
-    const placeholders = Valores.map((_, i) => `$${i + 1}`).join(', ');
+    const Marcadores = Valores.map((_, i) => `$${i + 1}`).join(', ');
 
     try {
       const Resultado = await pool.query(
         `INSERT INTO "PRODUCTOS" (${Columnas})
-         VALUES (${placeholders})
+         VALUES (${Marcadores})
          RETURNING "ID_Producto"`,
         Valores
       );
@@ -270,18 +270,18 @@ class ModeloProductos {
 
   /**
    * Actualiza un producto por su ID y devuelve filas afectadas
-   * @param {number} idProducto
+   * @param {number} ID_Producto
    * @param {Object} Cambios
    * @returns {Promise<number>}
    */
-  async Actualizar(idProducto, Cambios) {
+  async Actualizar(ID_Producto, Cambios) {
     const Campos = [];
     const Valores = [];
     Object.keys(Cambios).forEach((Clave, Índice) => {
       Campos.push(`"${Clave}" = $${Índice + 1}`);
       Valores.push(Cambios[Clave]);
     });
-    Valores.push(idProducto);
+    Valores.push(ID_Producto);
 
     try {
       const Resultado = await pool.query(
@@ -299,15 +299,15 @@ class ModeloProductos {
 
   /**
    * Elimina un producto por su ID y devuelve filas afectadas
-   * @param {number} idProducto
+   * @param {number} ID_Producto
    * @returns {Promise<number>}
    */
-  async Eliminar(idProducto) {
+  async Eliminar(ID_Producto) {
     try {
       const Resultado = await pool.query(
         `DELETE FROM "PRODUCTOS"
          WHERE "ID_Producto" = $1`,
-        [idProducto]
+        [ID_Producto]
       );
       return Resultado.rowCount;
     } catch (error) {

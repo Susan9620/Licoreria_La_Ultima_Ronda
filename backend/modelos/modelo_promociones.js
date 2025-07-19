@@ -58,12 +58,12 @@ class ModeloPromociones {
         ? JSON.stringify(Datos[k])
         : Datos[k]
     );
-    const placeholders = Valores.map((_, i) => `$${i + 1}`).join(', ');
+    const Marcadores = Valores.map((_, i) => `$${i + 1}`).join(', ');
 
     try {
       const Resultado = await pool.query(
         `INSERT INTO "PROMOCIONES" (${Columnas})
-         VALUES (${placeholders})
+         VALUES (${Marcadores})
          RETURNING "ID_Promoción"`,
         Valores
       );
@@ -95,7 +95,7 @@ class ModeloPromociones {
       throw new Error('No se proporcionaron campos válidos para actualizar la promoción');
     }
 
-    const sets = Claves
+    const Conjuntos = Claves
       .map((k, i) => `"${k}" = $${i + 1}`)
       .join(', ');
     const Valores = Claves.map(k =>
@@ -108,7 +108,7 @@ class ModeloPromociones {
     try {
       const Resultado = await pool.query(
         `UPDATE "PROMOCIONES"
-         SET ${sets}
+         SET ${Conjuntos}
          WHERE "ID_Promoción" = $${Valores.length}`,
         Valores
       );

@@ -4,11 +4,11 @@ const controladorVariantesProducto = require("../controladores/controlador_varia
 const router = express.Router()
 
 /**
- * @route   GET /api/variantes/producto/:idProducto
+ * @route   GET /api/variantes/producto/:ID_Producto
  * @desc    Obtener todas las variantes de un producto específico
  * @access  Público
  */
-router.get("/producto/:idProducto", controladorVariantesProducto.obtenerPorProducto)
+router.get("/producto/:ID_Producto", controladorVariantesProducto.Obtener_Por_Producto)
 
 /**
  * @route   GET /api/variantes/:id

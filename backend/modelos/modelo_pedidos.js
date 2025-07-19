@@ -1,11 +1,11 @@
 const { pool } = require('../configuraciones/configuraciones_bd');
 
-class ModeloPedidos {
+class Modelo_Pedidos {
   /**
-   * Crea un pedido con sus detalles, ajusta stock, y devuelve número de pedido e ID.
+   * Crear un pedido con sus detalles, ajustar stock, y devolver número de pedido e ID.
    * @param {Object} Datos
    * @param {number} Datos.ID_Usuario
-   * @param {Array<{ID_Variante:number,Cantidad:number,Precio_Unitario:number,Subtotal:number}>} Datos.items
+   * @param {Array<{ID_Variante:number,Cantidad:number,Precio_Unitario:number,Subtotal:number}>} Datos.Items
    * @param {number} Datos.Subtotal
    * @param {number} Datos.envio
    * @param {number} Datos.descuento
@@ -15,9 +15,9 @@ class ModeloPedidos {
    * @param {string} Datos.codigoPostal
    * @param {string} Datos.instruccionesEnvio
    */
-  async crearConDetalles({
+  async Crear_Con_Detalles({
     ID_Usuario,
-    items,
+    Items,
     Subtotal,
     envio,
     descuento,
@@ -62,7 +62,7 @@ class ModeloPedidos {
       const ID_Pedido = insertPedido.rows[0].ID_Pedido;
 
       // 3) Por cada línea: descontar stock y guardar detalle
-      for (const { ID_Variante, Cantidad, Precio_Unitario, Subtotal: sub } of items) {
+      for (const { ID_Variante, Cantidad, Precio_Unitario, Subtotal: sub } of Items) {
         const updateStock = await client.query(
           `UPDATE "VARIANTES_PRODUCTO"
              SET "Stock" = "Stock" - $1
@@ -86,7 +86,7 @@ class ModeloPedidos {
       return { numeroPedido, ID_Pedido };
     } catch (err) {
       await client.query('ROLLBACK');
-      console.error('Error en crearConDetalles:', err);
+      console.error('Error en Crear_Con_Detalles:', err);
       throw err;
     } finally {
       client.release();
@@ -135,7 +135,7 @@ class ModeloPedidos {
   /**
    * Obtiene un pedido con detalle e información de productos, aliased a camelCase.
    * @param {number} ID_Pedido
-   * @returns {Promise<{pedido:Object, items:Array}>}
+   * @returns {Promise<{pedido:Object, Items:Array}>}
    */
   async obtenerConDetalles(ID_Pedido) {
     try {
@@ -172,7 +172,7 @@ class ModeloPedidos {
            dp."Cantidad"        AS "Cantidad",
            dp."Precio_Unitario" AS "Precio_Unitario",
            dp."Subtotal"        AS "Subtotal",
-           vp."ID_Producto"     AS "idProducto",
+           vp."ID_Producto"     AS "ID_Producto",
            prod."Nombre"        AS "nombreProducto",
            vp."Nombre_Variante" AS "nombreVariante",
            img."URL"            AS "imagenUrl"
@@ -192,7 +192,7 @@ class ModeloPedidos {
         [ID_Pedido]
       );
 
-      return { pedido, items: itemsRows };
+      return { pedido, Items: itemsRows };
     } catch (error) {
       console.error('Error en obtenerConDetalles:', error);
       throw error;
@@ -204,7 +204,7 @@ class ModeloPedidos {
    * @param {number} ID_Usuario
    * @returns {Promise<Array>}
    */
-  async obtenerPorUsuario(ID_Usuario) {
+  async Obtener_Por_Usuario(ID_Usuario) {
     try {
       const { rows } = await pool.query(
         `SELECT
@@ -220,7 +220,7 @@ class ModeloPedidos {
       );
       return rows;
     } catch (error) {
-      console.error('Error en obtenerPorUsuario:', error);
+      console.error('Error en Obtener_Por_Usuario:', error);
       throw error;
     }
   }
@@ -271,4 +271,4 @@ class ModeloPedidos {
   }
 }
 
-module.exports = new ModeloPedidos();
+module.exports = new Modelo_Pedidos();

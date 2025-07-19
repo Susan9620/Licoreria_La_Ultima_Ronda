@@ -117,10 +117,10 @@ const Gestión_Pedidos = {
 
             // 1️⃣ Asigna el pedido y sus items al estado
             this.Estado.Pedido_Actual = json.Datos.pedido;
-            this.Estado.Pedido_Actual.items = json.Datos.items;
+            this.Estado.Pedido_Actual.Items = json.Datos.Items;
 
             console.log('📝 Datos pedidos completos:', json.Datos);
-            console.log('📝 Detalle de items (completo):', JSON.stringify(json.Datos.items, null, 2));
+            console.log('📝 Detalle de items (completo):', JSON.stringify(json.Datos.Items, null, 2));
             console.log('📋 JSON recibido:', json);
             console.log('📝 Pedido completo (campos):', JSON.stringify(json.Datos.pedido, null, 2));
 
@@ -227,12 +227,12 @@ const Gestión_Pedidos = {
     // Renderizar los productos comprados
     Renderizar_Productos: function () {
         const pedido = this.Estado.Pedido_Actual;
-        if (!pedido || !pedido.items) return;
+        if (!pedido || !pedido.Items) return;
 
         const cont = document.getElementById('Lista_Productos');
         cont.innerHTML = '';
 
-        pedido.items.forEach(item => {
+        pedido.Items.forEach(item => {
             const urlImg = item.imagenUrl || '/imagenes/producto-placeholder.jpg';
             const baseName = item.nombreProducto;
             // ❗️ Este campo debe venir de tu API; aquí probamos distintos nombres
@@ -435,10 +435,10 @@ const Gestión_Pedidos = {
         document.getElementById('Correo_Electrónico_Cliente').textContent =
             this.Estado.Datos_Sesión.Correo_Electrónico || 'No Disponible';
 
-        // Productos (items)
+        // Productos (Items)
         const tabla = document.getElementById('Factura_Artículos');
         tabla.innerHTML = '';
-        p.items.forEach(item => {
+        p.Items.forEach(item => {
             const precio = parseFloat(item.Precio_Unitario) || 0;
             const subtotalProducto = precio * item.Cantidad;
 
@@ -497,8 +497,8 @@ const Gestión_Pedidos = {
                 return;
             }
 
-            // 3) Si no trae items, cargarlos desde la API
-            if (!Array.isArray(p.items) || p.items.length === 0) {
+            // 3) Si no trae Items, cargarlos desde la API
+            if (!Array.isArray(p.Items) || p.Items.length === 0) {
                 const token = localStorage.getItem('token');
                 const resp = await fetch(`${API_BASE}/api/pedidos/${orden}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
@@ -507,10 +507,10 @@ const Gestión_Pedidos = {
                 if (!resp.ok || !json.Éxito) {
                     throw new Error(json.Mensaje || 'Error cargando detalles del pedido');
                 }
-                // json.Datos.pedido  y json.Datos.items
+                // json.Datos.pedido  y json.Datos.Items
                 p = {
                     ...json.Datos.pedido,
-                    items: json.Datos.items,
+                    Items: json.Datos.Items,
                     Subtotal: json.Datos.pedido.Subtotal,
                     envio: json.Datos.pedido.envio,
                     descuento: json.Datos.pedido.descuento
