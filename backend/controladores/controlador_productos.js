@@ -26,7 +26,7 @@ class ControladorProductos {
       res.status(500).json({
         Éxito: false,
         Mensaje: 'Error al obtener los productos destacados',
-        Error: process.env.NODE_ENV === 'development' ? error.message : null
+        error: process.env.NODE_ENV === 'development' ? error.message : null
       });
     }
   }
@@ -48,7 +48,7 @@ class ControladorProductos {
       res.status(500).json({
         Éxito: false,
         Mensaje: 'Error al obtener todos los productos',
-        Error: process.env.NODE_ENV === 'development' ? error.message : null
+        error: process.env.NODE_ENV === 'development' ? error.message : null
       });
     }
   }
@@ -79,7 +79,7 @@ class ControladorProductos {
       res.status(500).json({
         Éxito: false,
         Mensaje: 'Error al obtener el producto',
-        Error: process.env.NODE_ENV === 'development' ? error.message : null
+        error: process.env.NODE_ENV === 'development' ? error.message : null
       });
     }
   }

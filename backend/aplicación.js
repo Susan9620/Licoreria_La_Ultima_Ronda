@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { configurarServidor } = require('./configuraciones/configuraciones_servidor');
 const { testConnection } = require('./configuraciones/configuraciones_bd');
-const { notFoundHandler, errorHandler: Error_Manajador } = require('./middleware/middleware_error');
+const { notFoundHandler, errorHandler } = require('./middleware/middleware_error');
 const fs = require('fs');
 const path = require('path');
 
@@ -88,6 +88,6 @@ if (process.env.NODE_ENV === 'production') {
 app.use(notFoundHandler);
 
 // Middleware para manejar errores
-app.use(Error_Manajador);
+app.use(errorHandler);
 
 module.exports = app;

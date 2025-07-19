@@ -21,7 +21,7 @@ class ControladorPromociones {
       res.status(500).json({
         Éxito: false,
         Mensaje: 'Error al obtener las promociones',
-        Error: process.env.NODE_ENV === 'development' ? error.message : null
+        error: process.env.NODE_ENV === 'development' ? error.message : null
       });
     }
   }

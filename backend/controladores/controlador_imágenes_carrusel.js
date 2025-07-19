@@ -23,7 +23,7 @@ class ControladorImagenesCarrusel {
       res.status(500).json({
         Éxito: false,
         Mensaje: 'Error al obtener las imágenes del carrusel',
-        Error: process.env.NODE_ENV === 'development' ? error.message : null
+        error: process.env.NODE_ENV === 'development' ? error.message : null
       });
     }
   }
@@ -63,7 +63,7 @@ class ControladorImagenesCarrusel {
       res.status(500).json({
         Éxito: false,
         Mensaje: 'Error al obtener la imagen del carrusel',
-        Error: process.env.NODE_ENV === 'development' ? error.message : null
+        error: process.env.NODE_ENV === 'development' ? error.message : null
       });
     }
   }

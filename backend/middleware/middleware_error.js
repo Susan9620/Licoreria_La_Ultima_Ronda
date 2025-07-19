@@ -5,9 +5,9 @@
  * @param {Function} next - Función para continuar al siguiente middleware
  */
 const notFoundHandler = (req, res, next) => {
-  const Error = new Error(`Ruta no encontrada: ${req.originalUrl}`);
+  const error = new Error(`Ruta no encontrada: ${req.originalUrl}`);
   res.status(404);
-  next(Error);
+  next(error);
 };
 
 /**
@@ -17,13 +17,13 @@ const notFoundHandler = (req, res, next) => {
  * @param {Object} res - Objeto de respuesta
  * @param {Function} next - Función para continuar al siguiente middleware
  */
-const Error_Manejador = (err, req, res, next) => {
+const errorHandler = (err, req, res, next) => {
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   
   // Manejar errores específicos de base de datos
   if (err.code === 'ER_DUP_ENTRY') {
     return res.status(400).json({
-      Error: 'Entrada duplicada',
+      error: 'Entrada duplicada',
       Mensaje: 'Ya existe un registro con esa información'
     });
   }
@@ -31,7 +31,7 @@ const Error_Manejador = (err, req, res, next) => {
   // Manejar errores de validación
   if (err.name === 'ValidationError') {
     return res.status(422).json({
-      Error: 'Error de validación',
+      error: 'Error de validación',
       Mensaje: err.message,
       detalles: err.errors
     });
@@ -40,7 +40,7 @@ const Error_Manejador = (err, req, res, next) => {
   // Manejar errores de JWT
   if (err.name === 'JsonWebTokenError') {
     return res.status(401).json({
-      Error: 'Error de autenticación',
+      error: 'Error de autenticación',
       Mensaje: 'Token inválido o mal formado'
     });
   }
@@ -48,7 +48,7 @@ const Error_Manejador = (err, req, res, next) => {
   // Manejar errores de permisos
   if (err.name === 'NotAuthorizedError') {
     return res.status(403).json({
-      Error: 'Acceso prohibido',
+      error: 'Acceso prohibido',
       Mensaje: 'No tiene permisos para realizar esta acción'
     });
   }
@@ -60,7 +60,7 @@ const Error_Manejador = (err, req, res, next) => {
 
   // Respuesta de error genérica
   res.status(statusCode).json({
-    Error: err.name || 'Error interno',
+    error: err.name || 'Error interno',
     Mensaje: err.message || 'Ha ocurrido un error inesperado',
     ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
   });
@@ -68,5 +68,5 @@ const Error_Manejador = (err, req, res, next) => {
 
 module.exports = {
   notFoundHandler,
-  Error_Manejador: Error_Manejador
+  errorHandler
 };
