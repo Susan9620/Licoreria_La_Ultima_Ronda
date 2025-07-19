@@ -5,7 +5,6 @@ class ControladorPedidos {
    * POST /api/pedidos
    */
   async crearPedido(req, res) {
-    console.log('🔍 [PUT /admin/pedidos/:id/estado] req.body =', req.body);
     try {
       const ID_Usuario = req.usuario.id;
 
@@ -145,7 +144,7 @@ class ControladorPedidos {
       }
 
       // Llamada al modelo
-      const filasAfectadas = await modeloPedidos.actualizarEstado(ID_Pedido, Nuevo_Estado);
+      const filasAfectadas = await modeloPedidos.Actualizar_Estado(ID_Pedido, Nuevo_Estado);
       if (filasAfectadas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Pedido no encontrado.' });
       }
