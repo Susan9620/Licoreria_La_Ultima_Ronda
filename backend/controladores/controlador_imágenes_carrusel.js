@@ -9,9 +9,9 @@ class ControladorImagenesCarrusel {
    * @param {Object} req - Objeto de solicitud Express
    * @param {Object} res - Objeto de respuesta Express
    */
-  async obtenerImagenesCarrusel(req, res) {
+  async Obtener_Imágenes_Carrusel(req, res) {
     try {
-      const imagenes = await modeloImagenesCarrusel.obtenerImagenesCarrusel();
+      const imagenes = await modeloImagenesCarrusel.Obtener_Imágenes_Carrusel();
 
       res.status(200).json({
         Éxito: true,
@@ -33,7 +33,7 @@ class ControladorImagenesCarrusel {
    * @param {Object} req - Objeto de solicitud Express
    * @param {Object} res - Objeto de respuesta Express
    */
-  async obtenerImagenPorId(req, res) {
+  async Obtener_Imagen_ID(req, res) {
     try {
       const id = parseInt(req.params.id);
 
@@ -44,7 +44,7 @@ class ControladorImagenesCarrusel {
         });
       }
 
-      const imagen = await modeloImagenesCarrusel.obtenerImagenPorId(id);
+      const imagen = await modeloImagenesCarrusel.Obtener_Imagen_ID(id);
 
       if (!imagen) {
         return res.status(404).json({
@@ -116,7 +116,7 @@ class ControladorImagenesCarrusel {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
 
-      const Filas = await modeloImagenesCarrusel.eliminar(id);
+      const Filas = await modeloImagenesCarrusel.Eliminar(id);
       if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Imagen no encontrada.' });
       }

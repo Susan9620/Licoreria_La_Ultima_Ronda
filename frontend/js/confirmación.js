@@ -93,18 +93,18 @@ const Gestión_Pedidos = {
     // Cargar el pedido actual desde localStorage
     async Cargar_Pedido_Actual() {
         const params = new URLSearchParams(window.location.search);
-        const idPedido = params.get('idPedido');
+        const ID_Pedido = params.get('ID_Pedido');
         const token = localStorage.getItem('token');
 
-        console.log('⏳ Cargar_Pedido_Actual → idPedido:', idPedido, '— token existe? →', !!token);
+        console.log('⏳ Cargar_Pedido_Actual → ID_Pedido:', ID_Pedido, '— token existe? →', !!token);
 
-        if (!idPedido || !token) {
+        if (!ID_Pedido || !token) {
             // si no hay ID o token, redirigimos al login o home
             return window.location.href = '/html/login.html';
         }
 
         try {
-            const resp = await fetch(`${API_BASE}/api/pedidos/${idPedido}`, {
+            const resp = await fetch(`${API_BASE}/api/pedidos/${ID_Pedido}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + token
@@ -207,7 +207,7 @@ const Gestión_Pedidos = {
         document.getElementById('Método_Pago').textContent = txtMP;
 
         // Totales
-        const sub = parseFloat(p.subtotal) || 0;
+        const sub = parseFloat(p.Subtotal) || 0;
         const env = parseFloat(p.envio) || 0;
         const tot = parseFloat(p.Total) || 0;
         const desc = parseFloat(p.descuento) || 0;
@@ -245,8 +245,8 @@ const Gestión_Pedidos = {
                 ? `${baseName} – ${variante}`
                 : baseName;
 
-            const cantidad = item.cantidad;
-            const precio = parseFloat(item.precioUnitario) || 0;
+            const Cantidad = item.Cantidad;
+            const precio = parseFloat(item.Precio_Unitario) || 0;
 
             const el = document.createElement('div');
             el.className = 'Producto_Elemento';
@@ -258,11 +258,11 @@ const Gestión_Pedidos = {
                 <div class="Información_Producto">
                     <div class="Nombre_Producto">${nombre}</div>
                     <div class="Detalle_Producto">
-                    <span class="Cantidad_Producto">Cantidad: ${cantidad}</span>
+                    <span class="Cantidad_Producto">Cantidad: ${Cantidad}</span>
                     </div>
                 </div>
                 <div class="Precio_Producto">
-                    $${(precio * cantidad).toFixed(2)}
+                    $${(precio * Cantidad).toFixed(2)}
                 </div>
             `;
             cont.appendChild(el);
@@ -336,7 +336,7 @@ const Gestión_Pedidos = {
         tabla.innerHTML = '';
 
         this.Estado.Historial_Pedidos.forEach(p => {
-            const idOrden = p.idPedido || p.numeroPedido;
+            const idOrden = p.ID_Pedido || p.numeroPedido;
             const totalVal = parseFloat(p.Total) || 0;
             const fecha = new Date(p.fecha);
             const fechaFormateada = fecha.toLocaleDateString('es-ES', this.Configuración.Fecha_Corta);
@@ -439,8 +439,8 @@ const Gestión_Pedidos = {
         const tabla = document.getElementById('Factura_Artículos');
         tabla.innerHTML = '';
         p.items.forEach(item => {
-            const precio = parseFloat(item.precioUnitario) || 0;
-            const subtotalProducto = precio * item.cantidad;
+            const precio = parseFloat(item.Precio_Unitario) || 0;
+            const subtotalProducto = precio * item.Cantidad;
 
             // Aquí concatenamos variante si existe
             const nombre = item.nombreVariante
@@ -450,7 +450,7 @@ const Gestión_Pedidos = {
             const fila = document.createElement('tr');
             fila.innerHTML = `
               <td>${nombre}</td>
-              <td>${item.cantidad}</td>
+              <td>${item.Cantidad}</td>
               <td>$${precio.toFixed(2)}</td>
               <td>$${subtotalProducto.toFixed(2)}</td>
             `;
@@ -458,13 +458,13 @@ const Gestión_Pedidos = {
         });
 
         // Cálculos de totales
-        const subtotal = parseFloat(p.subtotal) || 0;
+        const Subtotal = parseFloat(p.Subtotal) || 0;
         const envio = parseFloat(p.envio) || 0;
         const descuento = parseFloat(p.descuento) || 0;
-        const iva = subtotal * 0.15;
-        const totalConIVA = subtotal + iva + envio - descuento;
+        const iva = Subtotal * 0.15;
+        const totalConIVA = Subtotal + iva + envio - descuento;
 
-        document.getElementById('Subtotal_Factura').textContent = `$${subtotal.toFixed(2)}`;
+        document.getElementById('Subtotal_Factura').textContent = `$${Subtotal.toFixed(2)}`;
         document.getElementById('IVA_Factura').textContent = `$${iva.toFixed(2)}`;
         document.getElementById('Envío_Factura').textContent = envio > 0 ? `$${envio.toFixed(2)}` : 'Gratis';
         document.getElementById('Total_Factura').textContent = `$${totalConIVA.toFixed(2)}`;
@@ -484,14 +484,14 @@ const Gestión_Pedidos = {
         try {
             // 1) Si coincide con el pedido actual
             const actual = this.Estado.Pedido_Actual;
-            const actualId = actual?.idPedido || actual?.numeroPedido;
+            const actualId = actual?.ID_Pedido || actual?.numeroPedido;
             if (actual && actualId == orden) {
                 this.Mostrar_Modal_Factura();
                 return;
             }
 
             // 2) Buscar en el historial
-            let p = this.Estado.Historial_Pedidos.find(p => (p.idPedido || p.numeroPedido) == orden);
+            let p = this.Estado.Historial_Pedidos.find(p => (p.ID_Pedido || p.numeroPedido) == orden);
             if (!p) {
                 Mostrar_Notificación('No se pudo encontrar la factura solicitada', 'Error');
                 return;
@@ -511,7 +511,7 @@ const Gestión_Pedidos = {
                 p = {
                     ...json.Datos.pedido,
                     items: json.Datos.items,
-                    subtotal: json.Datos.pedido.subtotal,
+                    Subtotal: json.Datos.pedido.Subtotal,
                     envio: json.Datos.pedido.envio,
                     descuento: json.Datos.pedido.descuento
                 };

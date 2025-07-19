@@ -1,14 +1,11 @@
 const { pool } = require('../configuraciones/configuraciones_bd');
 
-/**
- * Modelo para gestionar las imágenes del carrusel en PostgreSQL
- */
-class ModeloImagenesCarrusel {
+class Modelo_Imágenes_Carrusel {
   /**
-   * Obtiene todas las imágenes activas del carrusel ordenadas por el campo Orden
-   * @returns {Promise<Array>} - Lista de imágenes del carrusel
+   * Obtener todas las imágenes activas del carrusel ordenadas
+   * @returns {Promise<Array>}
    */
-  async obtenerImagenesCarrusel() {
+  async Obtener_Imágenes_Carrusel() {
     try {
       const Resultado = await pool.query(`
         SELECT 
@@ -33,11 +30,11 @@ class ModeloImagenesCarrusel {
   }
 
   /**
-   * Obtiene una imagen específica del carrusel por su ID
-   * @param {number} id - ID de la imagen a obtener
-   * @returns {Promise<Object|null>} - Imagen del carrusel o null si no existe
+   * Obtener una imagen específica del carrusel por su ID
+   * @param {number} id
+   * @returns {Promise<Object|null>}
    */
-  async obtenerImagenPorId(id) {
+  async Obtener_Imagen_ID(id) {
     try {
       const Resultado = await pool.query(
         `SELECT
@@ -62,12 +59,12 @@ class ModeloImagenesCarrusel {
   }
 
   /**
-   * Inserta una nueva imagen de carrusel y devuelve su ID.
-   * @param {Object} Datos - Campos a insertar
-   * @returns {Promise<number>} ID generado
+   * Insertar una nueva imagen de carrusel y devolver su ID.
+   * @param {Object} Datos
+   * @returns {Promise<number>}
    */
   async Crear(Datos) {
-    const permitidos = [
+    const Permitidos = [
       'Título',
       'Subtítulo',
       'URL_Imagen',
@@ -75,13 +72,13 @@ class ModeloImagenesCarrusel {
       'Orden',
       'Activo'
     ];
-    const keys = Object.keys(Datos).filter(k => permitidos.includes(k));
-    if (keys.length === 0) {
+    const Claves = Object.keys(Datos).filter(k => Permitidos.includes(k));
+    if (Claves.length === 0) {
       throw new Error('No se proporcionaron campos válidos para crear la imagen de carrusel');
     }
 
-    const columns = keys.map(k => `"${k}"`).join(', ');
-    const values = keys.map(k => Datos[k]);
+    const columns = Claves.map(k => `"${k}"`).join(', ');
+    const values = Claves.map(k => Datos[k]);
     const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
 
     try {
@@ -105,7 +102,7 @@ class ModeloImagenesCarrusel {
    * @returns {Promise<number>} número de filas afectadas
    */
   async Actualizar(idImagen, Cambios) {
-    const permitidos = [
+    const Permitidos = [
       'Título',
       'Subtítulo',
       'URL_Imagen',
@@ -113,15 +110,15 @@ class ModeloImagenesCarrusel {
       'Orden',
       'Activo'
     ];
-    const keys = Object.keys(Cambios).filter(k => permitidos.includes(k));
-    if (keys.length === 0) {
+    const Claves = Object.keys(Cambios).filter(k => Permitidos.includes(k));
+    if (Claves.length === 0) {
       throw new Error('No se proporcionaron campos válidos para actualizar');
     }
 
-    const sets = keys
+    const sets = Claves
       .map((k, i) => `"${k}" = $${i + 1}`)
       .join(', ');
-    const values = keys.map(k => Cambios[k]);
+    const values = Claves.map(k => Cambios[k]);
     // último placeholder para el id
     values.push(idImagen);
 
@@ -144,7 +141,7 @@ class ModeloImagenesCarrusel {
    * @param {number} idImagen
    * @returns {Promise<number>} número de filas afectadas
    */
-  async eliminar(idImagen) {
+  async Eliminar(idImagen) {
     try {
       const Resultado = await pool.query(
         `DELETE FROM "IMÁGENES_CARRUSEL"
@@ -159,4 +156,4 @@ class ModeloImagenesCarrusel {
   }
 }
 
-module.exports = new ModeloImagenesCarrusel();
+module.exports = new Modelo_Imágenes_Carrusel();

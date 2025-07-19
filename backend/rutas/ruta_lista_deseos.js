@@ -23,6 +23,6 @@ router.post('/', verificarToken, controladorListaDeseos.agregar);
  * @desc    Eliminar un producto de la lista de deseos
  * @access  Privado
  */
-router.delete('/:productoId', verificarToken, controladorListaDeseos.eliminar);
+router.delete('/:productoId', verificarToken, controladorListaDeseos.Eliminar);
 
 module.exports = router;

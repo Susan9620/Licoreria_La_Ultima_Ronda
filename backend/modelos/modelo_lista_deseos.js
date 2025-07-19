@@ -73,7 +73,7 @@ class ModeloListaDeseos {
    * @param {number} idProducto
    * @returns {Promise<number>} filas afectadas
    */
-  async eliminar(ID_Usuario, idProducto) {
+  async Eliminar(ID_Usuario, idProducto) {
     try {
       const Resultado = await pool.query(
         `

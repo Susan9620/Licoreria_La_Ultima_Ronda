@@ -218,7 +218,7 @@ class ControladorProductos {
   async eliminarProducto(req, res) {
     try {
       const id = parseInt(req.params.id, 10);
-      const Filas = await modeloProductos.eliminar(id);
+      const Filas = await modeloProductos.Eliminar(id);
       if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Producto no encontrado.' });
       }

@@ -73,7 +73,7 @@ const ModeloImagenesProducto = {
    * @returns {Promise<number>}
    */
   async Crear(Datos) {
-    const permitidos = [
+    const Permitidos = [
       "ID_Producto",
       "ID_Variante",
       "URL",
@@ -81,13 +81,13 @@ const ModeloImagenesProducto = {
       "Principal",
       "Orden"
     ];
-    const keys = Object.keys(Datos).filter(k => permitidos.includes(k));
-    if (keys.length === 0) {
+    const Claves = Object.keys(Datos).filter(k => Permitidos.includes(k));
+    if (Claves.length === 0) {
       throw new Error("No se proporcionaron campos válidos para crear la imagen de producto");
     }
 
-    const columns      = keys.map(k => `"${k}"`).join(", ");
-    const values       = keys.map(k => Datos[k]);
+    const columns      = Claves.map(k => `"${k}"`).join(", ");
+    const values       = Claves.map(k => Datos[k]);
     const placeholders = values.map((_, i) => `$${i + 1}`).join(", ");
 
     try {
@@ -111,16 +111,16 @@ const ModeloImagenesProducto = {
    * @returns {Promise<number>} filas afectadas
    */
   async Actualizar(idImagen, Cambios) {
-    const permitidos = ["URL", "Alt", "Principal", "Orden"];
-    const keys = Object.keys(Cambios).filter(k => permitidos.includes(k));
-    if (keys.length === 0) {
+    const Permitidos = ["URL", "Alt", "Principal", "Orden"];
+    const Claves = Object.keys(Cambios).filter(k => Permitidos.includes(k));
+    if (Claves.length === 0) {
       throw new Error("No se proporcionaron campos válidos para actualizar la imagen de producto");
     }
 
-    const sets = keys
+    const sets = Claves
       .map((k, i) => `"${k}" = $${i + 1}`)
       .join(", ");
-    const values = keys.map(k => Cambios[k]);
+    const values = Claves.map(k => Cambios[k]);
     values.push(idImagen); // último placeholder
 
     try {
@@ -142,7 +142,7 @@ const ModeloImagenesProducto = {
    * @param {number} idImagen
    * @returns {Promise<number>} filas afectadas
    */
-  async eliminar(idImagen) {
+  async Eliminar(idImagen) {
     try {
       const Resultado = await pool.query(
         `DELETE FROM "IMÁGENES_PRODUCTO"

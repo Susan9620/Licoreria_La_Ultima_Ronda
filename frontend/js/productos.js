@@ -316,7 +316,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             // 5.2) Cantidad
-            const cantidad = parseInt(inputCantidad.value, 10) || 1;
+            const Cantidad = parseInt(inputCantidad.value, 10) || 1;
 
             // 5.3) Nombre completo: Producto – Variante
             // 'volumen' viene definido al principio de Abrir_Modal:
@@ -330,7 +330,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 nombreCompleto,
                 Precio_Producto,
                 Imagen_Producto,
-                cantidad
+                Cantidad
             );
 
             // 5.5) Cerrar el modal
@@ -356,7 +356,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             // 5.6.2) Cantidad
-            const cantidad = parseInt(inputCantidad.value, 10) || 1;
+            const Cantidad = parseInt(inputCantidad.value, 10) || 1;
 
             // 5.6.3) Nombre completo (producto + variante)
             const nombreCompleto = volumen && volumen !== '—'
@@ -368,7 +368,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 nombreCompleto,
                 Precio_Producto,
                 Imagen_Producto,
-                cantidad
+                Cantidad
             );
 
             // 5.6.5) Redirigir al checkout

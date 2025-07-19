@@ -68,7 +68,7 @@ class Controlador_Categorías {
   async Eliminar_Categoría(req, res) {
     try {
       const id = parseInt(req.params.id, 10);
-      const Filas = await Modelo_Categorías.eliminar(id);
+      const Filas = await Modelo_Categorías.Eliminar(id);
       if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Categoría no encontrada.' });
       }

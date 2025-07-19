@@ -190,7 +190,7 @@ class ControladorUsuarios {
       if (isNaN(id)) {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
-      const Filas = await modeloUsuarios.eliminar(id);
+      const Filas = await modeloUsuarios.Eliminar(id);
       if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Usuario no encontrado.' });
       }

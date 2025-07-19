@@ -13,7 +13,7 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     // Obtener datos del carrusel
-    const carrusel = await modeloImagenesCarrusel.obtenerImagenesCarrusel();
+    const carrusel = await modeloImagenesCarrusel.Obtener_Imágenes_Carrusel();
     
     // Obtener productos destacados (limitar a 4)
     const productosDestacados = await modeloProductosDestacados.obtenerProductosDestacados(4);

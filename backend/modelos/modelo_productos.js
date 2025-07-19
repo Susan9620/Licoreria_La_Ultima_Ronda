@@ -177,11 +177,11 @@ class ModeloProductos {
 
   /**
    * Obtiene productos que se compran juntos con la variante dada
-   * @param {number} idVariante
+   * @param {number} ID_Variante
    * @param {number} limite
    * @returns {Promise<Array>}
    */
-  async obtenerProductosCompradosJuntos(idVariante, limite = 4) {
+  async obtenerProductosCompradosJuntos(ID_Variante, limite = 4) {
     try {
       const Resultado = await pool.query(
         `SELECT
@@ -197,7 +197,7 @@ class ModeloProductos {
          GROUP BY v2."ID_Producto"
          ORDER BY "VecesCompradoJunto" DESC
          LIMIT $2`,
-        [idVariante, limite]
+        [ID_Variante, limite]
       );
       return Resultado.rows;
     } catch (error) {
@@ -233,7 +233,7 @@ class ModeloProductos {
    * @returns {Promise<number>}
    */
   async Crear(Datos) {
-    const permitidos = [
+    const Permitidos = [
       'ID_Categoría',
       'Nombre',
       'Descripción_Corta',
@@ -245,13 +245,13 @@ class ModeloProductos {
       'Etiqueta',
       'Activo'
     ];
-    const keys = Object.keys(Datos).filter(k => permitidos.includes(k));
-    if (keys.length === 0) {
+    const Claves = Object.keys(Datos).filter(k => Permitidos.includes(k));
+    if (Claves.length === 0) {
       throw new Error('No se proporcionaron campos válidos para crear el producto');
     }
 
-    const columns = keys.map(k => `"${k}"`).join(', ');
-    const values = keys.map(k => Datos[k]);
+    const columns = Claves.map(k => `"${k}"`).join(', ');
+    const values = Claves.map(k => Datos[k]);
     const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
 
     try {
@@ -302,7 +302,7 @@ class ModeloProductos {
    * @param {number} idProducto
    * @returns {Promise<number>}
    */
-  async eliminar(idProducto) {
+  async Eliminar(idProducto) {
     try {
       const Resultado = await pool.query(
         `DELETE FROM "PRODUCTOS"

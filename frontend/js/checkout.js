@@ -347,7 +347,7 @@ const Checkout = {
         return Array.isArray(json.Datos) ? json.Datos : [];
     },
 
-    // 3) Prepara items resolviendo idVariante en memoria (con fallback al ID_Producto)
+    // 3) Prepara items resolviendo ID_Variante en memoria (con fallback al ID_Producto)
     async prepararItemsParaCheckout() {
         const productos = await this.cargarTodosLosProductos();
 
@@ -379,12 +379,12 @@ const Checkout = {
                     return null;
                 }
 
-                // 5) Devolvemos el objeto con idVariante garantizado
+                // 5) Devolvemos el objeto con ID_Variante garantizado
                 return {
-                    idVariante: varPred.ID_Variante_Producto,
-                    cantidad: item.Cantidad,
-                    precioUnitario: item.Precio,
-                    subtotal: +(item.Precio * item.Cantidad).toFixed(2)
+                    ID_Variante: varPred.ID_Variante_Producto,
+                    Cantidad: item.Cantidad,
+                    Precio_Unitario: item.Precio,
+                    Subtotal: +(item.Precio * item.Cantidad).toFixed(2)
                 };
             })
         );
@@ -408,25 +408,25 @@ const Checkout = {
         const Datos = this.Recopilar_Datos_Formulario();
 
         try {
-            // 4.2) Resolver idVariante para cada artículo
+            // 4.2) Resolver ID_Variante para cada artículo
             console.log('📦 window.Carrito.Artículos en Completar_Pedido:', window.Carrito.Artículos);
             const items = await this.prepararItemsParaCheckout();
             console.log("📋 Items procesados para enviar:", items);
 
             const { direccion, codigoPostal, instrucciones } = Datos;
-            const subtotal = window.Carrito.Calcular_Total();
+            const Subtotal = window.Carrito.Calcular_Total();
             const envio = this.Estado.Envío_Gratis ? 0 : this.Configuración.Envío;
-            const descuento = subtotal * this.Estado.Descuento_Aplicado;
+            const descuento = Subtotal * this.Estado.Descuento_Aplicado;
             const total = +(
-                subtotal               // base
+                Subtotal               // base
                 - descuento            // menos descuento
                 + envio                // más envío
-                + (subtotal - descuento) * 0.15  // más IVA 15%
+                + (Subtotal - descuento) * 0.15  // más IVA 15%
             ).toFixed(2);
 
             const payload = {
-                items,              // tu array de { idVariante, cantidad, precioUnitario, subtotal }
-                subtotal,           // número
+                items,              // tu array de { ID_Variante, Cantidad, Precio_Unitario, Subtotal }
+                Subtotal,           // número
                 envio,              // número
                 descuento,          // número
                 total,              // número
@@ -456,7 +456,7 @@ const Checkout = {
             if (!res.ok || !json.Éxito) throw new Error(json.Mensaje || `Error ${res.status}`);
 
             // 2) Tomamos el ID del pedido que acaba de crear el backend
-            const idPedido = json.Datos.idPedido;
+            const ID_Pedido = json.Datos.ID_Pedido;
 
             // 3) Vaciamos el carrito
             window.Carrito.Artículos = [];
@@ -464,10 +464,10 @@ const Checkout = {
                 window.Carrito.Guardar_Artículos();
             }
 
-            // 4) Redirigimos incluyendo idPedido en la URL
+            // 4) Redirigimos incluyendo ID_Pedido en la URL
             Mostrar_Notificación('¡Pedido completado con éxito! Redirigiendo...', 'Éxito');
             setTimeout(() => {
-                window.location.href = `/html/confirmación.html?idPedido=${idPedido}`;
+                window.location.href = `/html/confirmación.html?ID_Pedido=${ID_Pedido}`;
             }, 1500);
 
         } catch (err) {

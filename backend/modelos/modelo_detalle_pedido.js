@@ -1,18 +1,18 @@
 const { pool } = require('../configuraciones/configuraciones_bd');
 
-class ModeloDetallePedido {
+class Modelo_Detalle_Pedido {
   /**
-   * Inserta un detalle de pedido
-   * @param {{ idPedido:number, idVariante:number, cantidad:number, precioUnitario:number, subtotal:number }} Datos
-   * @returns {Promise<number>} número de filas afectadas
+   * Insertar un detalle de pedido
+   * @param {{ ID_Pedido:number, ID_Variante:number, Cantidad:number, Precio_Unitario:number, Subtotal:number }} Datos
+   * @returns {Promise<number>}
    */
-  async insertar({ idPedido, idVariante, cantidad, precioUnitario, subtotal }) {
+  async Insertar({ ID_Pedido, ID_Variante, Cantidad, Precio_Unitario, Subtotal }) {
     try {
       const Resultado = await pool.query(
         `INSERT INTO "DETALLE_PEDIDO"
            ("ID_Pedido", "ID_Variante", "Cantidad", "Precio_Unitario", "Subtotal")
          VALUES ($1, $2, $3, $4, $5)`,
-        [idPedido, idVariante, cantidad, precioUnitario, subtotal]
+        [ID_Pedido, ID_Variante, Cantidad, Precio_Unitario, Subtotal]
       );
       return Resultado.rowCount;
     } catch (error) {
@@ -22,4 +22,4 @@ class ModeloDetallePedido {
   }
 }
 
-module.exports = new ModeloDetallePedido();
+module.exports = new Modelo_Detalle_Pedido();

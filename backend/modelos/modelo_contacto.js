@@ -2,10 +2,10 @@ const { pool } = require('../configuraciones/configuraciones_bd');
 
 class Modelo_Contacto {
   /**
-   * Inserta un mensaje de contacto en la BD y devuelve su ID generado.
+   * Insertar un mensaje de contacto y devolver su ID generado
    * @param {number|null} ID_Usuario 
    * @param {string} Mensaje 
-   * @returns {Promise<number>} el ID generado
+   * @returns {Promise<number>}
    */
   static async Crear(ID_Usuario, Mensaje) {
     try {
@@ -23,8 +23,8 @@ class Modelo_Contacto {
   }
 
   /**
-   * Lista todos los mensajes de contacto.
-   * @returns {Promise<Array>} lista de mensajes
+   * Obtener todos los mensajes
+   * @returns {Promise<Array>}
    */
   static async obtenerTodos() {
     try {

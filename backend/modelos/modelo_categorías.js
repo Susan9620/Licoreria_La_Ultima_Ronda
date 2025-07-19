@@ -80,7 +80,7 @@ class Modelo_Categorías {
   /**
    * Eliminar una categoría.
    */
-  async eliminar(id) {
+  async Eliminar(id) {
     try {
       const Resultado = await pool.query(
         `DELETE FROM "CATEGORÍAS"

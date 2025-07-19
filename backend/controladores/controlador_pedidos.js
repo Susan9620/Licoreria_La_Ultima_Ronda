@@ -14,7 +14,7 @@ class ControladorPedidos {
 
       const {
         items,
-        subtotal,
+        Subtotal,
         envio,
         descuento,
         total,
@@ -29,10 +29,10 @@ class ControladorPedidos {
       if (Array.isArray(items)) {
         items.forEach((item, index) => {
           console.log(`📦 Item ${index + 1}:`);
-          console.log(`   - idVariante: ${item.idVariante} (tipo: ${typeof item.idVariante})`);
-          console.log(`   - cantidad: ${item.cantidad}`);
-          console.log(`   - precioUnitario: ${item.precioUnitario}`);
-          console.log(`   - subtotal: ${item.subtotal}`);
+          console.log(`   - ID_Variante: ${item.ID_Variante} (tipo: ${typeof item.ID_Variante})`);
+          console.log(`   - Cantidad: ${item.Cantidad}`);
+          console.log(`   - Precio_Unitario: ${item.Precio_Unitario}`);
+          console.log(`   - Subtotal: ${item.Subtotal}`);
         });
       }
 
@@ -40,17 +40,17 @@ class ControladorPedidos {
         return res.status(400).json({ Éxito: false, Mensaje: 'No hay ítems en el pedido' });
       }
 
-      // 🔍 Verificar que todos los items tengan idVariante válido
+      // 🔍 Verificar que todos los items tengan ID_Variante válido
       const itemsSinVariante = items.filter(item =>
-        !item.idVariante ||
-        item.idVariante === null ||
-        item.idVariante === undefined ||
-        item.idVariante === "null" ||
-        item.idVariante === "undefined"
+        !item.ID_Variante ||
+        item.ID_Variante === null ||
+        item.ID_Variante === undefined ||
+        item.ID_Variante === "null" ||
+        item.ID_Variante === "undefined"
       );
 
       if (itemsSinVariante.length > 0) {
-        console.error("❌ Items sin idVariante válido encontrados:", itemsSinVariante);
+        console.error("❌ Items sin ID_Variante válido encontrados:", itemsSinVariante);
         return res.status(400).json({
           Éxito: false,
           Mensaje: 'Algunos items no tienen ID_Variante válido',
@@ -58,10 +58,10 @@ class ControladorPedidos {
         });
       }
 
-      const { numeroPedido, idPedido } = await modeloPedidos.crearConDetalles({
+      const { numeroPedido, ID_Pedido } = await modeloPedidos.crearConDetalles({
         ID_Usuario,
         items,
-        subtotal,
+        Subtotal,
         envio,
         descuento,
         total,
@@ -74,7 +74,7 @@ class ControladorPedidos {
       return res.status(201).json({
         Éxito: true,
         Mensaje: 'Pedido y detalle guardados',
-        Datos: { idPedido, númeroPedido: numeroPedido }
+        Datos: { ID_Pedido, númeroPedido: numeroPedido }
       });
     } catch (err) {
       console.error('Error al crear pedido con detalle:', err);
@@ -99,8 +99,8 @@ class ControladorPedidos {
 
   async obtenerPedido(req, res) {
     try {
-      const idPedido = parseInt(req.params.id, 10);
-      const { pedido, items } = await modeloPedidos.obtenerConDetalles(idPedido);
+      const ID_Pedido = parseInt(req.params.id, 10);
+      const { pedido, items } = await modeloPedidos.obtenerConDetalles(ID_Pedido);
       return res.json({ Éxito: true, Datos: { pedido, items } });
     } catch (err) {
       console.error(err);
@@ -129,11 +129,11 @@ class ControladorPedidos {
    */
   async cambiarEstado(req, res) {
     try {
-      const idPedido = parseInt(req.params.id, 10);
+      const ID_Pedido = parseInt(req.params.id, 10);
       const { nuevoEstado } = req.body;
 
       // Validar ID
-      if (isNaN(idPedido)) {
+      if (isNaN(ID_Pedido)) {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID de pedido inválido.' });
       }
 
@@ -144,7 +144,7 @@ class ControladorPedidos {
       }
 
       // Llamada al modelo
-      const filasAfectadas = await modeloPedidos.actualizarEstado(idPedido, nuevoEstado);
+      const filasAfectadas = await modeloPedidos.actualizarEstado(ID_Pedido, nuevoEstado);
       if (filasAfectadas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Pedido no encontrado.' });
       }

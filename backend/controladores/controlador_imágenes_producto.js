@@ -110,7 +110,7 @@ const eliminarImagenProducto = async (req, res) => {
     if (isNaN(id)) {
       return res.status(400).json({ Éxito: false, Mensaje: "ID inválido." })
     }
-    const Filas = await modeloImagenesProducto.eliminar(id)
+    const Filas = await modeloImagenesProducto.Eliminar(id)
     if (Filas === 0) {
       return res.status(404).json({ Éxito: false, Mensaje: "Imagen no encontrada." })
     }

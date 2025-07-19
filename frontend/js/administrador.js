@@ -76,13 +76,13 @@ document.addEventListener('DOMContentLoaded', () => {
         <tbody>
           ${json.Datos.map(p => `
             <tr>
-              <td>${p.idPedido}</td>
+              <td>${p.ID_Pedido}</td>
               <td>${p.ID_Usuario}</td>
               <td>${new Date(p.fecha).toLocaleString()}</td>
               <td>$${parseFloat(p.Total).toFixed(2)}</td>
               <td><span class="Estado_Texto ${p.estadoPedido}">${p.estadoPedido}</span></td>
               <td>
-                <button class="Botones Botón_Primario" onclick="viewPedido(${p.idPedido})">
+                <button class="Botones Botón_Primario" onclick="viewPedido(${p.ID_Pedido})">
                   Ver/Editar
                 </button>
               </td>
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const json = await resp.json();
             if (!resp.ok || !json.Éxito) throw new Error(json.Mensaje);
             const { pedido, items } = json.Datos;
-            modalID.textContent = pedido.idPedido;
+            modalID.textContent = pedido.ID_Pedido;
             detUsuario.textContent = pedido.ID_Usuario;
             detFecha.textContent = new Date(pedido.fecha).toLocaleString();
             detTotal.textContent = parseFloat(pedido.total).toFixed(2);
@@ -115,8 +115,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 return `
           <tr>
             <td>${nombre}</td>
-            <td>${item.cantidad}</td>
-            <td>$${parseFloat(item.precioUnitario).toFixed(2)}</td>
+            <td>${item.Cantidad}</td>
+            <td>$${parseFloat(item.Precio_Unitario).toFixed(2)}</td>
           </tr>
         `;
             }).join('');

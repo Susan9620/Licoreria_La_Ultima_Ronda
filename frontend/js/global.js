@@ -524,20 +524,20 @@ const Carrito = {
                             const precioTexto = Producto.querySelector('.Precio_Paquete')?.textContent.trim() || '0';
                             const urlImagen = Producto.querySelector('.Imagen_Paquete img')?.src || '';
                             // Cantidad fija
-                            const cantidad = 1;
+                            const Cantidad = 1;
 
                             console.log(
                                 'Agregando producto del paquete:',
                                 nombreCompleto,
                                 precioTexto,
                                 urlImagen,
-                                cantidad
+                                Cantidad
                             );
                             this.Agregar_Elemento(
                                 nombreCompleto,
                                 precioTexto,
                                 urlImagen,
-                                cantidad
+                                Cantidad
                             );
                         });
 
@@ -572,20 +572,20 @@ const Carrito = {
                                 : nombreBase;
                             const precioTexto = Producto.querySelector('.Precio')?.textContent.trim() || '0';
                             const urlImagen = Producto.querySelector('img')?.src || '';
-                            const cantidad = 1;
+                            const Cantidad = 1;
 
                             console.log(
                                 'Agregando producto genérico:',
                                 nombreCompleto,
                                 precioTexto,
                                 urlImagen,
-                                cantidad
+                                Cantidad
                             );
                             this.Agregar_Elemento(
                                 nombreCompleto,
                                 precioTexto,
                                 urlImagen,
-                                cantidad
+                                Cantidad
                             );
                         });
 
@@ -642,7 +642,7 @@ const Carrito = {
                     .src;
 
                 // 6) Cantidad fija (1)
-                const cantidad = 1;
+                const Cantidad = 1;
 
                 // 7) Log para verificar
                 console.log(
@@ -650,7 +650,7 @@ const Carrito = {
                     nombreCompleto,
                     precioTexto,
                     urlImagen,
-                    cantidad
+                    Cantidad
                 );
 
                 // 8) Llamada a Agregar_Elemento con variante incluida
@@ -658,7 +658,7 @@ const Carrito = {
                     nombreCompleto,
                     precioTexto,
                     urlImagen,
-                    cantidad
+                    Cantidad
                 );
             });
         });
@@ -1357,7 +1357,7 @@ function Renderizar_Historial_Global() {
     tabla.innerHTML = '';
 
     window.Historial_Global.Pedidos.forEach(p => {
-        const idOrden = p.idPedido || p.numeroPedido;
+        const idOrden = p.ID_Pedido || p.numeroPedido;
         const totalVal = parseFloat(p.Total) || 0;
         const fecha = new Date(p.fecha);
         const fechaFormateada = fecha.toLocaleDateString('es-ES', window.Configuración_Historial.Formato_Fecha_Corta);
@@ -1394,11 +1394,11 @@ function Renderizar_Historial_Global() {
 /**
  * Ver factura de un pedido específico
  */
-async function Ver_Factura_Global(idPedido) {
+async function Ver_Factura_Global(ID_Pedido) {
     try {
         // Buscar el pedido en el historial cargado
         let pedido = window.Historial_Global.Pedidos.find(p =>
-            (p.idPedido || p.numeroPedido) == idPedido
+            (p.ID_Pedido || p.numeroPedido) == ID_Pedido
         );
 
         if (!pedido) {
@@ -1411,7 +1411,7 @@ async function Ver_Factura_Global(idPedido) {
         // Si no tiene items, cargarlos desde la API
         if (!Array.isArray(pedido.items) || pedido.items.length === 0) {
             const token = localStorage.getItem('token');
-            const resp = await fetch(`${baseUrl}/api/pedidos/${idPedido}`, {
+            const resp = await fetch(`${baseUrl}/api/pedidos/${ID_Pedido}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const json = await resp.json();
@@ -1473,8 +1473,8 @@ function Actualizar_Modal_Factura_Global(pedido) {
     if (tablaItems && pedido.items) {
         tablaItems.innerHTML = '';
         pedido.items.forEach(item => {
-            const precio = parseFloat(item.precioUnitario) || 0;
-            const subtotalProducto = precio * item.cantidad;
+            const precio = parseFloat(item.Precio_Unitario) || 0;
+            const subtotalProducto = precio * item.Cantidad;
 
             // si existe variante, la concatenamos
             const nombre = item.nombreVariante
@@ -1484,7 +1484,7 @@ function Actualizar_Modal_Factura_Global(pedido) {
             const fila = document.createElement('tr');
             fila.innerHTML = `
               <td>${nombre}</td>
-              <td>${item.cantidad}</td>
+              <td>${item.Cantidad}</td>
               <td>$${precio.toFixed(2)}</td>
               <td>$${subtotalProducto.toFixed(2)}</td>
             `;
@@ -1493,11 +1493,11 @@ function Actualizar_Modal_Factura_Global(pedido) {
     }
 
     // Cálculos de totales
-    const subtotal = parseFloat(pedido.subtotal) || 0;
+    const Subtotal = parseFloat(pedido.Subtotal) || 0;
     const envio = parseFloat(pedido.envio) || 0;
     const descuento = parseFloat(pedido.descuento) || 0;
-    const iva = subtotal * 0.15;
-    const totalConIVA = subtotal + iva + envio - descuento;
+    const iva = Subtotal * 0.15;
+    const totalConIVA = Subtotal + iva + envio - descuento;
 
     // Actualizar elementos de totales
     const subtotalFactura = document.getElementById('Subtotal_Factura');
@@ -1507,7 +1507,7 @@ function Actualizar_Modal_Factura_Global(pedido) {
     const descuentoFactura = document.getElementById('Descuento_Factura');
     const filaDescuento = document.getElementById('Fila_Descuento_Factura');
 
-    if (subtotalFactura) subtotalFactura.textContent = `$${subtotal.toFixed(2)}`;
+    if (subtotalFactura) subtotalFactura.textContent = `$${Subtotal.toFixed(2)}`;
     if (ivaFactura) ivaFactura.textContent = `$${iva.toFixed(2)}`;
     if (envioFactura) envioFactura.textContent = envio > 0 ? `$${envio.toFixed(2)}` : 'Gratis';
     if (totalFactura) totalFactura.textContent = `$${totalConIVA.toFixed(2)}`;

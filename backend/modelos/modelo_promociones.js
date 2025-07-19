@@ -38,7 +38,7 @@ class ModeloPromociones {
    * @returns {Promise<number>}
    */
   async Crear(Datos) {
-    const permitidos = [
+    const Permitidos = [
       'ID_Categoría',
       'Título',
       'Descripción',
@@ -47,13 +47,13 @@ class ModeloPromociones {
       'Tipo',
       'Parámetros'
     ];
-    const keys = Object.keys(Datos).filter(k => permitidos.includes(k));
-    if (keys.length === 0) {
+    const Claves = Object.keys(Datos).filter(k => Permitidos.includes(k));
+    if (Claves.length === 0) {
       throw new Error('No se proporcionaron campos válidos para crear la promoción');
     }
 
-    const columns = keys.map(k => `"${k}"`).join(', ');
-    const values = keys.map(k =>
+    const columns = Claves.map(k => `"${k}"`).join(', ');
+    const values = Claves.map(k =>
       k === 'Parámetros'
         ? JSON.stringify(Datos[k])
         : Datos[k]
@@ -81,7 +81,7 @@ class ModeloPromociones {
    * @returns {Promise<number>} filas afectadas
    */
   async Actualizar(idPromocion, Cambios) {
-    const permitidos = [
+    const Permitidos = [
       'ID_Categoría',
       'Título',
       'Descripción',
@@ -90,15 +90,15 @@ class ModeloPromociones {
       'Tipo',
       'Parámetros'
     ];
-    const keys = Object.keys(Cambios).filter(k => permitidos.includes(k));
-    if (keys.length === 0) {
+    const Claves = Object.keys(Cambios).filter(k => Permitidos.includes(k));
+    if (Claves.length === 0) {
       throw new Error('No se proporcionaron campos válidos para actualizar la promoción');
     }
 
-    const sets = keys
+    const sets = Claves
       .map((k, i) => `"${k}" = $${i + 1}`)
       .join(', ');
-    const values = keys.map(k =>
+    const values = Claves.map(k =>
       k === 'Parámetros'
         ? JSON.stringify(Cambios[k])
         : Cambios[k]
@@ -124,7 +124,7 @@ class ModeloPromociones {
    * @param {number} idPromocion
    * @returns {Promise<number>} filas afectadas
    */
-  async eliminar(idPromocion) {
+  async Eliminar(idPromocion) {
     try {
       const Resultado = await pool.query(
         `DELETE FROM "PROMOCIONES"

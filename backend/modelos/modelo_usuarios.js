@@ -78,7 +78,7 @@ class ModeloUsuarios {
    * @returns {Promise<number>}
    */
   async Crear(Datos) {
-    const permitidos = [
+    const Permitidos = [
       'Nombre_Completo',
       'Correo_Electrónico',
       'Contraseña',
@@ -89,13 +89,13 @@ class ModeloUsuarios {
       'Rol',
       'Activo'
     ];
-    const keys = Object.keys(Datos).filter(k => permitidos.includes(k));
-    if (keys.length === 0) {
+    const Claves = Object.keys(Datos).filter(k => Permitidos.includes(k));
+    if (Claves.length === 0) {
       throw new Error('No se proporcionaron campos válidos para crear el usuario');
     }
 
-    const columns = keys.map(k => `"${k}"`).join(', ');
-    const values = keys.map(k => Datos[k]);
+    const columns = Claves.map(k => `"${k}"`).join(', ');
+    const values = Claves.map(k => Datos[k]);
     const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
 
     try {
@@ -119,7 +119,7 @@ class ModeloUsuarios {
    * @returns {Promise<number>} filas afectadas
    */
   async Actualizar(ID_Usuario, Cambios) {
-    const permitidos = [
+    const Permitidos = [
       'Nombre_Completo',
       'Correo_Electrónico',
       'Contraseña',
@@ -130,13 +130,13 @@ class ModeloUsuarios {
       'Rol',
       'Activo'
     ];
-    const keys = Object.keys(Cambios).filter(k => permitidos.includes(k));
-    if (keys.length === 0) return 0;
+    const Claves = Object.keys(Cambios).filter(k => Permitidos.includes(k));
+    if (Claves.length === 0) return 0;
 
-    const sets = keys
+    const sets = Claves
       .map((k, i) => `"${k}" = $${i + 1}`)
       .join(', ');
-    const values = keys.map(k => Cambios[k]);
+    const values = Claves.map(k => Cambios[k]);
     values.push(ID_Usuario);
 
     try {
@@ -158,7 +158,7 @@ class ModeloUsuarios {
    * @param {number} ID_Usuario
    * @returns {Promise<number>} filas afectadas
    */
-  async eliminar(ID_Usuario) {
+  async Eliminar(ID_Usuario) {
     try {
       const Resultado = await pool.query(
         `DELETE FROM "USUARIOS"

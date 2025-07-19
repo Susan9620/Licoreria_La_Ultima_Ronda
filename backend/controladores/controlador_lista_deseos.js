@@ -39,14 +39,14 @@ class ControladorListaDeseos {
   /**
    * DELETE /api/deseos/:productoId
    */
-  async eliminar(req, res) {
+  async Eliminar(req, res) {
     try {
       const usuarioId = req.usuario.id;
       const productoId = parseInt(req.params.productoId, 10);
       if (isNaN(productoId)) {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID de producto inválido' });
       }
-      await modeloListaDeseos.eliminar(usuarioId, productoId);
+      await modeloListaDeseos.Eliminar(usuarioId, productoId);
       res.status(200).json({ Éxito: true, Mensaje: 'Producto eliminado de la lista de deseos' });
     } catch (error) {
       console.error('Error al eliminar de lista de deseos:', error);

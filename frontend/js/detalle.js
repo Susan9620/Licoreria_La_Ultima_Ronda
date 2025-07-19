@@ -1096,12 +1096,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const valorContador = document.querySelector(".Valor_Contador")
 
   if (botonMenos && botonMas && valorContador) {
-    let cantidad = 1
+    let Cantidad = 1
 
     botonMenos.addEventListener("click", () => {
-      if (cantidad > 1) {
-        cantidad--
-        valorContador.textContent = cantidad
+      if (Cantidad > 1) {
+        Cantidad--
+        valorContador.textContent = Cantidad
       }
     })
 
@@ -1111,9 +1111,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const stock = variante?.Stock ?? Infinity
 
       // 2) Solo incrementamos si no excedemos el stock
-      if (cantidad < stock) {
-        cantidad++
-        valorContador.textContent = cantidad
+      if (Cantidad < stock) {
+        Cantidad++
+        valorContador.textContent = Cantidad
       } else {
         // Opcional: notificar al usuario que no hay más unidades
         Mostrar_Notificación(
@@ -1154,7 +1154,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (botonAgregar) {
     botonAgregar.addEventListener('click', (e) => {
       e.stopPropagation();
-      const cantidad = parseInt(
+      const Cantidad = parseInt(
         document.querySelector('.Valor_Contador').textContent,
         10
       );
@@ -1162,7 +1162,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const variante = obtenerVarianteActual();
       const stock = variante?.Stock ?? 0;
 
-      if (cantidad > stock) {
+      if (Cantidad > stock) {
         Mostrar_Notificación(`No puedes añadir más de ${stock} unidades disponibles.`, 'Error');
         return;
       }
@@ -1180,7 +1180,7 @@ document.addEventListener("DOMContentLoaded", () => {
         nombreCompleto,
         precio,
         imagen,
-        cantidad
+        Cantidad
       );
     }, true);
   }
