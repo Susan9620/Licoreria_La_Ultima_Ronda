@@ -135,7 +135,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { 'Content-Type': 'application/json', ...authHeader() },
                 body: JSON.stringify({ Nuevo_Estado })
             });
+            // 1) clonamos antes de parsear JSON
+            const copia = resp.clone();
+            const textoRaw = await copia.text();
+            console.error('💥 raw error:', resp.status, textoRaw);
+
+            // 2) ahora sí parseamos JSON 
             const json = await resp.json();
+            if (!resp.ok) {
+                throw new Error(`HTTP ${resp.status}: ${textoRaw}`);
+            }
             if (!resp.ok) {
                 // Lee el cuerpo de la respuesta (texto o JSON)
                 let detalle;
