@@ -5,38 +5,38 @@ const { verificarToken } = require('../middleware/middleware_autenticación');
 const router = express.Router();
 
 /**
- * @route   GET /api/productos
+ * @route   GET /api/Productos
  * @desc    Obtener productos destacados
  */
-router.get('/', controladorProductos.obtenerProductosDestacados);
+router.get('/', controladorProductos.Obtener_Productos_Destacados);
 
 /**
- * @route   GET /api/productos/all
+ * @route   GET /api/Productos/all
  * @desc    Obtener todos los productos activos
  */
-router.get('/all', controladorProductos.obtenerTodos);
+router.get('/all', controladorProductos.Obtener_Todos);
 
 /**
- * @route   GET /api/productos/:id/compradosjuntos
+ * @route   GET /api/Productos/:id/compradosjuntos
  * @desc    Obtener hasta 4 productos comprados junto a la variante predeterminada
  */
 router.get('/:id/compradosjuntos', controladorProductos.obtenerCompradosJuntos);
 
 /**
- * @route   POST /api/productos/:id/calificar
+ * @route   POST /api/Productos/:id/calificar
  * @desc    Registrar una nueva valoración para el producto
  */
 router.post('/:id/calificar', verificarToken, controladorProductos.calificarProducto);
 
 /**
- * @route   GET /api/productos/:id/calificacion
+ * @route   GET /api/Productos/:id/calificacion
  * @desc    Obtener la valoración del usuario
  */
 router.get('/:id/calificacion', verificarToken, controladorProductos.obtenerCalificacionUsuario);
 
 
 /**
- * @route   GET /api/productos/:id
+ * @route   GET /api/Productos/:id
  * @desc    Obtener un producto por su ID
  */
 router.get('/:id', controladorProductos.obtenerPorId);

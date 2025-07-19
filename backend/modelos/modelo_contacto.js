@@ -26,14 +26,14 @@ class Modelo_Contacto {
    * Obtener todos los mensajes
    * @returns {Promise<Array>}
    */
-  static async obtenerTodos() {
+  static async Obtener_Todos() {
     try {
       const Resultado = await pool.query(
         `SELECT
            c."ID_Contacto"   AS id,
-           c."ID_Usuario"    AS usuarioId,
-           c."Mensaje"       AS mensaje,
-           c."Fecha_Envío"   AS fecha
+           c."ID_Usuario"    AS Usuario_ID,
+           c."Mensaje"       AS Mensaje,
+           c."Fecha_Envío"   AS Fecha
          FROM "CONTACTO" c
          ORDER BY c."Fecha_Envío" DESC`
       );

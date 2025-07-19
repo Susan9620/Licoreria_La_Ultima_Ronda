@@ -71,9 +71,9 @@ const esAdministrador = (req, res, next) => {
  * @param {Function} next - Función para continuar al siguiente middleware
  */
 const esPropietarioOAdmin = (req, res, next) => {
-  const usuarioId = parseInt(req.params.id) || parseInt(req.body.id_usuario);
+  const Usuario_ID = parseInt(req.params.id) || parseInt(req.body.id_usuario);
   
-  if (req.usuario && (req.usuario.id === usuarioId || req.usuario.rol === 'Administrador')) {
+  if (req.usuario && (req.usuario.id === Usuario_ID || req.usuario.rol === 'Administrador')) {
     next();
   } else {
     return res.status(403).json({ 

@@ -21,14 +21,14 @@ async function insertarReseña({ ID_Producto, ID_Usuario, valoracion }) {
 /**
  * Obtiene el promedio y total de reseñas para un producto
  * @param {number} ID_Producto
- * @returns {Promise<{ promedio: number, total: number }>}
+ * @returns {Promise<{ promedio: number, Total: number }>}
  */
 async function obtenerPromedioYTotal(ID_Producto) {
   try {
     const Resultado = await pool.query(
       `SELECT
          ROUND(AVG("Valoración")::numeric, 1) AS promedio,
-         COUNT(*)                           AS total
+         COUNT(*)                           AS Total
        FROM "RESEÑAS"
        WHERE "ID_Producto" = $1`,
       [ID_Producto]
@@ -36,7 +36,7 @@ async function obtenerPromedioYTotal(ID_Producto) {
     const row = Resultado.rows[0] || {};
     return {
       promedio: row.promedio ?? 0,
-      total:    row.total    ?? 0
+      Total:    row.Total    ?? 0
     };
   } catch (error) {
     console.error('Error al obtener promedio y total de reseñas:', error);

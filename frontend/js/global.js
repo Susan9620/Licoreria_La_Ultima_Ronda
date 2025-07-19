@@ -422,11 +422,11 @@ const Carrito = {
                 const variante = typeof obtenerVarianteActual === 'function'
                     ? obtenerVarianteActual()
                     : null;
-                const nombreVariante = variante?.Nombre_Variante || '';
+                const Nombre_Variante = variante?.Nombre_Variante || '';
 
                 // 6) Nombre completo
-                const nombreCompleto = nombreVariante
-                    ? `${nombreBase} – ${nombreVariante}`
+                const nombreCompleto = Nombre_Variante
+                    ? `${nombreBase} – ${Nombre_Variante}`
                     : nombreBase;
 
                 // 7) Log para verificar
@@ -513,12 +513,12 @@ const Carrito = {
                             // Nombre base
                             const nombreBase = Producto.querySelector('.Nombre_Paquete')?.textContent.trim() || 'Producto';
                             // Variante (dataset.volumen o fallback a etiqueta Valor_Característica)
-                            const nombreVariante = Producto.dataset.volumen
+                            const Nombre_Variante = Producto.dataset.volumen
                                 || Producto.querySelector('.Valor_Característica')?.textContent.trim()
                                 || '';
                             // Nombre completo
-                            const nombreCompleto = nombreVariante
-                                ? `${nombreBase} – ${nombreVariante}`
+                            const nombreCompleto = Nombre_Variante
+                                ? `${nombreBase} – ${Nombre_Variante}`
                                 : nombreBase;
                             // Precio e imagen
                             const precioTexto = Producto.querySelector('.Precio_Paquete')?.textContent.trim() || '0';
@@ -566,9 +566,9 @@ const Carrito = {
 
                         Productos.forEach(Producto => {
                             const nombreBase = Producto.querySelector('h3, h4')?.textContent.trim() || 'Producto';
-                            const nombreVariante = Producto.dataset.volumen || '';
-                            const nombreCompleto = nombreVariante
-                                ? `${nombreBase} – ${nombreVariante}`
+                            const Nombre_Variante = Producto.dataset.volumen || '';
+                            const nombreCompleto = Nombre_Variante
+                                ? `${nombreBase} – ${Nombre_Variante}`
                                 : nombreBase;
                             const precioTexto = Producto.querySelector('.Precio')?.textContent.trim() || '0';
                             const urlImagen = Producto.querySelector('img')?.src || '';
@@ -626,11 +626,11 @@ const Carrito = {
                     .textContent.trim();
 
                 // 3) Variante predeterminada (viene en data-volumen desde productos.js)
-                const nombreVariante = Tarjeta_Producto.dataset.volumen || '';
+                const Nombre_Variante = Tarjeta_Producto.dataset.volumen || '';
 
                 // 4) Componemos el nombre completo
-                const nombreCompleto = nombreVariante
-                    ? `${nombreBase} – ${nombreVariante}`
+                const nombreCompleto = Nombre_Variante
+                    ? `${nombreBase} – ${Nombre_Variante}`
                     : nombreBase;
 
                 // 5) Precio e imagen
@@ -986,9 +986,9 @@ const Lista_Deseos = {
                     if (tarjeta) {
                         const id = tarjeta.dataset.id;
                         const nombreBase = tarjeta.querySelector('h3')?.textContent.trim() || '';
-                        const nombreVariante = tarjeta.dataset.volumen || '';
-                        const nombre = nombreVariante
-                            ? `${nombreBase} – ${nombreVariante}`
+                        const Nombre_Variante = tarjeta.dataset.volumen || '';
+                        const nombre = Nombre_Variante
+                            ? `${nombreBase} – ${Nombre_Variante}`
                             : nombreBase;
 
                         const img = tarjeta.querySelector('img')?.src || '';
@@ -1357,14 +1357,14 @@ function Renderizar_Historial_Global() {
     tabla.innerHTML = '';
 
     window.Historial_Global.Pedidos.forEach(p => {
-        const idOrden = p.ID_Pedido || p.numeroPedido;
+        const idOrden = p.ID_Pedido || p.Número_Pedido;
         const totalVal = parseFloat(p.Total) || 0;
-        const fecha = new Date(p.fecha);
-        const fechaFormateada = fecha.toLocaleDateString('es-ES', window.Configuración_Historial.Formato_Fecha_Corta);
-        const estadoCapitalizado = p.estadoPedido.charAt(0).toUpperCase() + p.estadoPedido.slice(1);
+        const Fecha = new Date(p.Fecha);
+        const fechaFormateada = Fecha.toLocaleDateString('es-ES', window.Configuración_Historial.Formato_Fecha_Corta);
+        const estadoCapitalizado = p.Estado_Pedido.charAt(0).toUpperCase() + p.Estado_Pedido.slice(1);
 
         // ✓ Solo mostramos el icono de factura si NO está Pendiente ni Cancelado
-        const puedeVerFactura = p.estadoPedido !== 'Pendiente' && p.estadoPedido !== 'Cancelado';
+        const puedeVerFactura = p.Estado_Pedido !== 'Pendiente' && p.Estado_Pedido !== 'Cancelado';
         const botonFactura = puedeVerFactura
             ? `<button class="Botones Botón_Accion" onclick="Ver_Factura_Global('${idOrden}')">
                  <i class="fas fa-file-invoice"></i>
@@ -1397,11 +1397,11 @@ function Renderizar_Historial_Global() {
 async function Ver_Factura_Global(ID_Pedido) {
     try {
         // Buscar el pedido en el historial cargado
-        let pedido = window.Historial_Global.Pedidos.find(p =>
-            (p.ID_Pedido || p.numeroPedido) == ID_Pedido
+        let Pedido = window.Historial_Global.Pedidos.find(p =>
+            (p.ID_Pedido || p.Número_Pedido) == ID_Pedido
         );
 
-        if (!pedido) {
+        if (!Pedido) {
             if (typeof Mostrar_Notificación === 'function') {
                 Mostrar_Notificación('No se pudo encontrar la factura solicitada', 'Error');
             }
@@ -1409,7 +1409,7 @@ async function Ver_Factura_Global(ID_Pedido) {
         }
 
         // Si no tiene items, cargarlos desde la API
-        if (!Array.isArray(pedido.Items) || pedido.Items.length === 0) {
+        if (!Array.isArray(Pedido.Items) || Pedido.Items.length === 0) {
             const token = localStorage.getItem('token');
             const resp = await fetch(`${baseUrl}/api/pedidos/${ID_Pedido}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
@@ -1420,14 +1420,14 @@ async function Ver_Factura_Global(ID_Pedido) {
                 throw new Error(json.Mensaje || 'Error cargando detalles del pedido');
             }
 
-            pedido = {
-                ...json.Datos.pedido,
+            Pedido = {
+                ...json.Datos.Pedido,
                 Items: json.Datos.Items
             };
         }
 
         // Actualizar el modal y mostrarlo
-        Actualizar_Modal_Factura_Global(pedido);
+        Actualizar_Modal_Factura_Global(Pedido);
         Mostrar_Modal_Factura_Global();
 
     } catch (err) {
@@ -1441,45 +1441,45 @@ async function Ver_Factura_Global(ID_Pedido) {
 /**
  * Actualizar el contenido del modal de factura
  */
-function Actualizar_Modal_Factura_Global(pedido) {
+function Actualizar_Modal_Factura_Global(Pedido) {
     // Número y fecha
     const numeroFactura = document.getElementById('Número_Factura');
     const fechaFactura = document.getElementById('Fecha_Factura');
 
-    if (numeroFactura) numeroFactura.textContent = `F-${pedido.numeroPedido}`;
-    if (fechaFactura) fechaFactura.textContent = Formatear_Fecha_Global(pedido.fecha);
+    if (numeroFactura) numeroFactura.textContent = `F-${Pedido.Número_Pedido}`;
+    if (fechaFactura) fechaFactura.textContent = Formatear_Fecha_Global(Pedido.Fecha);
 
     // Datos del cliente
-    const nombreCliente = document.getElementById('Nombre_Cliente');
+    const Nombre_Cliente = document.getElementById('Nombre_Cliente');
     const direccionCliente = document.getElementById('Dirección_Cliente');
     const telefonoCliente = document.getElementById('Teléfono_Cliente');
-    const correoCliente = document.getElementById('Correo_Electrónico_Cliente');
+    const Correo_Cliente = document.getElementById('Correo_Electrónico_Cliente');
 
-    if (nombreCliente) {
-        nombreCliente.textContent = window.Historial_Global.Datos_Usuario?.Nombre_Completo || 'Cliente';
+    if (Nombre_Cliente) {
+        Nombre_Cliente.textContent = window.Historial_Global.Datos_Usuario?.Nombre_Completo || 'Cliente';
     }
     if (direccionCliente) {
-        direccionCliente.textContent = pedido.direccionEnvio || 'No Disponible';
+        direccionCliente.textContent = Pedido.Dirección_Envío || 'No Disponible';
     }
     if (telefonoCliente) {
         telefonoCliente.textContent = window.Historial_Global.Datos_Usuario?.Teléfono || 'No Disponible';
     }
-    if (correoCliente) {
-        correoCliente.textContent = window.Historial_Global.Datos_Usuario?.Correo_Electrónico || 'No Disponible';
+    if (Correo_Cliente) {
+        Correo_Cliente.textContent = window.Historial_Global.Datos_Usuario?.Correo_Electrónico || 'No Disponible';
     }
 
     // Productos
     const tablaItems = document.getElementById('Factura_Artículos');
-    if (tablaItems && pedido.Items) {
+    if (tablaItems && Pedido.Items) {
         tablaItems.innerHTML = '';
-        pedido.Items.forEach(item => {
+        Pedido.Items.forEach(item => {
             const precio = parseFloat(item.Precio_Unitario) || 0;
             const subtotalProducto = precio * item.Cantidad;
 
             // si existe variante, la concatenamos
-            const nombre = item.nombreVariante
-                ? `${item.nombreProducto} – ${item.nombreVariante}`
-                : item.nombreProducto;
+            const nombre = item.Nombre_Variante
+                ? `${item.Nombre_Producto} – ${item.Nombre_Variante}`
+                : item.Nombre_Producto;
 
             const fila = document.createElement('tr');
             fila.innerHTML = `
@@ -1493,11 +1493,11 @@ function Actualizar_Modal_Factura_Global(pedido) {
     }
 
     // Cálculos de totales
-    const Subtotal = parseFloat(pedido.Subtotal) || 0;
-    const envio = parseFloat(pedido.envio) || 0;
-    const descuento = parseFloat(pedido.descuento) || 0;
+    const Subtotal = parseFloat(Pedido.Subtotal) || 0;
+    const Envío = parseFloat(Pedido.Envío) || 0;
+    const Descuento = parseFloat(Pedido.Descuento) || 0;
     const iva = Subtotal * 0.15;
-    const totalConIVA = Subtotal + iva + envio - descuento;
+    const totalConIVA = Subtotal + iva + Envío - Descuento;
 
     // Actualizar elementos de totales
     const subtotalFactura = document.getElementById('Subtotal_Factura');
@@ -1509,13 +1509,13 @@ function Actualizar_Modal_Factura_Global(pedido) {
 
     if (subtotalFactura) subtotalFactura.textContent = `$${Subtotal.toFixed(2)}`;
     if (ivaFactura) ivaFactura.textContent = `$${iva.toFixed(2)}`;
-    if (envioFactura) envioFactura.textContent = envio > 0 ? `$${envio.toFixed(2)}` : 'Gratis';
+    if (envioFactura) envioFactura.textContent = Envío > 0 ? `$${Envío.toFixed(2)}` : 'Gratis';
     if (totalFactura) totalFactura.textContent = `$${totalConIVA.toFixed(2)}`;
 
-    // Manejar descuento
-    if (descuento > 0) {
+    // Manejar Descuento
+    if (Descuento > 0) {
         if (filaDescuento) filaDescuento.style.display = 'table-row';
-        if (descuentoFactura) descuentoFactura.textContent = `-$${descuento.toFixed(2)}`;
+        if (descuentoFactura) descuentoFactura.textContent = `-$${Descuento.toFixed(2)}`;
     } else {
         if (filaDescuento) filaDescuento.style.display = 'none';
     }
@@ -1590,8 +1590,8 @@ function Imprimir_Factura_Global() {
  */
 function Formatear_Fecha_Global(fechaISO) {
     try {
-        const fecha = new Date(fechaISO);
-        return fecha.toLocaleDateString('es-EC', window.Configuración_Historial.Formato_Fecha);
+        const Fecha = new Date(fechaISO);
+        return Fecha.toLocaleDateString('es-EC', window.Configuración_Historial.Formato_Fecha);
     } catch (error) {
         console.error("Error al formatear fecha:", error);
         return fechaISO;

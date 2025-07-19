@@ -340,7 +340,7 @@ const Checkout = {
 
     // 1) Carga *todos* los productos (ajusta la URL a tu endpoint real)
     async cargarTodosLosProductos() {
-        const res = await fetch(`${API_BASE}/api/productos/all`);  // <- aquí tu ruta que devuelve TODO el catálogo
+        const res = await fetch(`${API_BASE}/api/Productos/all`);  // <- aquí tu ruta que devuelve TODO el catálogo
         if (!res.ok) throw new Error(`No pude cargar todos los productos: ${res.status}`);
         const json = await res.json();
         // suponemos que vienen en json.Datos
@@ -349,15 +349,15 @@ const Checkout = {
 
     // 3) Prepara items resolviendo ID_Variante en memoria (con fallback al ID_Producto)
     async prepararItemsParaCheckout() {
-        const productos = await this.cargarTodosLosProductos();
+        const Productos = await this.cargarTodosLosProductos();
 
         const resultados = await Promise.all(
             window.Carrito.Artículos.map(async item => {
                 // 1) Separamos “Producto – Variante” si existe
-                const [nombreBase, nombreVariante] = item.Nombre.split(' – ').map(s => s.trim());
+                const [nombreBase, Nombre_Variante] = item.Nombre.split(' – ').map(s => s.trim());
 
                 // 2) Buscamos el producto por su nombre base
-                let prod = productos.find(p => p.Nombre === nombreBase);
+                let prod = Productos.find(p => p.Nombre === nombreBase);
                 if (!prod) {
                     console.warn(`Producto no encontrado en catálogo: "${nombreBase}"`);
                     return null;
@@ -369,13 +369,13 @@ const Checkout = {
                 const variantes = Array.isArray(varJson.Datos) ? varJson.Datos : [];
 
                 // 4) Intentamos emparejar la variante por nombre, o fallback a la predeterminada
-                let varPred = variantes.find(v => v.Nombre_Variante === nombreVariante)
+                let varPred = variantes.find(v => v.Nombre_Variante === Nombre_Variante)
                     || variantes.find(v => v.Predeterminada)
                     || variantes[0]
                     || null;
 
                 if (!varPred) {
-                    console.warn(`Variante no encontrada para "${nombreVariante}" en "${nombreBase}"`);
+                    console.warn(`Variante no encontrada para "${Nombre_Variante}" en "${nombreBase}"`);
                     return null;
                 }
 
@@ -413,27 +413,27 @@ const Checkout = {
             const Items = await this.prepararItemsParaCheckout();
             console.log("📋 Items procesados para enviar:", Items);
 
-            const { direccion, codigoPostal, instrucciones } = Datos;
+            const { direccion, Código_Postal, instrucciones } = Datos;
             const Subtotal = window.Carrito.Calcular_Total();
-            const envio = this.Estado.Envío_Gratis ? 0 : this.Configuración.Envío;
-            const descuento = Subtotal * this.Estado.Descuento_Aplicado;
-            const total = +(
+            const Envío = this.Estado.Envío_Gratis ? 0 : this.Configuración.Envío;
+            const Descuento = Subtotal * this.Estado.Descuento_Aplicado;
+            const Total = +(
                 Subtotal               // base
-                - descuento            // menos descuento
-                + envio                // más envío
-                + (Subtotal - descuento) * 0.15  // más IVA 15%
+                - Descuento            // menos descuento
+                + Envío                // más envío
+                + (Subtotal - Descuento) * 0.15  // más IVA 15%
             ).toFixed(2);
 
             const payload = {
                 Items,              // tu array de { ID_Variante, Cantidad, Precio_Unitario, Subtotal }
                 Subtotal,           // número
-                envio,              // número
-                descuento,          // número
-                total,              // número
-                metodoPago: this.Estado.Método_Pago, // string
-                direccionEnvio: direccion,           // string
-                codigoPostal,      // string
-                instruccionesEnvio: instrucciones     // string
+                Envío,              // número
+                Descuento,          // número
+                Total,              // número
+                Método_Pago: this.Estado.Método_Pago, // string
+                Dirección_Envío: direccion,           // string
+                Código_Postal,      // string
+                Instrucciones_Envío: instrucciones     // string
             };
 
             // 4.4) Enviar el pedido con JWT en Authorization
@@ -497,7 +497,7 @@ const Checkout = {
     Recopilar_Datos_Formulario: function () {
         return {
             direccion: document.getElementById('Direccion').value.trim(),
-            codigoPostal: document.getElementById('Código_Postal').value.trim(),
+            Código_Postal: document.getElementById('Código_Postal').value.trim(),
             instrucciones: document.getElementById('Instrucciones_Envío').value.trim()
         };
     },

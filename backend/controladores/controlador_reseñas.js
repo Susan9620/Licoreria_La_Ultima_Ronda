@@ -31,7 +31,7 @@ class ControladorReseñas {
       });
 
       // 2) Recalcular promedio y total de reseñas para ese producto
-      const { promedio, total } = await modeloReseñas.obtenerPromedioYTotal(
+      const { promedio, Total } = await modeloReseñas.obtenerPromedioYTotal(
         ID_Producto
       );
 
@@ -39,13 +39,13 @@ class ControladorReseñas {
       await modeloProductos.actualizarCalificacionYTotal(
         ID_Producto,
         promedio,
-        total
+        Total
       );
 
       return res.status(200).json({
         Éxito: true,
         Mensaje: 'Reseña registrada correctamente',
-        Datos: { promedio, total },
+        Datos: { promedio, Total },
       });
     } catch (error) {
       console.error('Error en insertarReseña:', error);

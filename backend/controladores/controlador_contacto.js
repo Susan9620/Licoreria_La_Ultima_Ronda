@@ -28,7 +28,7 @@ class Controlador_Contacto {
    */
   async Listar(req, res) {
     try {
-      const Mensajes = await Modelo_Contacto.obtenerTodos();
+      const Mensajes = await Modelo_Contacto.Obtener_Todos();
       return res.json({ Éxito: true, Datos: Mensajes });
     } catch (e) {
       console.error('Error listando mensajes de contacto:', e);

@@ -14,22 +14,22 @@ const router = express.Router();
 router.use(verificarToken, esAdministrador);
 
 // PEDIDOS
-// Obtener un pedido con detalles (pedido + items)
+// Obtener un pedido con detalles
 router.get('/pedidos/:id', ControladorPedidos.obtenerPedido);
 // Cambiar estado de un pedido
 router.put('/pedidos/:id/estado', ControladorPedidos.cambiarEstado);
 // Listar todos los pedidos
-router.get('/pedidos', ControladorPedidos.obtenerTodos);
+router.get('/pedidos', ControladorPedidos.Obtener_Todos);
 
 // PRODUCTOS
 // Listar todos los productos (solo Admin)
-router.get('/productos', ControladorProductos.obtenerTodos);
+router.get('/Productos', ControladorProductos.Obtener_Todos);
 // Crear producto
-router.post('/productos', ControladorProductos.crearProducto);
+router.post('/Productos', ControladorProductos.crearProducto);
 // Actualizar producto
-router.put('/productos/:id', ControladorProductos.actualizarProducto);
+router.put('/Productos/:id', ControladorProductos.actualizarProducto);
 // Eliminar producto
-router.delete('/productos/:id', ControladorProductos.eliminarProducto);
+router.delete('/Productos/:id', ControladorProductos.eliminarProducto);
 
 // IMÁGENES DE PRODUCTO
 // Crear imagen de producto

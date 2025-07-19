@@ -10,11 +10,11 @@ class ControladorProductos {
    * @param {Object} req - Objeto de solicitud Express
    * @param {Object} res - Objeto de respuesta Express
    */
-  async obtenerProductosDestacados(req, res) {
+  async Obtener_Productos_Destacados(req, res) {
     try {
       // Obtener el límite del parámetro de consulta o usar el valor predeterminado
-      const limite = req.query.limite ? parseInt(req.query.limite) : 4;
-      const productos = await modeloProductos.obtenerProductosDestacados(limite);
+      const Límite = req.query.Límite ? parseInt(req.query.Límite) : 4;
+      const productos = await modeloProductos.Obtener_Productos_Destacados(Límite);
 
       res.status(200).json({
         Éxito: true,
@@ -35,9 +35,9 @@ class ControladorProductos {
      * GET /api/productos/all
      * Obtiene todos los productos activos
      */
-  async obtenerTodos(req, res) {
+  async Obtener_Todos(req, res) {
     try {
-      const productos = await modeloProductos.obtenerTodos();
+      const productos = await modeloProductos.Obtener_Todos();
       res.status(200).json({
         Éxito: true,
         Mensaje: 'Todos los productos obtenidos correctamente',
@@ -141,13 +141,13 @@ class ControladorProductos {
       await modeloReseñas.insertarReseña({ ID_Producto, ID_Usuario, valoracion: calificacion });
 
       // 2) Recalcular y 3) actualizar
-      const { promedio, total } = await modeloReseñas.obtenerPromedioYTotal(ID_Producto);
-      await modeloProductos.actualizarCalificacionYTotal(ID_Producto, promedio, total);
+      const { promedio, Total } = await modeloReseñas.obtenerPromedioYTotal(ID_Producto);
+      await modeloProductos.actualizarCalificacionYTotal(ID_Producto, promedio, Total);
 
       return res.status(200).json({
         Éxito: true,
         Mensaje: 'Calificación registrada correctamente',
-        Datos: { promedio, total }
+        Datos: { promedio, Total }
       });
     } catch (error) {
       console.error('Error en calificarProducto:', error);

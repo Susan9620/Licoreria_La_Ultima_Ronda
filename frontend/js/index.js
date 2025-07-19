@@ -230,8 +230,8 @@ function ocultarCargando() {
 }
 
 // Función para inicializar la sección de productos destacados
-function Inicializar_Productos_Destacados(productos) {
-    if (!productos || productos.length === 0) {
+function Inicializar_Productos_Destacados(Productos) {
+    if (!Productos || Productos.length === 0) {
         console.warn('No hay productos destacados disponibles');
         return;
     }
@@ -247,7 +247,7 @@ function Inicializar_Productos_Destacados(productos) {
     contenedor_productos.innerHTML = '';
 
     // Crear elementos para cada producto destacado
-    productos.forEach(producto => {
+    Productos.forEach(producto => {
         // Crear tarjeta de producto
         const tarjeta_producto = document.createElement('div');
         tarjeta_producto.className = 'Tarjeta_Producto';
@@ -591,7 +591,7 @@ function Agregar_Al_Carrito(ID_Producto, ID_Variante, Cantidad) {
 // Función para actualizar el contador de productos en el carrito
 function Actualizar_Contador_Carrito() {
     const Carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-    const Total_Items = Carrito.reduce((total, item) => total + item.Cantidad, 0);
+    const Total_Items = Carrito.reduce((Total, item) => Total + item.Cantidad, 0);
 
     // Actualizar el contador en el ícono del carrito en el encabezado
     const Contador_Carrito = document.querySelector('.Contador_Carrito');

@@ -1,15 +1,12 @@
 const { pool } = require('../configuraciones/configuraciones_bd');
 
-/**
- * Modelo para gestionar los productos (destacados y todos) en PostgreSQL
- */
-class ModeloProductos {
+class Modelo_Productos {
   /**
-   * Obtiene los productos marcados como destacados
-   * @param {number} limite
+   * Obtener los productos destacados
+   * @param {number} Límite
    * @returns {Promise<Array>}
    */
-  async obtenerProductosDestacados(limite = 4) {
+  async Obtener_Productos_Destacados(Límite = 4) {
     try {
       const Resultado = await pool.query(
         `SELECT 
@@ -21,13 +18,13 @@ class ModeloProductos {
            c."Nombre" AS "Categoría",
            v."ID_Variante_Producto" AS "ID_Variante",
            v."Nombre_Variante",
-           v."Graduación" AS "Graduacion",
+           v."Graduación" AS "Graduación",
            v."Precio",
            v."Precio_Oferta",
            v."Stock",
            i."URL" AS "Imagen_URL",
-           COALESCE(AVG(r."Valoración"), 0) AS "CalificaciónMedia",
-           COUNT(r."ID_Reseña")   AS "TotalReseñas"
+           COALESCE(AVG(r."Valoración"), 0) AS "Calificación_Media",
+           COUNT(r."ID_Reseña")   AS "Total_Reseñas"
          FROM "PRODUCTOS" p
          JOIN "CATEGORÍAS" c
            ON p."ID_Categoría" = c."ID_Categoría"
@@ -49,7 +46,7 @@ class ModeloProductos {
            v."Precio", v."Precio_Oferta", v."Stock", i."URL"
          ORDER BY p."Fecha_Actualización" DESC
          LIMIT $1`,
-        [limite]
+        [Límite]
       );
       return Resultado.rows;
     } catch (error) {
@@ -59,24 +56,24 @@ class ModeloProductos {
   }
 
   /**
-   * Obtiene todos los productos activos
+   * Obtener todos los productos activos
    * @returns {Promise<Array>}
    */
-  async obtenerTodos() {
+  async Obtener_Todos() {
     try {
-      const productos = await pool.query(`
+      const Productos = await pool.query(`
        SELECT
           p."ID_Producto",
           p."Nombre",
           p."Descripción_Corta",
           p."Slug",
-          COALESCE(r.calif, p."Calificación") AS "CalificaciónMedia",
-          COALESCE(r.numReseñas, 0) AS "NumReseñas",
+          COALESCE(r.calif, p."Calificación") AS "Calificación_Media",
+          COALESCE(r.numReseñas, 0) AS "Número_Reseñas",
           p."Etiqueta",
           c."Nombre" AS "Categoría",
           v."ID_Variante_Producto" AS "ID_Variante",
           v."Nombre_Variante",
-          v."Graduación" AS "Graduacion",
+          v."Graduación" AS "Graduación",
           v."Precio",
           v."Precio_Oferta",
           v."Stock" AS "Stock",
@@ -109,7 +106,7 @@ class ModeloProductos {
         ORDER BY p."Nombre" ASC;
 
       `);
-      return productos.rows;
+      return Productos.rows;
     } catch (error) {
       console.error('Error al obtener todos los productos:', error);
       throw new Error('Error al obtener todos los productos');
@@ -135,13 +132,13 @@ class ModeloProductos {
            c."Nombre"                    AS "Categoría",
            v."ID_Variante_Producto"      AS "ID_Variante",
            v."Nombre_Variante",
-           v."Graduación"                AS "Graduacion",
+           v."Graduación"                AS "Graduación",
            v."Precio",
            v."Precio_Oferta",
            v."Stock",
            i."URL"                       AS "Imagen_URL",
-           COALESCE(rr."CalificaciónMedia", p."Calificación") AS "CalificaciónMedia",
-           COALESCE(rr."TotalReseñas", 0)                  AS "TotalReseñas"
+           COALESCE(rr."Calificación_Media", p."Calificación") AS "Calificación_Media",
+           COALESCE(rr."Total_Reseñas", 0)                  AS "Total_Reseñas"
          FROM "PRODUCTOS" p
          JOIN "CATEGORÍAS" c
            ON p."ID_Categoría" = c."ID_Categoría"
@@ -154,8 +151,8 @@ class ModeloProductos {
          LEFT JOIN (
            SELECT
              "ID_Producto",
-             ROUND(AVG("Valoración")::numeric,1) AS "CalificaciónMedia",
-             COUNT(*)                          AS "TotalReseñas"
+             ROUND(AVG("Valoración")::numeric,1) AS "Calificación_Media",
+             COUNT(*)                          AS "Total_Reseñas"
            FROM "RESEÑAS"
            GROUP BY "ID_Producto"
          ) rr
@@ -165,7 +162,7 @@ class ModeloProductos {
            p."ID_Producto", c."Nombre",
            v."ID_Variante_Producto", v."Nombre_Variante", v."Graduación",
            v."Precio", v."Precio_Oferta", v."Stock", i."URL",
-           rr."CalificaciónMedia", rr."TotalReseñas"`,
+           rr."Calificación_Media", rr."Total_Reseñas"`,
         [id]
       );
       return Resultado.rows[0] || null;
@@ -178,10 +175,10 @@ class ModeloProductos {
   /**
    * Obtiene productos que se compran juntos con la variante dada
    * @param {number} ID_Variante
-   * @param {number} limite
+   * @param {number} Límite
    * @returns {Promise<Array>}
    */
-  async obtenerProductosCompradosJuntos(ID_Variante, limite = 4) {
+  async obtenerProductosCompradosJuntos(ID_Variante, Límite = 4) {
     try {
       const Resultado = await pool.query(
         `SELECT
@@ -197,7 +194,7 @@ class ModeloProductos {
          GROUP BY v2."ID_Producto"
          ORDER BY "VecesCompradoJunto" DESC
          LIMIT $2`,
-        [ID_Variante, limite]
+        [ID_Variante, Límite]
       );
       return Resultado.rows;
     } catch (error) {
@@ -207,19 +204,19 @@ class ModeloProductos {
   }
 
   /**
-   * Actualiza Calificación y TotalReseñas de un producto
+   * Actualiza Calificación y Total_Reseñas de un producto
    * @param {number} ID_Producto
    * @param {number} promedio
-   * @param {number} total
+   * @param {number} Total
    */
-  async actualizarCalificacionYTotal(ID_Producto, promedio, total) {
+  async actualizarCalificacionYTotal(ID_Producto, promedio, Total) {
     try {
       await pool.query(
         `UPDATE "PRODUCTOS"
            SET "Calificación" = $1,
-               "TotalReseñas" = $2
+               "Total_Reseñas" = $2
          WHERE "ID_Producto" = $3`,
-        [promedio, total, ID_Producto]
+        [promedio, Total, ID_Producto]
       );
     } catch (error) {
       console.error('Error al actualizar calificación y total de reseñas:', error);
@@ -317,4 +314,4 @@ class ModeloProductos {
   }
 }
 
-module.exports = new ModeloProductos();
+module.exports = new Modelo_Productos();

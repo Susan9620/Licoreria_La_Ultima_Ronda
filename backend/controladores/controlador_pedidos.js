@@ -15,13 +15,13 @@ class ControladorPedidos {
       const {
         Items: Items,
         Subtotal,
-        envio,
-        descuento,
-        total,
-        metodoPago,
-        direccionEnvio,
-        codigoPostal,
-        instruccionesEnvio
+        Envío,
+        Descuento,
+        Total,
+        Método_Pago,
+        Dirección_Envío,
+        Código_Postal,
+        Instrucciones_Envío
       } = req.body;
 
       // 🔍 DEBUG: Verificar items específicamente
@@ -58,23 +58,23 @@ class ControladorPedidos {
         });
       }
 
-      const { numeroPedido, ID_Pedido } = await modeloPedidos.Crear_Con_Detalles({
+      const { Número_Pedido, ID_Pedido } = await modeloPedidos.Crear_Con_Detalles({
         ID_Usuario,
         Items: Items,
         Subtotal,
-        envio,
-        descuento,
-        total,
-        metodoPago,
-        direccionEnvio,
-        codigoPostal,
-        instruccionesEnvio
+        Envío,
+        Descuento,
+        Total,
+        Método_Pago,
+        Dirección_Envío,
+        Código_Postal,
+        Instrucciones_Envío
       });
 
       return res.status(201).json({
         Éxito: true,
         Mensaje: 'Pedido y detalle guardados',
-        Datos: { ID_Pedido, númeroPedido: numeroPedido }
+        Datos: { ID_Pedido, númeroPedido: Número_Pedido }
       });
     } catch (err) {
       console.error('Error al crear pedido con detalle:', err);
@@ -87,10 +87,10 @@ class ControladorPedidos {
       const id = parseInt(req.params.id, 10);
       if (isNaN(id)) return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido' });
 
-      const pedido = await modeloPedidos.obtenerPorId(id);
-      if (!pedido) return res.status(404).json({ Éxito: false, Mensaje: 'Pedido no encontrado' });
+      const Pedido = await modeloPedidos.obtenerPorId(id);
+      if (!Pedido) return res.status(404).json({ Éxito: false, Mensaje: 'Pedido no encontrado' });
 
-      res.json({ Éxito: true, Datos: pedido });
+      res.json({ Éxito: true, Datos: Pedido });
     } catch (err) {
       console.error('Error al obtener pedido:', err);
       res.status(500).json({ Éxito: false, Mensaje: 'Error al recuperar pedido' });
@@ -100,8 +100,8 @@ class ControladorPedidos {
   async obtenerPedido(req, res) {
     try {
       const ID_Pedido = parseInt(req.params.id, 10);
-      const { pedido, Items } = await modeloPedidos.obtenerConDetalles(ID_Pedido);
-      return res.json({ Éxito: true, Datos: { pedido, Items } });
+      const { Pedido, Items } = await modeloPedidos.Obtener_Con_Detalles(ID_Pedido);
+      return res.json({ Éxito: true, Datos: { Pedido, Items } });
     } catch (err) {
       console.error(err);
       return res.status(404).json({ Éxito: false, Mensaje: err.message });
@@ -130,7 +130,7 @@ class ControladorPedidos {
   async cambiarEstado(req, res) {
     try {
       const ID_Pedido = parseInt(req.params.id, 10);
-      const { nuevoEstado } = req.body;
+      const { Nuevo_Estado } = req.body;
 
       // Validar ID
       if (isNaN(ID_Pedido)) {
@@ -139,12 +139,12 @@ class ControladorPedidos {
 
       // Validar estado
       const estadosPermitidos = ['Pendiente', 'Pagado', 'Entregado', 'Cancelado'];
-      if (!estadosPermitidos.includes(nuevoEstado)) {
+      if (!estadosPermitidos.includes(Nuevo_Estado)) {
         return res.status(400).json({ Éxito: false, Mensaje: 'Estado inválido.' });
       }
 
       // Llamada al modelo
-      const filasAfectadas = await modeloPedidos.actualizarEstado(ID_Pedido, nuevoEstado);
+      const filasAfectadas = await modeloPedidos.actualizarEstado(ID_Pedido, Nuevo_Estado);
       if (filasAfectadas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Pedido no encontrado.' });
       }
@@ -160,9 +160,9 @@ class ControladorPedidos {
    * GET /api/admin/pedidos
    * Lista todos los pedidos (solo Admin)
    */
-  async obtenerTodos(req, res) {
+  async Obtener_Todos(req, res) {
     try {
-      const pedidos = await modeloPedidos.obtenerTodos();
+      const pedidos = await modeloPedidos.Obtener_Todos();
       return res.json({ Éxito: true, Datos: pedidos });
     } catch (error) {
       console.error('Error al listar pedidos:', error);

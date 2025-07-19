@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // — Carga dinámica de productos —
     (async function Cargar_Productos() {
         try {
-            const resp = await fetch(`${API_BASE}/api/productos/all`);
+            const resp = await fetch(`${API_BASE}/api/Productos/all`);
             const json = await resp.json();
             if (!json.Éxito) throw new Error(json.Mensaje || 'Error al cargar productos');
 
@@ -66,10 +66,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 // 1) data-attributes
                 tarjeta.dataset.category = p.Categoría;
                 tarjeta.dataset.id = p.ID_Producto;
-                tarjeta.dataset.calificacionMedia = p.CalificaciónMedia;
-                tarjeta.dataset.numReseñas = p.NumReseñas;
+                tarjeta.dataset.calificacionMedia = p.Calificación_Media;
+                tarjeta.dataset.numReseñas = p.Número_Reseñas;
                 tarjeta.dataset.volumen = p.Nombre_Variante || '';
-                tarjeta.dataset.graduacion = p.Graduacion || '';
+                tarjeta.dataset.graduacion = p.Graduación || '';
                 tarjeta.dataset.stock = p.Stock;
 
                 // 2) etiqueta
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // 4) estrellas + número de reseñas
                 const contCalif = clon.querySelector('.Clasificación');
-                contCalif.innerHTML = Generar_Estrellas(parseFloat(p.CalificaciónMedia) || 0);
+                contCalif.innerHTML = Generar_Estrellas(parseFloat(p.Calificación_Media) || 0);
 
                 // 5.1) Aplicar estado "Activo" si ya está en la lista de deseos
                 const btnFav = clon.querySelector('.Botón_Favorito');

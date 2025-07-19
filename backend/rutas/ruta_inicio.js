@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
     const carrusel = await modeloImagenesCarrusel.Obtener_Imágenes_Carrusel();
     
     // Obtener productos destacados (limitar a 4)
-    const productosDestacados = await modeloProductosDestacados.obtenerProductosDestacados(4);
+    const productosDestacados = await modeloProductosDestacados.Obtener_Productos_Destacados(4);
 
     // Obtener categorías de productos
     const Categorías = await Modelo_Categorías.Obtener_Categorías();

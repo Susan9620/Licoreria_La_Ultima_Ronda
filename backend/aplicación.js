@@ -53,7 +53,7 @@ app.get('/api/estado', (req, res) => {
 // Registrar rutas de la API
 app.use('/api/Categorías', require('./rutas/ruta_categorías'));
 app.use('/api/carrusel', require('./rutas/ruta_imágenes_carrusel'));
-app.use('/api/productos', require('./rutas/ruta_productos'));
+app.use('/api/Productos', require('./rutas/ruta_productos'));
 app.use('/api/variantes', require('./rutas/ruta_variantes_producto'));
 app.use('/api/imagenes', require('./rutas/ruta_imágenes_producto'));
 app.use('/api/usuarios', require('./rutas/ruta_usuarios'));

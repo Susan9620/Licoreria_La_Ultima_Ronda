@@ -7,40 +7,40 @@ class Modelo_Pedidos {
    * @param {number} Datos.ID_Usuario
    * @param {Array<{ID_Variante:number,Cantidad:number,Precio_Unitario:number,Subtotal:number}>} Datos.Items
    * @param {number} Datos.Subtotal
-   * @param {number} Datos.envio
-   * @param {number} Datos.descuento
-   * @param {number} Datos.total
-   * @param {string} Datos.metodoPago
-   * @param {string} Datos.direccionEnvio
-   * @param {string} Datos.codigoPostal
-   * @param {string} Datos.instruccionesEnvio
+   * @param {number} Datos.Envío
+   * @param {number} Datos.Descuento
+   * @param {number} Datos.Total
+   * @param {string} Datos.Método_Pago
+   * @param {string} Datos.Dirección_Envío
+   * @param {string} Datos.Código_Postal
+   * @param {string} Datos.Instrucciones_Envío
    */
   async Crear_Con_Detalles({
     ID_Usuario,
     Items,
     Subtotal,
-    envio,
-    descuento,
-    total,
-    metodoPago,
-    direccionEnvio,
-    codigoPostal,
-    instruccionesEnvio
+    Envío,
+    Descuento,
+    Total,
+    Método_Pago,
+    Dirección_Envío,
+    Código_Postal,
+    Instrucciones_Envío
   }) {
-    const client = await pool.connect();
+    const Cliente = await pool.connect();
     try {
-      await client.query('BEGIN');
+      await Cliente.query('BEGIN');
 
-      // 1) Generar número de pedido
-      const { rows: maxRows } = await client.query(
-        `SELECT MAX(CAST(SUBSTRING("Número_Pedido", 4) AS INTEGER)) AS maxnum
+      // Generar número de pedido
+      const { rows: Filas_Máximas } = await Cliente.query(
+        `SELECT MAX(CAST(SUBSTRING("Número_Pedido", 4) AS INTEGER)) AS Número_Máximo
            FROM "PEDIDOS"`
       );
-      const siguiente = (maxRows[0].maxnum || 0) + 1;
-      const numeroPedido = 'PED' + String(siguiente).padStart(4, '0');
+      const Siguiente = (Filas_Máximas[0].Número_Máximo || 0) + 1;
+      const Número_Pedido = 'PED' + String(Siguiente).padStart(4, '0');
 
-      // 2) Insertar el pedido
-      const insertPedido = await client.query(
+      // Insertar el pedido
+      const Insertar_Pedido = await Cliente.query(
         `INSERT INTO "PEDIDOS"
            ("ID_Usuario","Número_Pedido","Subtotal","Envío","Descuento","Total",
             "Método_Pago","Dirección_Envío","Código_Postal","Instrucciones_Envío")
@@ -48,59 +48,59 @@ class Modelo_Pedidos {
          RETURNING "ID_Pedido"`,
         [
           ID_Usuario,
-          numeroPedido,
+          Número_Pedido,
           Subtotal,
-          envio,
-          descuento,
-          total,
-          metodoPago,
-          direccionEnvio,
-          codigoPostal,
-          instruccionesEnvio
+          Envío,
+          Descuento,
+          Total,
+          Método_Pago,
+          Dirección_Envío,
+          Código_Postal,
+          Instrucciones_Envío
         ]
       );
-      const ID_Pedido = insertPedido.rows[0].ID_Pedido;
+      const ID_Pedido = Insertar_Pedido.rows[0].ID_Pedido;
 
-      // 3) Por cada línea: descontar stock y guardar detalle
-      for (const { ID_Variante, Cantidad, Precio_Unitario, Subtotal: sub } of Items) {
-        const updateStock = await client.query(
+      // Descontar stock por cada línea y guardar detalle
+      for (const { ID_Variante, Cantidad, Precio_Unitario, Subtotal: Subtotales } of Items) {
+        const Actualizar_Stock = await Cliente.query(
           `UPDATE "VARIANTES_PRODUCTO"
              SET "Stock" = "Stock" - $1
            WHERE "ID_Variante_Producto" = $2
              AND "Stock" >= $1`,
           [Cantidad, ID_Variante]
         );
-        if (updateStock.rowCount === 0) {
+        if (Actualizar_Stock.rowCount === 0) {
           throw new Error(`Stock insuficiente para la variante ${ID_Variante}`);
         }
 
-        await client.query(
+        await Cliente.query(
           `INSERT INTO "DETALLE_PEDIDO"
              ("ID_Pedido","ID_Variante","Cantidad","Precio_Unitario","Subtotal")
            VALUES ($1,$2,$3,$4,$5)`,
-          [ID_Pedido, ID_Variante, Cantidad, Precio_Unitario, sub]
+          [ID_Pedido, ID_Variante, Cantidad, Precio_Unitario, Subtotales]
         );
       }
 
-      await client.query('COMMIT');
-      return { numeroPedido, ID_Pedido };
+      await Cliente.query('COMMIT');
+      return { Número_Pedido, ID_Pedido };
     } catch (err) {
-      await client.query('ROLLBACK');
+      await Cliente.query('ROLLBACK');
       console.error('Error en Crear_Con_Detalles:', err);
       throw err;
     } finally {
-      client.release();
+      Cliente.release();
     }
   }
 
   /**
-   * Obtiene un pedido por su ID, incluyendo datos de usuario.
+   * Obtener un pedido por su ID, incluyendo los datos de usuario
    * @param {number} ID_Pedido
    * @returns {Promise<Object|null>}
    */
-  async obtenerPorId(ID_Pedido) {
+  async Obtener_Por_ID(ID_Pedido) {
     try {
-      const { rows: pedidoRows } = await pool.query(
+      const { rows: Filas_Pedido } = await pool.query(
         `SELECT
            p.*, u."Nombre_Completo", u."Correo_Electrónico"
          FROM "PEDIDOS" p
@@ -109,12 +109,12 @@ class Modelo_Pedidos {
          WHERE p."ID_Pedido" = $1`,
         [ID_Pedido]
       );
-      if (!pedidoRows.length) return null;
-      const pedido = pedidoRows[0];
+      if (!Filas_Pedido.length) return null;
+      const Pedido = Filas_Pedido[0];
 
-      const { rows: detalleRows } = await pool.query(
+      const { rows: Detalle_Filas } = await pool.query(
         `SELECT
-           d."ID_Detalle_Pedido" AS idDetalle,
+           d."ID_Detalle_Pedido" AS ID_Detalle,
            d."ID_Variante"       AS ID_Variante,
            d."Cantidad",
            d."Precio_Unitario",
@@ -124,58 +124,58 @@ class Modelo_Pedidos {
         [ID_Pedido]
       );
 
-      pedido.detalle = detalleRows;
-      return pedido;
+      Pedido.detalle = Detalle_Filas;
+      return Pedido;
     } catch (error) {
-      console.error('Error en obtenerPorId:', error);
+      console.error('Error en Obtener_Por_ID:', error);
       throw error;
     }
   }
 
   /**
-   * Obtiene un pedido con detalle e información de productos, aliased a camelCase.
+   * Obtener un pedido con detalle e información de productos
    * @param {number} ID_Pedido
-   * @returns {Promise<{pedido:Object, Items:Array}>}
+   * @returns {Promise<{Pedido:Object, Items:Array}>}
    */
-  async obtenerConDetalles(ID_Pedido) {
+  async Obtener_Con_Detalles(ID_Pedido) {
     try {
-      const { rows: headerRows } = await pool.query(
+      const { rows: Encabezado_Filas } = await pool.query(
         `SELECT
            p."ID_Pedido"           AS "ID_Pedido",
-           p."Número_Pedido"       AS "numeroPedido",
-           p."Fecha_Creación"      AS "fecha",
+           p."Número_Pedido"       AS "Número_Pedido",
+           p."Fecha_Creación"      AS "Fecha",
            p."Subtotal"            AS "Subtotal",
-           p."Envío"               AS "envio",
-           p."Descuento"           AS "descuento",
-           p."Total"               AS "total",
-           p."Método_Pago"         AS "metodoPago",
-           p."Estado_Pedido"       AS "estadoPedido",
-           p."Dirección_Envío"     AS "direccionEnvio",
-           p."Código_Postal"       AS "codigoPostal",
-           p."Instrucciones_Envío" AS "instruccionesEnvio",
-           u."Nombre_Completo"     AS "nombreCliente",
-           u."Correo_Electrónico"  AS "correoCliente"
+           p."Envío"               AS "Envío",
+           p."Descuento"           AS "Descuento",
+           p."Total"               AS "Total",
+           p."Método_Pago"         AS "Método_Pago",
+           p."Estado_Pedido"       AS "Estado_Pedido",
+           p."Dirección_Envío"     AS "Dirección_Envío",
+           p."Código_Postal"       AS "Código_Postal",
+           p."Instrucciones_Envío" AS "Instrucciones_Envío",
+           u."Nombre_Completo"     AS "Nombre_Cliente",
+           u."Correo_Electrónico"  AS "Correo_Cliente"
          FROM "PEDIDOS" p
          JOIN "USUARIOS" u
            ON u."ID_Usuario" = p."ID_Usuario"
          WHERE p."ID_Pedido" = $1`,
         [ID_Pedido]
       );
-      if (!headerRows.length) {
+      if (!Encabezado_Filas.length) {
         throw new Error('Pedido no encontrado');
       }
-      const pedido = headerRows[0];
+      const Pedido = Encabezado_Filas[0];
 
-      const { rows: itemsRows } = await pool.query(
+      const { rows: Items_Filas } = await pool.query(
         `SELECT
            dp."ID_Variante"     AS "ID_Variante",
            dp."Cantidad"        AS "Cantidad",
            dp."Precio_Unitario" AS "Precio_Unitario",
            dp."Subtotal"        AS "Subtotal",
            vp."ID_Producto"     AS "ID_Producto",
-           prod."Nombre"        AS "nombreProducto",
-           vp."Nombre_Variante" AS "nombreVariante",
-           img."URL"            AS "imagenUrl"
+           prod."Nombre"        AS "Nombre_Producto",
+           vp."Nombre_Variante" AS "Nombre_Variante",
+           img."URL"            AS "URL_Imagen"
          FROM "DETALLE_PEDIDO" dp
          JOIN "VARIANTES_PRODUCTO" vp
            ON vp."ID_Variante_Producto" = dp."ID_Variante"
@@ -192,33 +192,33 @@ class Modelo_Pedidos {
         [ID_Pedido]
       );
 
-      return { pedido, Items: itemsRows };
+      return { Pedido, Items: Items_Filas };
     } catch (error) {
-      console.error('Error en obtenerConDetalles:', error);
+      console.error('Error en Obtener_Con_Detalles:', error);
       throw error;
     }
   }
 
   /**
-   * Devuelve todos los pedidos de un usuario.
+   * Devolver todos los pedidos de un usuario
    * @param {number} ID_Usuario
    * @returns {Promise<Array>}
    */
   async Obtener_Por_Usuario(ID_Usuario) {
     try {
-      const { rows } = await pool.query(
+      const { rows: Filas_Usuario } = await pool.query(
         `SELECT
            p."ID_Pedido"       AS "ID_Pedido",
-           p."Número_Pedido"   AS "numeroPedido",
-           p."Fecha_Creación"  AS "fecha",
+           p."Número_Pedido"   AS "Número_Pedido",
+           p."Fecha_Creación"  AS "Fecha",
            p."Total",
-           p."Estado_Pedido"   AS "estadoPedido"
+           p."Estado_Pedido"   AS "Estado_Pedido"
          FROM "PEDIDOS" p
          WHERE p."ID_Usuario" = $1
          ORDER BY p."Fecha_Creación" DESC`,
         [ID_Usuario]
       );
-      return rows;
+      return Filas_Usuario;
     } catch (error) {
       console.error('Error en Obtener_Por_Usuario:', error);
       throw error;
@@ -226,46 +226,46 @@ class Modelo_Pedidos {
   }
 
   /**
-   * Actualiza el estado de un pedido.
+   * Actualizar el estado de un pedido
    * @param {number} ID_Pedido
-   * @param {string} nuevoEstado
-   * @returns {Promise<number>} filas afectadas
+   * @param {string} Nuevo_Estado
+   * @returns {Promise<number>}
    */
-  async actualizarEstado(ID_Pedido, nuevoEstado) {
+  async Actualizar_Estado(ID_Pedido, Nuevo_Estado) {
     try {
       const Resultado = await pool.query(
         `UPDATE "PEDIDOS"
            SET "Estado_Pedido" = $1
          WHERE "ID_Pedido" = $2`,
-        [nuevoEstado, ID_Pedido]
+        [Nuevo_Estado, ID_Pedido]
       );
       return Resultado.rowCount;
     } catch (error) {
-      console.error('Error en actualizarEstado:', error);
+      console.error('Error en Actualizar_Estado:', error);
       throw error;
     }
   }
 
   /**
-   * Devuelve todos los pedidos (para admin).
+   * Devolver todos los pedidos (solo administrador)
    * @returns {Promise<Array>}
    */
-  async obtenerTodos() {
+  async Obtener_Todos() {
     try {
-      const { rows } = await pool.query(
+      const { rows: Filas_Pedidos } = await pool.query(
         `SELECT
            "ID_Pedido"       AS "ID_Pedido",
-           "Número_Pedido"   AS "numeroPedido",
-           "Fecha_Creación"  AS "fecha",
+           "Número_Pedido"   AS "Número_Pedido",
+           "Fecha_Creación"  AS "Fecha",
            "Total",
-           "Estado_Pedido"   AS "estadoPedido",
+           "Estado_Pedido"   AS "Estado_Pedido",
            "ID_Usuario"      AS "ID_Usuario"
          FROM "PEDIDOS"
          ORDER BY "Fecha_Creación" DESC`
       );
-      return rows;
+      return Filas_Pedidos;
     } catch (error) {
-      console.error('Error en obtenerTodos:', error);
+      console.error('Error en Obtener_Todos:', error);
       throw error;
     }
   }

@@ -9,7 +9,7 @@ async function cargarDatosDeProductos(ids) {
   const resultados = []
   for (let ID of ids) {
     try {
-      const resp = await fetch(`${API_BASE}/api/productos/${ID}`)
+      const resp = await fetch(`${API_BASE}/api/Productos/${ID}`)
       if (!resp.ok) continue
       const json = await resp.json()
       if (json.Éxito && json.Datos) {
@@ -43,7 +43,7 @@ async function cargarDatosProducto() {
     mostrarIndicadorCarga(true)
 
     // Obtener datos del producto
-    const respuestaProducto = await fetch(`${API_BASE}/api/productos/${ID_Producto}`)
+    const respuestaProducto = await fetch(`${API_BASE}/api/Productos/${ID_Producto}`)
     if (!respuestaProducto.ok) {
       throw new Error("Producto no encontrado")
     }
@@ -132,8 +132,8 @@ function renderizarProducto() {
   actualizarMigasPan()
 
   // Actualizar información básica
-  const nombreProducto = document.querySelector(".Nombre_Producto")
-  if (nombreProducto) nombreProducto.textContent = productoActual.Nombre
+  const Nombre_Producto = document.querySelector(".Nombre_Producto")
+  if (Nombre_Producto) Nombre_Producto.textContent = productoActual.Nombre
 
   const descripcion = document.querySelector(".Descripción_Breve")
   if (descripcion) {
@@ -242,7 +242,7 @@ async function initCalificacionUsuario() {
   const token = localStorage.getItem('token');
   if (token) {
     try {
-      const resp = await fetch(`${API_BASE}/api/productos/${productoActual.ID_Producto}/calificacion`, {
+      const resp = await fetch(`${API_BASE}/api/Productos/${productoActual.ID_Producto}/calificacion`, {
         headers: { 'Authorization': 'Bearer ' + token }
       });
       const json = await resp.json();
@@ -288,7 +288,7 @@ async function initCalificacionUsuario() {
         return;
       }
       try {
-        const resp = await fetch(`${API_BASE}/api/productos/${productoActual.ID_Producto}/calificar`, {
+        const resp = await fetch(`${API_BASE}/api/Productos/${productoActual.ID_Producto}/calificar`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -299,8 +299,8 @@ async function initCalificacionUsuario() {
         const json = await resp.json();
         if (!resp.ok || !json.Éxito) throw new Error(json.Mensaje || 'Error');
         // actualizar media y total en UI
-        productoActual.CalificaciónMedia = json.Datos.promedio;
-        productoActual.TotalReseñas = json.Datos.total;
+        productoActual.Calificación_Media = json.Datos.promedio;
+        productoActual.Total_Reseñas = json.Datos.Total;
         actualizarCalificacion();
         // bloquear definitivamente
         estrellas.forEach(s => s.style.pointerEvents = 'none');
@@ -412,10 +412,10 @@ function actualizarEtiquetas() {
   const precioOferta = parseFloat(productoActual.Precio_Oferta) || 0
 
   if (precioOferta > 0 && precioOferta < precio) {
-    const descuento = Math.round(((precio - precioOferta) / precio) * 100)
+    const Descuento = Math.round(((precio - precioOferta) / precio) * 100)
     const etiquetaOferta = document.createElement("span")
     etiquetaOferta.className = "Etiqueta Oferta"
-    etiquetaOferta.textContent = `-${descuento}%`
+    etiquetaOferta.textContent = `-${Descuento}%`
     contenedorEtiquetas.appendChild(etiquetaOferta)
   }
 }
@@ -425,8 +425,8 @@ function actualizarCalificacion() {
   const calificacionProducto = document.querySelector(".Calificación_Producto")
   if (!calificacionProducto) return
 
-  const calificacion = parseFloat(productoActual.CalificaciónMedia) || 0;
-  const totalReseñas = parseInt(productoActual.TotalReseñas) || 0;
+  const calificacion = parseFloat(productoActual.Calificación_Media) || 0;
+  const totalReseñas = parseInt(productoActual.Total_Reseñas) || 0;
 
   // Actualizar estrellas
   const estrellas = calificacionProducto.querySelector(".Estrellas")
@@ -475,11 +475,11 @@ function actualizarPrecio() {
   let html = ""
 
   if (precioOferta > 0 && precioOferta < precio) {
-    const descuento = Math.round(((precio - precioOferta) / precio) * 100)
+    const Descuento = Math.round(((precio - precioOferta) / precio) * 100)
     html = `
       <span class="Precio_Actual">$${precioOferta.toFixed(2)}</span>
       <span class="Precio_Anterior">$${precio.toFixed(2)}</span>
-      <span class="Descuento">Ahorra ${descuento}%</span>
+      <span class="Descuento">Ahorra ${Descuento}%</span>
     `
   } else {
     html = `<span class="Precio_Actual">$${precio.toFixed(2)}</span>`
@@ -694,7 +694,7 @@ function actualizarInformacionAdicional() {
 // Cargar productos relacionados
 async function cargarProductosRelacionados() {
   try {
-    const respuesta = await fetch(`${API_BASE}/api/productos/all`);
+    const respuesta = await fetch(`${API_BASE}/api/Productos/all`);
     if (!respuesta.ok) return;
 
     const Datos = await respuesta.json();
@@ -753,13 +753,13 @@ async function cargarProductosRelacionados() {
 }
 
 // Renderizar productos relacionados
-function renderizarProductosRelacionados(productos) {
+function renderizarProductosRelacionados(Productos) {
   const contenedor = document.querySelector(".Carrusel_Relacionados")
-  if (!contenedor || productos.length === 0) return
+  if (!contenedor || Productos.length === 0) return
 
   contenedor.innerHTML = ""
 
-  productos.forEach(producto => {
+  Productos.forEach(producto => {
     const tarjeta = document.createElement("div")
     tarjeta.className = "Tarjeta_Producto"
 
@@ -769,18 +769,18 @@ function renderizarProductosRelacionados(productos) {
         : producto.Precio
     ) || 0
 
-    const imagenUrl = producto.Imagen_URL || "https://via.placeholder.com/320x200?text=Sin+Imagen"
+    const URL_Imagen = producto.Imagen_URL || "https://via.placeholder.com/320x200?text=Sin+Imagen"
 
     tarjeta.innerHTML = `
       <div class="Imagen_Tarjeta">
-        <img src="${imagenUrl}" alt="${producto.Nombre}">
+        <img src="${URL_Imagen}" alt="${producto.Nombre}">
       </div>
       <div class="Cuerpo_Tarjeta">
         <h3 class="Título_Producto">${producto.Nombre}</h3>
         <div class="Información_Producto">
           <div class="Precio_Tarjeta">$${precio.toFixed(2)}</div>
           <div class="Estrellas_Tarjeta">
-            ${generarEstrellas(producto.CalificaciónMedia || 0)}
+            ${generarEstrellas(producto.Calificación_Media || 0)}
           </div>
         </div>
         <div class="Botones_Tarjeta">
@@ -798,7 +798,7 @@ function renderizarProductosRelacionados(productos) {
 async function cargarYRenderizarCompradosJuntos(ID_Producto) {
   try {
     // 1) Traer los IDs de "comprados juntos"
-    const resp = await fetch(`${API_BASE}/api/productos/${ID_Producto}/compradosjuntos`);
+    const resp = await fetch(`${API_BASE}/api/Productos/${ID_Producto}/compradosjuntos`);
     if (!resp.ok) return;
     const json = await resp.json();
     if (!json.Éxito) return;
@@ -807,11 +807,11 @@ async function cargarYRenderizarCompradosJuntos(ID_Producto) {
 
     // 2) IDs y detalles de cada producto
     const ids = Datos.map(item => item.ID_Producto);
-    const productos = await cargarDatosDeProductos(ids);
+    const Productos = await cargarDatosDeProductos(ids);
 
     // 3) Traer variantes predeterminadas para cada producto
     const variantesMap = {};
-    await Promise.all(productos.map(async p => {
+    await Promise.all(Productos.map(async p => {
       try {
         const r = await fetch(`${API_BASE}/api/variantes/producto/${p.ID_Producto}`);
         if (!r.ok) return;
@@ -828,7 +828,7 @@ async function cargarYRenderizarCompradosJuntos(ID_Producto) {
     if (!contenedorPaquete) return;
     contenedorPaquete.innerHTML = "";
 
-    productos.forEach((p, index) => {
+    Productos.forEach((p, index) => {
       // 4.1) Separador "+"
       if (index > 0) {
         const sep = document.createElement("div");
@@ -843,7 +843,7 @@ async function cargarYRenderizarCompradosJuntos(ID_Producto) {
           ? p.Precio_Oferta
           : p.Precio
       ) || 0;
-      const imagenUrl = p.Imagen_URL || "https://via.placeholder.com/150x150?text=Sin+Imagen";
+      const URL_Imagen = p.Imagen_URL || "https://via.placeholder.com/150x150?text=Sin+Imagen";
 
       const tarjeta = document.createElement("div");
       tarjeta.className = "Producto_Paquete";
@@ -853,7 +853,7 @@ async function cargarYRenderizarCompradosJuntos(ID_Producto) {
 
       tarjeta.innerHTML = `
         <div class="Imagen_Paquete">
-          <img src="${imagenUrl}" alt="${p.Nombre}" />
+          <img src="${URL_Imagen}" alt="${p.Nombre}" />
         </div>
         <div class="Nombre_Paquete">${p.Nombre}</div>
         <div class="Precio_Paquete">$${precioNum.toFixed(2)}</div>
@@ -862,7 +862,7 @@ async function cargarYRenderizarCompradosJuntos(ID_Producto) {
     });
 
     // 5) Calcular y mostrar total
-    const total = productos.reduce((sum, p) => {
+    const Total = Productos.reduce((sum, p) => {
       const pr = parseFloat(
         p.Precio_Oferta && parseFloat(p.Precio_Oferta) < parseFloat(p.Precio)
           ? p.Precio_Oferta
@@ -872,7 +872,7 @@ async function cargarYRenderizarCompradosJuntos(ID_Producto) {
     }, 0);
     const precioTotalElem = document.querySelector(".Comprados_Juntos .Precio_Total");
     if (precioTotalElem) {
-      precioTotalElem.textContent = `$${total.toFixed(2)}`;
+      precioTotalElem.textContent = `$${Total.toFixed(2)}`;
     }
 
     // 6) Animación de entrada
@@ -911,11 +911,11 @@ function actualizarPrecioVariante(precio, precioOferta, stock) {
   const precioOfertaNum = parseFloat(precioOferta) || 0
 
   if (precioOfertaNum > 0 && precioOfertaNum < precioNum) {
-    const descuento = Math.round(((precioNum - precioOfertaNum) / precioNum) * 100)
+    const Descuento = Math.round(((precioNum - precioOfertaNum) / precioNum) * 100)
     html = `
       <span class="Precio_Actual">$${precioOfertaNum.toFixed(2)}</span>
       <span class="Precio_Anterior">$${precioNum.toFixed(2)}</span>
-      <span class="Descuento">Ahorra ${descuento}%</span>
+      <span class="Descuento">Ahorra ${Descuento}%</span>
     `
   } else {
     html = `<span class="Precio_Actual">$${precioNum.toFixed(2)}</span>`
@@ -1167,9 +1167,9 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      const nombreVariante = variante?.Nombre_Variante ?? '';
-      const nombreCompleto = nombreVariante
-        ? `${productoActual.Nombre} – ${nombreVariante}`
+      const Nombre_Variante = variante?.Nombre_Variante ?? '';
+      const nombreCompleto = Nombre_Variante
+        ? `${productoActual.Nombre} – ${Nombre_Variante}`
         : productoActual.Nombre;
 
       const Imagen = document.querySelector('.Imagen_Principal img')?.src || '';

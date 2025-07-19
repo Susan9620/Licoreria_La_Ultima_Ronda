@@ -116,13 +116,13 @@ const Gestión_Pedidos = {
             if (!json.Éxito) throw new Error('Pedido no exitoso');
 
             // 1️⃣ Asigna el pedido y sus items al estado
-            this.Estado.Pedido_Actual = json.Datos.pedido;
+            this.Estado.Pedido_Actual = json.Datos.Pedido;
             this.Estado.Pedido_Actual.Items = json.Datos.Items;
 
             console.log('📝 Datos pedidos completos:', json.Datos);
             console.log('📝 Detalle de items (completo):', JSON.stringify(json.Datos.Items, null, 2));
             console.log('📋 JSON recibido:', json);
-            console.log('📝 Pedido completo (campos):', JSON.stringify(json.Datos.pedido, null, 2));
+            console.log('📝 Pedido completo (campos):', JSON.stringify(json.Datos.Pedido, null, 2));
 
             if (!resp.ok || !json.Éxito) {
                 throw new Error(json.Mensaje || resp.statusText);
@@ -149,7 +149,7 @@ const Gestión_Pedidos = {
         const Encabezado_Título = document.querySelector('.Encabezado_Confirmación h2');
         const Encabezado_Subtítulo = document.querySelector('.Encabezado_Confirmación p');
 
-        if (Pedido.estadoPedido === 'Pendiente') {
+        if (Pedido.Estado_Pedido === 'Pendiente') {
             Encabezado_Título.textContent = '¡Pedido Pendiente!';
             Encabezado_Subtítulo.textContent = 'Su pedido está en proceso de verificación de pago.';
 
@@ -180,7 +180,7 @@ const Gestión_Pedidos = {
         // ——— Bloque para ocultar/mostrar botón de factura ———
         const btnFactura = document.getElementById('Descargar_Factura');
         if (btnFactura) {
-            if (Pedido.estadoPedido === 'Pendiente' || Pedido.estadoPedido === 'Cancelado') {
+            if (Pedido.Estado_Pedido === 'Pendiente' || Pedido.Estado_Pedido === 'Cancelado') {
                 btnFactura.style.display = 'none';
             } else {
                 btnFactura.style.display = ''; // o 'inline-block' si tu CSS lo necesita
@@ -194,30 +194,30 @@ const Gestión_Pedidos = {
         if (!p) return;
 
         // Número de pedido
-        document.getElementById('Número_Pedido').textContent = p.numeroPedido;
+        document.getElementById('Número_Pedido').textContent = p.Número_Pedido;
 
         // Fecha
-        const f = new Date(p.fecha);
+        const f = new Date(p.Fecha);
         document.getElementById('Fecha_Pedido').textContent =
             f.toLocaleDateString('es-ES', this.Configuración.Formato_Fecha);
 
         // Método de pago
-        let txtMP = p.metodoPago;
+        let txtMP = p.Método_Pago;
         if (txtMP === 'Transferencia') txtMP = 'Transferencia Bancaria';
         document.getElementById('Método_Pago').textContent = txtMP;
 
         // Totales
-        const sub = parseFloat(p.Subtotal) || 0;
-        const env = parseFloat(p.envio) || 0;
-        const tot = parseFloat(p.Total) || 0;
-        const desc = parseFloat(p.descuento) || 0;
+        const Subtotales = parseFloat(p.Subtotal) || 0;
+        const Envíos = parseFloat(p.Envío) || 0;
+        const Totales = parseFloat(p.Total) || 0;
+        const Descuentos = parseFloat(p.Descuento) || 0;
 
-        document.getElementById('Valor_Subtotal').textContent = `$${sub.toFixed(2)}`;
-        document.getElementById('Valor_Envío').textContent = env > 0 ? `$${env.toFixed(2)}` : 'Gratis';
-        document.getElementById('Valor_Total').textContent = `$${tot.toFixed(2)}`;
+        document.getElementById('Valor_Subtotal').textContent = `$${Subtotales.toFixed(2)}`;
+        document.getElementById('Valor_Envío').textContent = Envíos > 0 ? `$${Envíos.toFixed(2)}` : 'Gratis';
+        document.getElementById('Valor_Total').textContent = `$${Totales.toFixed(2)}`;
 
-        if (desc > 0) {
-            document.getElementById('Valor_Descuento').textContent = `-$${desc.toFixed(2)}`;
+        if (Descuentos > 0) {
+            document.getElementById('Valor_Descuento').textContent = `-$${Descuentos.toFixed(2)}`;
             document.getElementById('Contenedor_Descuento').style.display = 'flex';
         } else {
             document.getElementById('Contenedor_Descuento').style.display = 'none';
@@ -226,18 +226,18 @@ const Gestión_Pedidos = {
 
     // Renderizar los productos comprados
     Renderizar_Productos: function () {
-        const pedido = this.Estado.Pedido_Actual;
-        if (!pedido || !pedido.Items) return;
+        const Pedido = this.Estado.Pedido_Actual;
+        if (!Pedido || !Pedido.Items) return;
 
         const cont = document.getElementById('Lista_Productos');
         cont.innerHTML = '';
 
-        pedido.Items.forEach(item => {
-            const urlImg = item.imagenUrl || '/imagenes/producto-placeholder.jpg';
-            const baseName = item.nombreProducto;
+        Pedido.Items.forEach(item => {
+            const urlImg = item.URL_Imagen || '/imagenes/producto-placeholder.jpg';
+            const baseName = item.Nombre_Producto;
             // ❗️ Este campo debe venir de tu API; aquí probamos distintos nombres
             const variante = item.volumen        // si en tu modelo así se llama
-                || item.nombreVariante // o con esta clave
+                || item.Nombre_Variante // o con esta clave
                 || item.variante       // o así
                 || '';
             // Si hay variante, la concatenamos
@@ -272,29 +272,29 @@ const Gestión_Pedidos = {
     // Renderizar la información de envío
     Renderizar_Información_Envío: function () {
         const p = this.Estado.Pedido_Actual;
-        console.log('🛠️ Datos de envío raw:', p.direccionEnvio, p.codigoPostal, p.instruccionesEnvio);
+        console.log('🛠️ Datos de envío raw:', p.Dirección_Envío, p.Código_Postal, p.Instrucciones_Envío);
         if (!p) return;
 
         // Montamos la dirección
         let html = `
     <div class="Dirección_Envío">
-      <p><strong>Dirección:</strong> ${p.direccionEnvio || 'No especificada'}</p>
-      <p><strong>Código Postal:</strong> ${p.codigoPostal || 'No especificado'}</p>
+      <p><strong>Dirección:</strong> ${p.Dirección_Envío || 'No especificada'}</p>
+      <p><strong>Código Postal:</strong> ${p.Código_Postal || 'No especificado'}</p>
     </div>`;
         // Agregamos instrucciones si existen
-        if (p.instruccionesEnvio && p.instruccionesEnvio.trim()) {
+        if (p.Instrucciones_Envío && p.Instrucciones_Envío.trim()) {
             html += `
       <div class="Instrucciones_Envío">
-        <p><strong>Instrucciones:</strong> ${p.instruccionesEnvio}</p>
+        <p><strong>Instrucciones:</strong> ${p.Instrucciones_Envío}</p>
       </div>`;
         }
 
         document.getElementById('Información_Envío').innerHTML = html;
 
         // Tiempo estimado: sólo si ya no está pendiente
-        if (p.estadoPedido !== 'Pendiente') {
-            // Asegúrate de que tu API devuelva también la fecha (p.fecha o p.fechaPedido)
-            const fechaPedido = new Date(p.fecha);
+        if (p.Estado_Pedido !== 'Pendiente') {
+            // Asegúrate de que tu API devuelva también la fecha (p.Fecha o p.fechaPedido)
+            const fechaPedido = new Date(p.Fecha);
             fechaPedido.setMinutes(fechaPedido.getMinutes() + this.Configuración.Tiempo_Envío_Estimado);
             const elTiempo = document.getElementById('Tiempo_Estimado');
             if (elTiempo) {
@@ -336,14 +336,14 @@ const Gestión_Pedidos = {
         tabla.innerHTML = '';
 
         this.Estado.Historial_Pedidos.forEach(p => {
-            const idOrden = p.ID_Pedido || p.numeroPedido;
+            const idOrden = p.ID_Pedido || p.Número_Pedido;
             const totalVal = parseFloat(p.Total) || 0;
-            const fecha = new Date(p.fecha);
-            const fechaFormateada = fecha.toLocaleDateString('es-ES', this.Configuración.Fecha_Corta);
-            const estadoCapitalizado = p.estadoPedido.charAt(0).toUpperCase() + p.estadoPedido.slice(1);
+            const Fecha = new Date(p.Fecha);
+            const fechaFormateada = Fecha.toLocaleDateString('es-ES', this.Configuración.Fecha_Corta);
+            const estadoCapitalizado = p.Estado_Pedido.charAt(0).toUpperCase() + p.Estado_Pedido.slice(1);
 
             // ——— Comprobamos si mostrar el icono ———
-            const puedeVerFactura = p.estadoPedido !== 'Pendiente' && p.estadoPedido !== 'Cancelado';
+            const puedeVerFactura = p.Estado_Pedido !== 'Pendiente' && p.Estado_Pedido !== 'Cancelado';
             const botonFactura = puedeVerFactura
                 ? `<button class="Botones Botón_Accion" onclick="Gestión_Pedidos.Ver_Factura_Pedido('${idOrden}')">
                      <i class="fas fa-file-invoice"></i>
@@ -422,14 +422,14 @@ const Gestión_Pedidos = {
     // Actualizar el contenido de la factura con los datos de un pedido
     Actualizar_Datos_Factura: function (p) {
         // Número y fecha
-        document.getElementById('Número_Factura').textContent = `F-${p.numeroPedido}`;
-        document.getElementById('Fecha_Factura').textContent = this.Formatear_Fecha(p.fecha);
+        document.getElementById('Número_Factura').textContent = `F-${p.Número_Pedido}`;
+        document.getElementById('Fecha_Factura').textContent = this.Formatear_Fecha(p.Fecha);
 
         // Datos del cliente
         document.getElementById('Nombre_Cliente').textContent =
             this.Estado.Datos_Sesión.Nombre_Completo || 'Cliente';
         document.getElementById('Dirección_Cliente').textContent =
-            p.direccionEnvio || 'No Disponible';
+            p.Dirección_Envío || 'No Disponible';
         document.getElementById('Teléfono_Cliente').textContent =
             this.Estado.Datos_Sesión.Teléfono || 'No Disponible';
         document.getElementById('Correo_Electrónico_Cliente').textContent =
@@ -443,9 +443,9 @@ const Gestión_Pedidos = {
             const subtotalProducto = precio * item.Cantidad;
 
             // Aquí concatenamos variante si existe
-            const nombre = item.nombreVariante
-                ? `${item.nombreProducto} – ${item.nombreVariante}`
-                : item.nombreProducto;
+            const nombre = item.Nombre_Variante
+                ? `${item.Nombre_Producto} – ${item.Nombre_Variante}`
+                : item.Nombre_Producto;
 
             const fila = document.createElement('tr');
             fila.innerHTML = `
@@ -459,21 +459,21 @@ const Gestión_Pedidos = {
 
         // Cálculos de totales
         const Subtotal = parseFloat(p.Subtotal) || 0;
-        const envio = parseFloat(p.envio) || 0;
-        const descuento = parseFloat(p.descuento) || 0;
+        const Envío = parseFloat(p.Envío) || 0;
+        const Descuento = parseFloat(p.Descuento) || 0;
         const iva = Subtotal * 0.15;
-        const totalConIVA = Subtotal + iva + envio - descuento;
+        const totalConIVA = Subtotal + iva + Envío - Descuento;
 
         document.getElementById('Subtotal_Factura').textContent = `$${Subtotal.toFixed(2)}`;
         document.getElementById('IVA_Factura').textContent = `$${iva.toFixed(2)}`;
-        document.getElementById('Envío_Factura').textContent = envio > 0 ? `$${envio.toFixed(2)}` : 'Gratis';
+        document.getElementById('Envío_Factura').textContent = Envío > 0 ? `$${Envío.toFixed(2)}` : 'Gratis';
         document.getElementById('Total_Factura').textContent = `$${totalConIVA.toFixed(2)}`;
 
         // Descuento
         const filaDesc = document.getElementById('Fila_Descuento_Factura');
-        if (descuento > 0) {
+        if (Descuento > 0) {
             filaDesc.style.display = 'table-row';
-            document.getElementById('Descuento_Factura').textContent = `-$${descuento.toFixed(2)}`;
+            document.getElementById('Descuento_Factura').textContent = `-$${Descuento.toFixed(2)}`;
         } else {
             filaDesc.style.display = 'none';
         }
@@ -484,14 +484,14 @@ const Gestión_Pedidos = {
         try {
             // 1) Si coincide con el pedido actual
             const actual = this.Estado.Pedido_Actual;
-            const actualId = actual?.ID_Pedido || actual?.numeroPedido;
+            const actualId = actual?.ID_Pedido || actual?.Número_Pedido;
             if (actual && actualId == orden) {
                 this.Mostrar_Modal_Factura();
                 return;
             }
 
             // 2) Buscar en el historial
-            let p = this.Estado.Historial_Pedidos.find(p => (p.ID_Pedido || p.numeroPedido) == orden);
+            let p = this.Estado.Historial_Pedidos.find(p => (p.ID_Pedido || p.Número_Pedido) == orden);
             if (!p) {
                 Mostrar_Notificación('No se pudo encontrar la factura solicitada', 'Error');
                 return;
@@ -509,11 +509,11 @@ const Gestión_Pedidos = {
                 }
                 // json.Datos.pedido  y json.Datos.Items
                 p = {
-                    ...json.Datos.pedido,
+                    ...json.Datos.Pedido,
                     Items: json.Datos.Items,
-                    Subtotal: json.Datos.pedido.Subtotal,
-                    envio: json.Datos.pedido.envio,
-                    descuento: json.Datos.pedido.descuento
+                    Subtotal: json.Datos.Pedido.Subtotal,
+                    Envío: json.Datos.Pedido.Envío,
+                    Descuento: json.Datos.Pedido.Descuento
                 };
             }
 
@@ -536,7 +536,7 @@ const Gestión_Pedidos = {
         Ventana_Impresión.document.write(`
             <html>
                 <head>
-                    <title>Factura – ${this.Estado.Pedido_Actual.numeroPedido}</title>
+                    <title>Factura – ${this.Estado.Pedido_Actual.Número_Pedido}</title>
                     <style>
                         body { font-family: Arial, sans-serif; color: #333; }
                         .Encabezado_Factura { display: flex; justify-content: space-between; margin-bottom: 30px; }

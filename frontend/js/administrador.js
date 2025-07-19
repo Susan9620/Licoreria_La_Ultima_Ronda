@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         content.innerHTML = '';
         if (sect === 'Pedidos') {
             await renderPedidos();
-        } else if (sect === 'productos') {
+        } else if (sect === 'Productos') {
             await renderProductos();
         }
     }
@@ -78,9 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
             <tr>
               <td>${p.ID_Pedido}</td>
               <td>${p.ID_Usuario}</td>
-              <td>${new Date(p.fecha).toLocaleString()}</td>
+              <td>${new Date(p.Fecha).toLocaleString()}</td>
               <td>$${parseFloat(p.Total).toFixed(2)}</td>
-              <td><span class="Estado_Texto ${p.estadoPedido}">${p.estadoPedido}</span></td>
+              <td><span class="Estado_Texto ${p.Estado_Pedido}">${p.Estado_Pedido}</span></td>
               <td>
                 <button class="Botones Botón_Primario" onclick="viewPedido(${p.ID_Pedido})">
                   Ver/Editar
@@ -102,16 +102,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const resp = await fetch(`${baseUrl}/api/admin/pedidos/${id}`, { headers: authHeader() });
             const json = await resp.json();
             if (!resp.ok || !json.Éxito) throw new Error(json.Mensaje);
-            const { pedido, Items } = json.Datos;
-            modalID.textContent = pedido.ID_Pedido;
-            detUsuario.textContent = pedido.ID_Usuario;
-            detFecha.textContent = new Date(pedido.fecha).toLocaleString();
-            detTotal.textContent = parseFloat(pedido.total).toFixed(2);
-            detEstado.value = pedido.estadoPedido;
+            const { Pedido, Items } = json.Datos;
+            modalID.textContent = Pedido.ID_Pedido;
+            detUsuario.textContent = Pedido.ID_Usuario;
+            detFecha.textContent = new Date(Pedido.Fecha).toLocaleString();
+            detTotal.textContent = parseFloat(Pedido.Total).toFixed(2);
+            detEstado.value = Pedido.Estado_Pedido;
             detProductos.innerHTML = Items.map(item => {
-                const nombre = item.nombreVariante
-                    ? `${item.nombreProducto} – ${item.nombreVariante}`
-                    : item.nombreProducto;
+                const nombre = item.Nombre_Variante
+                    ? `${item.Nombre_Producto} – ${item.Nombre_Variante}`
+                    : item.Nombre_Producto;
                 return `
           <tr>
             <td>${nombre}</td>
@@ -128,12 +128,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnGuardar?.addEventListener('click', async () => {
         const id = modalID.textContent;
-        const nuevoEstado = detEstado.value;
+        const Nuevo_Estado = detEstado.value;
         try {
             const resp = await fetch(`${baseUrl}/api/admin/pedidos/${id}/estado`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json', ...authHeader() },
-                body: JSON.stringify({ nuevoEstado })
+                body: JSON.stringify({ Nuevo_Estado })
             });
             const json = await resp.json();
             if (!resp.ok || !json.Éxito) throw new Error(json.Mensaje);
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function renderProductos() {
         content.innerHTML = '<p>Cargando productos…</p>';
         try {
-            const resp = await fetch(`${baseUrl}/api/admin/productos`, { headers: authHeader() });
+            const resp = await fetch(`${baseUrl}/api/admin/Productos`, { headers: authHeader() });
             const json = await resp.json();
             if (!resp.ok || !json.Éxito) throw new Error(json.Mensaje);
             const table = document.createElement('table');
@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('Título_Modal_Producto').textContent = 'Editar';
         ResetearModal_Producto();
         try {
-            const resp = await fetch(`${baseUrl}/api/productos/${id}`, { headers: authHeader() });
+            const resp = await fetch(`${baseUrl}/api/Productos/${id}`, { headers: authHeader() });
             const { Datos: prod } = await resp.json();
             document.getElementById('Nombre_Producto').value = prod.Nombre;
             document.getElementById('Precio_Producto').value = prod.Precio;
@@ -232,13 +232,13 @@ document.addEventListener('DOMContentLoaded', () => {
         let res, json;
         try {
             if (modoProducto === 'Crear') {
-                res = await fetch(`${baseUrl}/api/admin/productos`, {
+                res = await fetch(`${baseUrl}/api/admin/Productos`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeader() },
                     body: JSON.stringify(Datos)
                 });
                 json = await res.json(); idProductoActual = json.Datos.ID_Producto;
             } else {
-                await fetch(`${baseUrl}/api/admin/productos/${idProductoActual}`, {
+                await fetch(`${baseUrl}/api/admin/Productos/${idProductoActual}`, {
                     method: 'PUT', headers: { 'Content-Type': 'application/json', ...authHeader() },
                     body: JSON.stringify(Datos)
                 });
@@ -258,7 +258,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.eliminarProducto = async (id) => {
         if (!confirm('¿Seguro que quieres eliminar este producto?')) return;
-        await fetch(`${baseUrl}/api/admin/productos/${id}`, { method: 'DELETE', headers: authHeader() });
+        await fetch(`${baseUrl}/api/admin/Productos/${id}`, { method: 'DELETE', headers: authHeader() });
         await renderProductos();
     };
 
