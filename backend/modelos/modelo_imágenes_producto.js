@@ -86,16 +86,16 @@ const ModeloImagenesProducto = {
       throw new Error("No se proporcionaron campos válidos para crear la imagen de producto");
     }
 
-    const columns      = Claves.map(k => `"${k}"`).join(", ");
-    const values       = Claves.map(k => Datos[k]);
-    const placeholders = values.map((_, i) => `$${i + 1}`).join(", ");
+    const Columnas      = Claves.map(k => `"${k}"`).join(", ");
+    const Valores       = Claves.map(k => Datos[k]);
+    const placeholders = Valores.map((_, i) => `$${i + 1}`).join(", ");
 
     try {
       const Resultado = await pool.query(
-        `INSERT INTO "IMÁGENES_PRODUCTO" (${columns})
+        `INSERT INTO "IMÁGENES_PRODUCTO" (${Columnas})
          VALUES (${placeholders})
          RETURNING "ID_Imagen"`,
-        values
+        Valores
       );
       return Resultado.rows[0]["ID_Imagen"];
     } catch (error) {
@@ -120,15 +120,15 @@ const ModeloImagenesProducto = {
     const sets = Claves
       .map((k, i) => `"${k}" = $${i + 1}`)
       .join(", ");
-    const values = Claves.map(k => Cambios[k]);
-    values.push(idImagen); // último placeholder
+    const Valores = Claves.map(k => Cambios[k]);
+    Valores.push(idImagen); // último placeholder
 
     try {
       const Resultado = await pool.query(
         `UPDATE "IMÁGENES_PRODUCTO"
          SET ${sets}
-         WHERE "ID_Imagen" = $${values.length}`,
-        values
+         WHERE "ID_Imagen" = $${Valores.length}`,
+        Valores
       );
       return Resultado.rowCount;
     } catch (error) {

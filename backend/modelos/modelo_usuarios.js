@@ -94,16 +94,16 @@ class ModeloUsuarios {
       throw new Error('No se proporcionaron campos válidos para crear el usuario');
     }
 
-    const columns = Claves.map(k => `"${k}"`).join(', ');
-    const values = Claves.map(k => Datos[k]);
-    const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
+    const Columnas = Claves.map(k => `"${k}"`).join(', ');
+    const Valores = Claves.map(k => Datos[k]);
+    const placeholders = Valores.map((_, i) => `$${i + 1}`).join(', ');
 
     try {
       const Resultado = await pool.query(
-        `INSERT INTO "USUARIOS" (${columns})
+        `INSERT INTO "USUARIOS" (${Columnas})
          VALUES (${placeholders})
          RETURNING "ID_Usuario"`,
-        values
+        Valores
       );
       return Resultado.rows[0]['ID_Usuario'];
     } catch (error) {
@@ -136,15 +136,15 @@ class ModeloUsuarios {
     const sets = Claves
       .map((k, i) => `"${k}" = $${i + 1}`)
       .join(', ');
-    const values = Claves.map(k => Cambios[k]);
-    values.push(ID_Usuario);
+    const Valores = Claves.map(k => Cambios[k]);
+    Valores.push(ID_Usuario);
 
     try {
       const Resultado = await pool.query(
         `UPDATE "USUARIOS"
            SET ${sets}
-         WHERE "ID_Usuario" = $${values.length}`,
-        values
+         WHERE "ID_Usuario" = $${Valores.length}`,
+        Valores
       );
       return Resultado.rowCount;
     } catch (error) {

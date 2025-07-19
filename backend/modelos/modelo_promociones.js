@@ -52,20 +52,20 @@ class ModeloPromociones {
       throw new Error('No se proporcionaron campos válidos para crear la promoción');
     }
 
-    const columns = Claves.map(k => `"${k}"`).join(', ');
-    const values = Claves.map(k =>
+    const Columnas = Claves.map(k => `"${k}"`).join(', ');
+    const Valores = Claves.map(k =>
       k === 'Parámetros'
         ? JSON.stringify(Datos[k])
         : Datos[k]
     );
-    const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
+    const placeholders = Valores.map((_, i) => `$${i + 1}`).join(', ');
 
     try {
       const Resultado = await pool.query(
-        `INSERT INTO "PROMOCIONES" (${columns})
+        `INSERT INTO "PROMOCIONES" (${Columnas})
          VALUES (${placeholders})
          RETURNING "ID_Promoción"`,
-        values
+        Valores
       );
       return Resultado.rows[0]['ID_Promoción'];
     } catch (error) {
@@ -98,19 +98,19 @@ class ModeloPromociones {
     const sets = Claves
       .map((k, i) => `"${k}" = $${i + 1}`)
       .join(', ');
-    const values = Claves.map(k =>
+    const Valores = Claves.map(k =>
       k === 'Parámetros'
         ? JSON.stringify(Cambios[k])
         : Cambios[k]
     );
-    values.push(idPromocion);
+    Valores.push(idPromocion);
 
     try {
       const Resultado = await pool.query(
         `UPDATE "PROMOCIONES"
          SET ${sets}
-         WHERE "ID_Promoción" = $${values.length}`,
-        values
+         WHERE "ID_Promoción" = $${Valores.length}`,
+        Valores
       );
       return Resultado.rowCount;
     } catch (error) {

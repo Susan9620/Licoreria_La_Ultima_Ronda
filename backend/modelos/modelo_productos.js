@@ -250,16 +250,16 @@ class ModeloProductos {
       throw new Error('No se proporcionaron campos válidos para crear el producto');
     }
 
-    const columns = Claves.map(k => `"${k}"`).join(', ');
-    const values = Claves.map(k => Datos[k]);
-    const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
+    const Columnas = Claves.map(k => `"${k}"`).join(', ');
+    const Valores = Claves.map(k => Datos[k]);
+    const placeholders = Valores.map((_, i) => `$${i + 1}`).join(', ');
 
     try {
       const Resultado = await pool.query(
-        `INSERT INTO "PRODUCTOS" (${columns})
+        `INSERT INTO "PRODUCTOS" (${Columnas})
          VALUES (${placeholders})
          RETURNING "ID_Producto"`,
-        values
+        Valores
       );
       return Resultado.rows[0]['ID_Producto'];
     } catch (error) {

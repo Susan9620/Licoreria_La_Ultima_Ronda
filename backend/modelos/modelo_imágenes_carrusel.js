@@ -77,16 +77,16 @@ class Modelo_Imágenes_Carrusel {
       throw new Error('No se proporcionaron campos válidos para crear la imagen de carrusel');
     }
 
-    const columns = Claves.map(k => `"${k}"`).join(', ');
-    const values = Claves.map(k => Datos[k]);
-    const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
+    const Columnas = Claves.map(k => `"${k}"`).join(', ');
+    const Valores = Claves.map(k => Datos[k]);
+    const placeholders = Valores.map((_, i) => `$${i + 1}`).join(', ');
 
     try {
       const Resultado = await pool.query(
-        `INSERT INTO "IMÁGENES_CARRUSEL" (${columns})
+        `INSERT INTO "IMÁGENES_CARRUSEL" (${Columnas})
          VALUES (${placeholders})
          RETURNING "ID_Imagen"`,
-        values
+        Valores
       );
       return Resultado.rows[0]['ID_Imagen'];
     } catch (error) {
@@ -118,16 +118,16 @@ class Modelo_Imágenes_Carrusel {
     const sets = Claves
       .map((k, i) => `"${k}" = $${i + 1}`)
       .join(', ');
-    const values = Claves.map(k => Cambios[k]);
+    const Valores = Claves.map(k => Cambios[k]);
     // último placeholder para el id
-    values.push(idImagen);
+    Valores.push(idImagen);
 
     try {
       const Resultado = await pool.query(
         `UPDATE "IMÁGENES_CARRUSEL"
          SET ${sets}
-         WHERE "ID_Imagen" = $${values.length}`,
-        values
+         WHERE "ID_Imagen" = $${Valores.length}`,
+        Valores
       );
       return Resultado.rowCount;
     } catch (error) {
