@@ -128,42 +128,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnGuardar?.addEventListener('click', async () => {
         const id = modalID.textContent;
-        const Nuevo_Estado = detEstado.value;
         try {
             const resp = await fetch(`${baseUrl}/api/admin/pedidos/${id}/estado`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json', ...authHeader() },
-                body: JSON.stringify({ Nuevo_Estado })
+                body: JSON.stringify({ Nuevo_Estado: detEstado.value })
             });
-            // 1) clonamos antes de parsear JSON
-            const copia = resp.clone();
-            const textoRaw = await copia.text();
-            console.error('💥 raw error:', resp.status, textoRaw);
 
-            // 2) ahora sí parseamos JSON 
-            const json = await resp.json();
+            // 1) Clonamos la respuesta y leemos el texto bruto
+            const raw = await resp.clone().text();
+            console.error('💥 raw error:', resp.status, raw);
+
+            // 2) Intentamos parsear JSON (si es JSON)
+            let json = null;
+            try {
+                json = await resp.json();
+            } catch { }
+
+            // 3) Disparamos el error con el texto crudo
             if (!resp.ok) {
-                throw new Error(`HTTP ${resp.status}: ${textoRaw}`);
+                throw new Error(`HTTP ${resp.status}: ${raw}`);
             }
-            if (!resp.ok) {
-                // Lee el cuerpo de la respuesta (texto o JSON)
-                let detalle;
-                try {
-                    detalle = await resp.text();
-                    console.error('💥 PUT /api/admin/pedidos/:id/estado ERROR', resp.status, detalle);
-                } catch (err) {
-                    console.error('💥 No pude leer body de error:', err);
-                }
-                throw new Error(`Error en servidor (${resp.status})`);
+            if (json && !json.Éxito) {
+                throw new Error(json.Mensaje || 'Éxito=false');
             }
-            if (!json.Éxito) {
-                console.error('💥 API devolvió éxito=false', json);
-                throw new Error(json.Mensaje || 'Error desconocido');
-            }
+
+            // … si todo está ok …
             modal.classList.add('Oculto');
             await renderPedidos();
             Mostrar_Notificación('Estado actualizado correctamente.', 'Éxito');
+
         } catch (e) {
+            console.error('🔴 fallo al guardar pedido:', e);
             Mostrar_Notificación('Error al guardar: ' + e.message, 'Error');
         }
     });
