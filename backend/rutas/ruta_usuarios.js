@@ -7,7 +7,7 @@ router.post('/register', ctrl.register);
 router.post('/login',    ctrl.login);
 
 // Listar todos los usuarios
-router.get('/',           ctrl.listar);
+router.get('/',           ctrl.Listar);
 
 // PERFIL del usuario logueado
 router.get(

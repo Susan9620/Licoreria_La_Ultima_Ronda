@@ -8,7 +8,7 @@ class ModeloUsuarios {
    */
   async obtenerPorCorreo(correo) {
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `SELECT *
            FROM "USUARIOS"
           WHERE "Correo_Electrónico" = $1
@@ -16,7 +16,7 @@ class ModeloUsuarios {
           LIMIT 1`,
         [correo]
       );
-      return result.rows[0] || null;
+      return Resultado.rows[0] || null;
     } catch (error) {
       console.error('Error al obtener usuario por correo:', error);
       throw new Error('Error al obtener usuario');
@@ -29,7 +29,7 @@ class ModeloUsuarios {
    */
   async listarTodos() {
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `SELECT
            "ID_Usuario",
            "Nombre_Completo",
@@ -39,7 +39,7 @@ class ModeloUsuarios {
          FROM "USUARIOS"
         WHERE "Activo" = TRUE`
       );
-      return result.rows;
+      return Resultado.rows;
     } catch (error) {
       console.error('Error al listar usuarios:', error);
       throw new Error('Error al listar los usuarios');
@@ -53,7 +53,7 @@ class ModeloUsuarios {
    */
   async obtenerPorId(id) {
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `SELECT
            "ID_Usuario",
            "Nombre_Completo",
@@ -65,7 +65,7 @@ class ModeloUsuarios {
         LIMIT 1`,
         [id]
       );
-      return result.rows[0] || null;
+      return Resultado.rows[0] || null;
     } catch (error) {
       console.error('Error al obtener usuario por ID:', error);
       throw new Error('Error al obtener usuario');
@@ -77,7 +77,7 @@ class ModeloUsuarios {
    * @param {Object} Datos
    * @returns {Promise<number>}
    */
-  async crear(Datos) {
+  async Crear(Datos) {
     const permitidos = [
       'Nombre_Completo',
       'Correo_Electrónico',
@@ -99,13 +99,13 @@ class ModeloUsuarios {
     const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
 
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `INSERT INTO "USUARIOS" (${columns})
          VALUES (${placeholders})
          RETURNING "ID_Usuario"`,
         values
       );
-      return result.rows[0]['ID_Usuario'];
+      return Resultado.rows[0]['ID_Usuario'];
     } catch (error) {
       console.error('Error al crear usuario:', error);
       throw new Error('Error al crear el usuario');
@@ -114,11 +114,11 @@ class ModeloUsuarios {
 
   /**
    * Actualiza un usuario por su ID, sólo con campos permitidos
-   * @param {number} idUsuario
-   * @param {Object} cambios
+   * @param {number} ID_Usuario
+   * @param {Object} Cambios
    * @returns {Promise<number>} filas afectadas
    */
-  async actualizar(idUsuario, cambios) {
+  async Actualizar(ID_Usuario, Cambios) {
     const permitidos = [
       'Nombre_Completo',
       'Correo_Electrónico',
@@ -130,23 +130,23 @@ class ModeloUsuarios {
       'Rol',
       'Activo'
     ];
-    const keys = Object.keys(cambios).filter(k => permitidos.includes(k));
+    const keys = Object.keys(Cambios).filter(k => permitidos.includes(k));
     if (keys.length === 0) return 0;
 
     const sets = keys
       .map((k, i) => `"${k}" = $${i + 1}`)
       .join(', ');
-    const values = keys.map(k => cambios[k]);
-    values.push(idUsuario);
+    const values = keys.map(k => Cambios[k]);
+    values.push(ID_Usuario);
 
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `UPDATE "USUARIOS"
            SET ${sets}
          WHERE "ID_Usuario" = $${values.length}`,
         values
       );
-      return result.rowCount;
+      return Resultado.rowCount;
     } catch (error) {
       console.error('Error al actualizar usuario:', error);
       throw new Error('Error al actualizar el usuario');
@@ -155,17 +155,17 @@ class ModeloUsuarios {
 
   /**
    * Elimina (borra) un usuario por su ID
-   * @param {number} idUsuario
+   * @param {number} ID_Usuario
    * @returns {Promise<number>} filas afectadas
    */
-  async eliminar(idUsuario) {
+  async eliminar(ID_Usuario) {
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `DELETE FROM "USUARIOS"
          WHERE "ID_Usuario" = $1`,
-        [idUsuario]
+        [ID_Usuario]
       );
-      return result.rowCount;
+      return Resultado.rowCount;
     } catch (error) {
       console.error('Error al eliminar usuario:', error);
       throw new Error('Error al eliminar el usuario');

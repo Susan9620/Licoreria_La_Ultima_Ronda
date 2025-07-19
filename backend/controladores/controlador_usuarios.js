@@ -18,7 +18,7 @@ class ControladorUsuarios {
       const salt = await bcrypt.genSalt(10);
       const hash = await bcrypt.hash(Contraseña, salt);
       // Crear usuario
-      const nuevo = await modeloUsuarios.crear({
+      const nuevo = await modeloUsuarios.Crear({
         Nombre_Completo,
         Correo_Electrónico,
         Contraseña: hash
@@ -67,7 +67,7 @@ class ControladorUsuarios {
   }
 
   // GET /api/usuarios
-  async listar(req, res) {
+  async Listar(req, res) {
     try {
       const usuarios = await modeloUsuarios.listarTodos();
       res.json({ Éxito: true, Datos: usuarios });
@@ -131,7 +131,7 @@ class ControladorUsuarios {
       const hash = await bcrypt.hash(Contraseña, 10);
 
       // Pasa un objeto con todas las claves a tu modelo
-      const id = await modeloUsuarios.crear({
+      const id = await modeloUsuarios.Crear({
         Nombre_Completo,
         Correo_Electrónico,
         Contraseña: hash,
@@ -146,7 +146,7 @@ class ControladorUsuarios {
       return res.status(201).json({
         Éxito: true,
         Mensaje: 'Usuario creado correctamente',
-        Datos: { idUsuario: id }
+        Datos: { ID_Usuario: id }
       });
     } catch (error) {
       console.error('Error al crear usuario:', error);
@@ -164,13 +164,13 @@ class ControladorUsuarios {
       if (isNaN(id)) {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
-      const cambios = { ...req.body };
+      const Cambios = { ...req.body };
       // Si vienen contraseña, la hasheamos
-      if (cambios.Contraseña) {
-        cambios.Contraseña = await bcrypt.hash(cambios.Contraseña, 10);
+      if (Cambios.Contraseña) {
+        Cambios.Contraseña = await bcrypt.hash(Cambios.Contraseña, 10);
       }
-      const filas = await modeloUsuarios.actualizar(id, cambios);
-      if (filas === 0) {
+      const Filas = await modeloUsuarios.Actualizar(id, Cambios);
+      if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Usuario no encontrado.' });
       }
       return res.json({ Éxito: true, Mensaje: 'Usuario actualizado correctamente.' });
@@ -190,8 +190,8 @@ class ControladorUsuarios {
       if (isNaN(id)) {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
-      const filas = await modeloUsuarios.eliminar(id);
-      if (filas === 0) {
+      const Filas = await modeloUsuarios.eliminar(id);
+      if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Usuario no encontrado.' });
       }
       return res.json({ Éxito: true, Mensaje: 'Usuario eliminado correctamente.' });

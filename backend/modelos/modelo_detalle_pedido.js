@@ -8,13 +8,13 @@ class ModeloDetallePedido {
    */
   async insertar({ idPedido, idVariante, cantidad, precioUnitario, subtotal }) {
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `INSERT INTO "DETALLE_PEDIDO"
            ("ID_Pedido", "ID_Variante", "Cantidad", "Precio_Unitario", "Subtotal")
          VALUES ($1, $2, $3, $4, $5)`,
         [idPedido, idVariante, cantidad, precioUnitario, subtotal]
       );
-      return result.rowCount;
+      return Resultado.rowCount;
     } catch (error) {
       console.error('Error al insertar detalle de pedido:', error);
       throw new Error('Error al insertar el detalle de pedido');

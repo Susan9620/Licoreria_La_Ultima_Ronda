@@ -10,7 +10,7 @@ class ModeloPromociones {
    */
   async obtenerPromocionesActivas() {
     try {
-      const result = await pool.query(`
+      const Resultado = await pool.query(`
         SELECT
           "ID_Promoción"   AS id,
           "ID_Categoría"   AS categoriaId,
@@ -25,7 +25,7 @@ class ModeloPromociones {
           AND ("Fecha_Fin"    IS NULL OR "Fecha_Fin"    >= CURRENT_DATE)
         ORDER BY "Fecha_Inicio" DESC
       `);
-      return result.rows;
+      return Resultado.rows;
     } catch (error) {
       console.error('Error al obtener promociones:', error);
       throw new Error('Error al obtener las promociones');
@@ -37,7 +37,7 @@ class ModeloPromociones {
    * @param {Object} Datos
    * @returns {Promise<number>}
    */
-  async crear(Datos) {
+  async Crear(Datos) {
     const permitidos = [
       'ID_Categoría',
       'Título',
@@ -61,13 +61,13 @@ class ModeloPromociones {
     const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
 
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `INSERT INTO "PROMOCIONES" (${columns})
          VALUES (${placeholders})
          RETURNING "ID_Promoción"`,
         values
       );
-      return result.rows[0]['ID_Promoción'];
+      return Resultado.rows[0]['ID_Promoción'];
     } catch (error) {
       console.error('Error al crear promoción:', error);
       throw new Error('Error al crear la promoción');
@@ -77,10 +77,10 @@ class ModeloPromociones {
   /**
    * Actualiza una promoción por su ID.
    * @param {number} idPromocion
-   * @param {Object} cambios
+   * @param {Object} Cambios
    * @returns {Promise<number>} filas afectadas
    */
-  async actualizar(idPromocion, cambios) {
+  async Actualizar(idPromocion, Cambios) {
     const permitidos = [
       'ID_Categoría',
       'Título',
@@ -90,7 +90,7 @@ class ModeloPromociones {
       'Tipo',
       'Parámetros'
     ];
-    const keys = Object.keys(cambios).filter(k => permitidos.includes(k));
+    const keys = Object.keys(Cambios).filter(k => permitidos.includes(k));
     if (keys.length === 0) {
       throw new Error('No se proporcionaron campos válidos para actualizar la promoción');
     }
@@ -100,19 +100,19 @@ class ModeloPromociones {
       .join(', ');
     const values = keys.map(k =>
       k === 'Parámetros'
-        ? JSON.stringify(cambios[k])
-        : cambios[k]
+        ? JSON.stringify(Cambios[k])
+        : Cambios[k]
     );
     values.push(idPromocion);
 
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `UPDATE "PROMOCIONES"
          SET ${sets}
          WHERE "ID_Promoción" = $${values.length}`,
         values
       );
-      return result.rowCount;
+      return Resultado.rowCount;
     } catch (error) {
       console.error(`Error al actualizar promoción ${idPromocion}:`, error);
       throw new Error('Error al actualizar la promoción');
@@ -126,12 +126,12 @@ class ModeloPromociones {
    */
   async eliminar(idPromocion) {
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `DELETE FROM "PROMOCIONES"
          WHERE "ID_Promoción" = $1`,
         [idPromocion]
       );
-      return result.rowCount;
+      return Resultado.rowCount;
     } catch (error) {
       console.error(`Error al eliminar promoción ${idPromocion}:`, error);
       throw new Error('Error al eliminar la promoción');

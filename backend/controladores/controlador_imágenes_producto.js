@@ -67,7 +67,7 @@ const obtenerPrincipal = async (req, res) => {
  */
 const crearImagenProducto = async (req, res) => {
   try {
-    const id = await modeloImagenesProducto.crear(req.body)
+    const id = await modeloImagenesProducto.Crear(req.body)
     return res.status(201).json({
       Éxito: true,
       Mensaje: "Imagen de producto creada correctamente",
@@ -89,8 +89,8 @@ const actualizarImagenProducto = async (req, res) => {
     if (isNaN(id)) {
       return res.status(400).json({ Éxito: false, Mensaje: "ID inválido." })
     }
-    const filas = await modeloImagenesProducto.actualizar(id, req.body)
-    if (filas === 0) {
+    const Filas = await modeloImagenesProducto.Actualizar(id, req.body)
+    if (Filas === 0) {
       return res.status(404).json({ Éxito: false, Mensaje: "Imagen no encontrada." })
     }
     return res.json({ Éxito: true, Mensaje: "Imagen de producto actualizada correctamente." })
@@ -110,8 +110,8 @@ const eliminarImagenProducto = async (req, res) => {
     if (isNaN(id)) {
       return res.status(400).json({ Éxito: false, Mensaje: "ID inválido." })
     }
-    const filas = await modeloImagenesProducto.eliminar(id)
-    if (filas === 0) {
+    const Filas = await modeloImagenesProducto.eliminar(id)
+    if (Filas === 0) {
       return res.status(404).json({ Éxito: false, Mensaje: "Imagen no encontrada." })
     }
     return res.json({ Éxito: true, Mensaje: "Imagen de producto eliminada correctamente." })

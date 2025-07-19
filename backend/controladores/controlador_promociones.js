@@ -32,7 +32,7 @@ class ControladorPromociones {
    */
   async crearPromocion(req, res) {
     try {
-      const id = await modeloPromociones.crear(req.body);
+      const id = await modeloPromociones.Crear(req.body);
       return res.status(201).json({
         Éxito: true,
         Mensaje: 'Promoción creada correctamente',
@@ -55,8 +55,8 @@ class ControladorPromociones {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
 
-      const filas = await modeloPromociones.actualizar(id, req.body);
-      if (filas === 0) {
+      const Filas = await modeloPromociones.Actualizar(id, req.body);
+      if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Promoción no encontrada.' });
       }
 
@@ -78,8 +78,8 @@ class ControladorPromociones {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
 
-      const filas = await modeloPromociones.eliminar(id);
-      if (filas === 0) {
+      const Filas = await modeloPromociones.eliminar(id);
+      if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Promoción no encontrada.' });
       }
 

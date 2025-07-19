@@ -4,7 +4,7 @@ class ModeloPedidos {
   /**
    * Crea un pedido con sus detalles, ajusta stock, y devuelve número de pedido e ID.
    * @param {Object} Datos
-   * @param {number} Datos.idUsuario
+   * @param {number} Datos.ID_Usuario
    * @param {Array<{idVariante:number,cantidad:number,precioUnitario:number,subtotal:number}>} Datos.items
    * @param {number} Datos.subtotal
    * @param {number} Datos.envio
@@ -16,7 +16,7 @@ class ModeloPedidos {
    * @param {string} Datos.instruccionesEnvio
    */
   async crearConDetalles({
-    idUsuario,
+    ID_Usuario,
     items,
     subtotal,
     envio,
@@ -47,7 +47,7 @@ class ModeloPedidos {
          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
          RETURNING "ID_Pedido"`,
         [
-          idUsuario,
+          ID_Usuario,
           numeroPedido,
           subtotal,
           envio,
@@ -201,10 +201,10 @@ class ModeloPedidos {
 
   /**
    * Devuelve todos los pedidos de un usuario.
-   * @param {number} idUsuario
+   * @param {number} ID_Usuario
    * @returns {Promise<Array>}
    */
-  async obtenerPorUsuario(idUsuario) {
+  async obtenerPorUsuario(ID_Usuario) {
     try {
       const { rows } = await pool.query(
         `SELECT
@@ -216,7 +216,7 @@ class ModeloPedidos {
          FROM "PEDIDOS" p
          WHERE p."ID_Usuario" = $1
          ORDER BY p."Fecha_Creación" DESC`,
-        [idUsuario]
+        [ID_Usuario]
       );
       return rows;
     } catch (error) {
@@ -233,13 +233,13 @@ class ModeloPedidos {
    */
   async actualizarEstado(idPedido, nuevoEstado) {
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `UPDATE "PEDIDOS"
            SET "Estado_Pedido" = $1
          WHERE "ID_Pedido" = $2`,
         [nuevoEstado, idPedido]
       );
-      return result.rowCount;
+      return Resultado.rowCount;
     } catch (error) {
       console.error('Error en actualizarEstado:', error);
       throw error;
@@ -259,7 +259,7 @@ class ModeloPedidos {
            "Fecha_Creación"  AS "fecha",
            "Total",
            "Estado_Pedido"   AS "estadoPedido",
-           "ID_Usuario"      AS "idUsuario"
+           "ID_Usuario"      AS "ID_Usuario"
          FROM "PEDIDOS"
          ORDER BY "Fecha_Creación" DESC`
       );

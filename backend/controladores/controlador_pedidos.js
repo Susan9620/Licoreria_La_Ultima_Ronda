@@ -6,7 +6,7 @@ class ControladorPedidos {
    */
   async crearPedido(req, res) {
     try {
-      const idUsuario = req.usuario.id;
+      const ID_Usuario = req.usuario.id;
 
       // 🔍 DEBUG: Ver qué llega en el body
       console.log("📥 Datos recibidos en el backend:");
@@ -59,7 +59,7 @@ class ControladorPedidos {
       }
 
       const { numeroPedido, idPedido } = await modeloPedidos.crearConDetalles({
-        idUsuario,
+        ID_Usuario,
         items,
         subtotal,
         envio,
@@ -114,8 +114,8 @@ class ControladorPedidos {
  */
   async obtenerPedidosPorUsuario(req, res) {
     try {
-      const idUsuario = req.usuario.id;
-      const pedidos = await modeloPedidos.obtenerPorUsuario(idUsuario);
+      const ID_Usuario = req.usuario.id;
+      const pedidos = await modeloPedidos.obtenerPorUsuario(ID_Usuario);
       return res.json({ Éxito: true, Datos: pedidos });
     } catch (err) {
       console.error('Error al obtener historial de pedidos:', err);

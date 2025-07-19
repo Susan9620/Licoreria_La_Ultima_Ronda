@@ -7,7 +7,7 @@ const { pool } = require('../configuraciones/configuraciones_bd');
  */
 async function obtenerPorProducto(idProducto) {
   try {
-    const result = await pool.query(
+    const Resultado = await pool.query(
       `SELECT
          "ID_Variante_Producto",
          "ID_Producto",
@@ -28,7 +28,7 @@ async function obtenerPorProducto(idProducto) {
          "Precio" ASC`,
       [idProducto]
     );
-    return result.rows;
+    return Resultado.rows;
   } catch (error) {
     console.error('Error en modelo obtenerPorProducto:', error);
     throw error;
@@ -42,7 +42,7 @@ async function obtenerPorProducto(idProducto) {
  */
 async function obtenerPorId(id) {
   try {
-    const result = await pool.query(
+    const Resultado = await pool.query(
       `SELECT
          "ID_Variante_Producto",
          "ID_Producto",
@@ -60,7 +60,7 @@ async function obtenerPorId(id) {
          AND "Activo" = TRUE`,
       [id]
     );
-    return result.rows[0] || null;
+    return Resultado.rows[0] || null;
   } catch (error) {
     console.error('Error en modelo obtenerPorId:', error);
     throw error;

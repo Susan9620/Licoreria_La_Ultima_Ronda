@@ -70,7 +70,7 @@ class ControladorImagenesCarrusel {
 
   async crearImagenCarrusel(req, res) {
     try {
-      const id = await modeloImagenesCarrusel.crear(req.body);
+      const id = await modeloImagenesCarrusel.Crear(req.body);
       return res.status(201).json({
         Éxito: true,
         Mensaje: 'Imagen de carrusel creada correctamente',
@@ -93,8 +93,8 @@ class ControladorImagenesCarrusel {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
 
-      const filas = await modeloImagenesCarrusel.actualizar(id, req.body);
-      if (filas === 0) {
+      const Filas = await modeloImagenesCarrusel.Actualizar(id, req.body);
+      if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Imagen no encontrada.' });
       }
 
@@ -116,8 +116,8 @@ class ControladorImagenesCarrusel {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
 
-      const filas = await modeloImagenesCarrusel.eliminar(id);
-      if (filas === 0) {
+      const Filas = await modeloImagenesCarrusel.eliminar(id);
+      if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Imagen no encontrada.' });
       }
 

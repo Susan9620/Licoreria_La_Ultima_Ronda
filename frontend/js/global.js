@@ -789,9 +789,9 @@ const Lista_Deseos = {
         console.log('Artículos de Lista de Deseos guardados en localStorage');
     },
 
-    Alternar_Favorito: async function (id, nombre, imagen, precio) {
+    Alternar_Favorito: async function (ID, nombre, imagen, precio) {
         try {
-            const existe = Lista_Deseos.Artículos.some(x => x.ID == id);
+            const existe = Lista_Deseos.Artículos.some(x => x.ID == ID);
 
             if (!existe) {
                 // Añadir a BD
@@ -801,20 +801,20 @@ const Lista_Deseos = {
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + tuJwt
                     },
-                    body: JSON.stringify({ productoId: parseInt(id, 10) })
+                    body: JSON.stringify({ productoId: parseInt(ID, 10) })
                 });
                 // Actualiza local
-                Lista_Deseos.Artículos.push({ ID: id, Nombre: nombre, Imagen: imagen, Precio: precio });
+                Lista_Deseos.Artículos.push({ ID: ID, Nombre: nombre, Imagen: imagen, Precio: precio });
             } else {
                 // Eliminar de BD
-                await fetch(`${baseUrl}/api/deseos/${id}`, {
+                await fetch(`${baseUrl}/api/deseos/${ID}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': 'Bearer ' + tuJwt
                     }
                 });
                 // Actualiza local
-                Lista_Deseos.Artículos = this.Artículos.filter(x => x.ID != id);
+                Lista_Deseos.Artículos = this.Artículos.filter(x => x.ID != ID);
             }
 
             Lista_Deseos.Actualizar_Contador();

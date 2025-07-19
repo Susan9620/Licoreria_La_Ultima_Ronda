@@ -1,12 +1,9 @@
 const { pool } = require('../configuraciones/configuraciones_bd');
 
-/**
- * Modelo para gestionar las categorías en la base de datos
- */
 class Modelo_Categorías {
   /**
-   * Obtiene todas las categorías activas
-   * @returns {Promise<Array>} - Lista de categorías
+   * Obtener todas las categorías activas
+   * @returns {Promise<Array>}
    */
   async Obtener_Categorías() {
     try {
@@ -32,18 +29,18 @@ class Modelo_Categorías {
   }
 
   /**
-   * Inserta una nueva categoría y devuelve su ID.
+   * Insertar una nueva categoría y devolver su ID.
    */
-  async crear({ Nombre, Descripción, Ícono, Slug, Activo = true }) {
+  async Crear({ Nombre, Descripción, Ícono, Slug, Activo = true }) {
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `INSERT INTO "CATEGORÍAS"
            ("Nombre", "Descripción", "Ícono", "Slug", "Activo")
          VALUES ($1, $2, $3, $4, $5)
          RETURNING "ID_Categoría"`,
         [Nombre, Descripción, Ícono, Slug, Activo]
       );
-      return result.rows[0]['ID_Categoría'];
+      return Resultado.rows[0]['ID_Categoría'];
     } catch (error) {
       console.error('Error al crear categoría:', error);
       throw new Error('Error al crear la categoría');
@@ -51,30 +48,29 @@ class Modelo_Categorías {
   }
 
   /**
-   * Actualiza campos de una categoría dado su ID.
+   * Actualizar campos de una categoría dado su ID.
    */
-  async actualizar(id, cambios) {
+  async Actualizar(id, Cambios) {
     try {
-      const campos = [];
-      const valores = [];
-      let idx = 1;
+      const Campos = [];
+      const Valores = [];
+      let Índice = 1;
 
-      for (const key of Object.keys(cambios)) {
-        campos.push(`"${key}" = $${idx}`);
-        valores.push(cambios[key]);
-        idx++;
+      for (const Clave of Object.keys(Cambios)) {
+        Campos.push(`"${Clave}" = $${Índice}`);
+        Valores.push(Cambios[Clave]);
+        Índice++;
       }
 
-      // El último placeholder es para el id
-      valores.push(id);
+      Valores.push(id);
 
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `UPDATE "CATEGORÍAS"
-         SET ${campos.join(', ')}
-         WHERE "ID_Categoría" = $${idx}`,
-        valores
+         SET ${Campos.join(', ')}
+         WHERE "ID_Categoría" = $${Índice}`,
+        Valores
       );
-      return result.rowCount;
+      return Resultado.rowCount;
     } catch (error) {
       console.error('Error al actualizar categoría:', error);
       throw new Error('Error al actualizar la categoría');
@@ -82,16 +78,16 @@ class Modelo_Categorías {
   }
 
   /**
-   * Elimina una categoría.
+   * Eliminar una categoría.
    */
   async eliminar(id) {
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `DELETE FROM "CATEGORÍAS"
          WHERE "ID_Categoría" = $1`,
         [id]
       );
-      return result.rowCount;
+      return Resultado.rowCount;
     } catch (error) {
       console.error('Error al eliminar categoría:', error);
       throw new Error('Error al eliminar la categoría');

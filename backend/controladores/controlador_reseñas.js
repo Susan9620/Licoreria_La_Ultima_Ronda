@@ -9,7 +9,7 @@ class ControladorReseñas {
   async insertarReseña(req, res) {
     try {
       const idProducto = parseInt(req.params.idProducto, 10);
-      const { valoracion, idUsuario = null } = req.body;
+      const { valoracion, ID_Usuario = null } = req.body;
 
       if (
         isNaN(idProducto) ||
@@ -26,7 +26,7 @@ class ControladorReseñas {
       // 1) Insertar la reseña en la tabla RESEÑAS
       await modeloReseñas.insertarReseña({
         idProducto,
-        idUsuario,
+        ID_Usuario,
         valoracion,
       });
 

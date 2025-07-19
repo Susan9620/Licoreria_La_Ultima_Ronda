@@ -106,9 +106,9 @@ class ControladorProductos {
 
       // 2) Llamar al modelo para obtener los “comprados juntos”
       //    (En modelo_producto.js deberás implementar `obtenerProductosCompradosJuntos`)
-      const filas = await modeloProductos.obtenerProductosCompradosJuntos(idVariantePred, 4);
+      const Filas = await modeloProductos.obtenerProductosCompradosJuntos(idVariantePred, 4);
 
-      return res.json({ Éxito: true, Datos: filas });
+      return res.json({ Éxito: true, Datos: Filas });
     } catch (error) {
       console.error('Error en obtenerCompradosJuntos:', error);
       return res.status(500).json({
@@ -132,13 +132,13 @@ class ControladorProductos {
       }
 
       // ¡Aquí!: extrae el usuario YA VERIFICADO
-      const idUsuario = req.usuario?.id;
-      if (!idUsuario) {
+      const ID_Usuario = req.usuario?.id;
+      if (!ID_Usuario) {
         return res.status(401).json({ Éxito: false, Mensaje: 'Usuario no autenticado' });
       }
 
       // 1) Insertar la reseña
-      await modeloReseñas.insertarReseña({ idProducto, idUsuario, valoracion: calificacion });
+      await modeloReseñas.insertarReseña({ idProducto, ID_Usuario, valoracion: calificacion });
 
       // 2) Recalcular y 3) actualizar
       const { promedio, total } = await modeloReseñas.obtenerPromedioYTotal(idProducto);
@@ -162,8 +162,8 @@ class ControladorProductos {
   async obtenerCalificacionUsuario(req, res) {
     try {
       const idProducto = parseInt(req.params.id, 10);
-      const idUsuario = req.usuario.id;
-      const fila = await modeloReseñas.obtenerCalificacionUsuario(idProducto, idUsuario);
+      const ID_Usuario = req.usuario.id;
+      const fila = await modeloReseñas.obtenerCalificacionUsuario(idProducto, ID_Usuario);
       // fila puede ser { Valoración: 4 } o undefined
       return res.json({ Éxito: true, Datos: fila ? fila.valoracion : null });
     } catch (error) {
@@ -179,7 +179,7 @@ class ControladorProductos {
   async crearProducto(req, res) {
     try {
       const Datos = req.body;
-      const nuevoId = await modeloProductos.crear(Datos);
+      const nuevoId = await modeloProductos.Crear(Datos);
       return res.status(201).json({
         Éxito: true,
         Mensaje: 'Producto creado correctamente',
@@ -199,9 +199,9 @@ class ControladorProductos {
   async actualizarProducto(req, res) {
     try {
       const id = parseInt(req.params.id, 10);
-      const cambios = req.body;
-      const filas = await modeloProductos.actualizar(id, cambios);
-      if (filas === 0) {
+      const Cambios = req.body;
+      const Filas = await modeloProductos.Actualizar(id, Cambios);
+      if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Producto no encontrado.' });
       }
       return res.json({ Éxito: true, Mensaje: 'Producto actualizado correctamente.' });
@@ -218,8 +218,8 @@ class ControladorProductos {
   async eliminarProducto(req, res) {
     try {
       const id = parseInt(req.params.id, 10);
-      const filas = await modeloProductos.eliminar(id);
-      if (filas === 0) {
+      const Filas = await modeloProductos.eliminar(id);
+      if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Producto no encontrado.' });
       }
       return res.json({ Éxito: true, Mensaje: 'Producto eliminado correctamente.' });

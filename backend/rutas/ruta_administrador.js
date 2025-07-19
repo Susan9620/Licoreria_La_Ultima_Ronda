@@ -43,9 +43,9 @@ router.delete('/imagenes/:id', ControladorImagenesProducto.eliminarImagenProduct
 // Crear categoría
 router.post('/Categorías', Controlador_Categorías.Crear_Categoría);
 // Actualizar categoría
-router.put('/Categorías/:id', Controlador_Categorías.actualizarCategoria);
+router.put('/Categorías/:id', Controlador_Categorías.Actualizar_Categoría);
 // Eliminar categoría
-router.delete('/Categorías/:id', Controlador_Categorías.eliminarCategoria);
+router.delete('/Categorías/:id', Controlador_Categorías.Eliminar_Categoría);
 
 // CARRUSEL
 // Crear imagen de carrusel

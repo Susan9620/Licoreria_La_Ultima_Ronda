@@ -1,21 +1,21 @@
 const { pool } = require('../configuraciones/configuraciones_bd');
 
-class ModeloContacto {
+class Modelo_Contacto {
   /**
    * Inserta un mensaje de contacto en la BD y devuelve su ID generado.
-   * @param {number|null} idUsuario 
+   * @param {number|null} ID_Usuario 
    * @param {string} Mensaje 
    * @returns {Promise<number>} el ID generado
    */
-  static async crear(idUsuario, Mensaje) {
+  static async Crear(ID_Usuario, Mensaje) {
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `INSERT INTO "CONTACTO" ("ID_Usuario", "Mensaje")
          VALUES ($1, $2)
          RETURNING "ID_Contacto"`,
-        [idUsuario, Mensaje]
+        [ID_Usuario, Mensaje]
       );
-      return result.rows[0]['ID_Contacto'];
+      return Resultado.rows[0]['ID_Contacto'];
     } catch (error) {
       console.error('Error al crear contacto:', error);
       throw new Error('Error al insertar el mensaje de contacto');
@@ -28,7 +28,7 @@ class ModeloContacto {
    */
   static async obtenerTodos() {
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `SELECT
            c."ID_Contacto"   AS id,
            c."ID_Usuario"    AS usuarioId,
@@ -37,7 +37,7 @@ class ModeloContacto {
          FROM "CONTACTO" c
          ORDER BY c."Fecha_Envío" DESC`
       );
-      return result.rows;
+      return Resultado.rows;
     } catch (error) {
       console.error('Error al obtener contactos:', error);
       throw new Error('Error al listar los mensajes de contacto');
@@ -45,4 +45,4 @@ class ModeloContacto {
   }
 }
 
-module.exports = ModeloContacto;
+module.exports = Modelo_Contacto;

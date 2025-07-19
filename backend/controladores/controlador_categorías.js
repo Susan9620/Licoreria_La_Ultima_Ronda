@@ -1,12 +1,9 @@
 const Modelo_Categorías = require('../modelos/modelo_categorías');
 
-/**
- * Controlador para gestionar las categorías
- */
 class Controlador_Categorías {
   /**
    * GET /api/Categorías
-   * Devuelve todas las categorías activas
+   * Devolver todas las categorías activas
    */
   async Obtener_Categorías(req, res) {
     try {
@@ -28,16 +25,16 @@ class Controlador_Categorías {
 
   /**
    * POST /api/admin/Categorías
-   * Crea una nueva categoría (solo Admin)
+   * Crear una nueva categoría (solo Admin)
    */
   async Crear_Categoría(req, res) {
     try {
       const Datos = req.body; 
-      const id = await Modelo_Categorías.crear(Datos);
+      const id = await Modelo_Categorías.Crear(Datos);
       return res.status(201).json({
         Éxito: true,
         Mensaje: 'Categoría creada correctamente',
-        Datos: { idCategoria: id }
+        Datos: { ID_Categoría: id }
       });
     } catch (error) {
       console.error('Error al crear categoría:', error);
@@ -47,14 +44,14 @@ class Controlador_Categorías {
 
   /**
    * PUT /api/admin/Categorías/:id
-   * Actualiza una categoría existente (solo Admin)
+   * Actualizar una categoría existente (solo Admin)
    */
-  async actualizarCategoria(req, res) {
+  async Actualizar_Categoría(req, res) {
     try {
       const id = parseInt(req.params.id, 10);
-      const cambios = req.body;
-      const filas = await Modelo_Categorías.actualizar(id, cambios);
-      if (filas === 0) {
+      const Cambios = req.body;
+      const Filas = await Modelo_Categorías.Actualizar(id, Cambios);
+      if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Categoría no encontrada.' });
       }
       return res.json({ Éxito: true, Mensaje: 'Categoría actualizada correctamente.' });
@@ -66,13 +63,13 @@ class Controlador_Categorías {
 
   /**
    * DELETE /api/admin/Categorías/:id
-   * Elimina una categoría (solo Admin)
+   * Eliminar una categoría (solo Admin)
    */
-  async eliminarCategoria(req, res) {
+  async Eliminar_Categoría(req, res) {
     try {
       const id = parseInt(req.params.id, 10);
-      const filas = await Modelo_Categorías.eliminar(id);
-      if (filas === 0) {
+      const Filas = await Modelo_Categorías.eliminar(id);
+      if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Categoría no encontrada.' });
       }
       return res.json({ Éxito: true, Mensaje: 'Categoría eliminada correctamente.' });

@@ -11,7 +11,7 @@ class ModeloProductos {
    */
   async obtenerProductosDestacados(limite = 4) {
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `SELECT 
            p."ID_Producto",
            p."Nombre",
@@ -51,7 +51,7 @@ class ModeloProductos {
          LIMIT $1`,
         [limite]
       );
-      return result.rows;
+      return Resultado.rows;
     } catch (error) {
       console.error('Error al obtener productos destacados:', error);
       throw new Error('Error al obtener los productos destacados');
@@ -123,7 +123,7 @@ class ModeloProductos {
    */
   async obtenerPorId(id) {
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `SELECT
            p."ID_Producto",
            p."Nombre",
@@ -168,7 +168,7 @@ class ModeloProductos {
            rr."CalificaciónMedia", rr."TotalReseñas"`,
         [id]
       );
-      return result.rows[0] || null;
+      return Resultado.rows[0] || null;
     } catch (error) {
       console.error('Error al obtener producto por ID:', error);
       throw new Error('Error al obtener producto');
@@ -183,7 +183,7 @@ class ModeloProductos {
    */
   async obtenerProductosCompradosJuntos(idVariante, limite = 4) {
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `SELECT
            v2."ID_Producto"           AS "ID_Producto",
            COUNT(*)                   AS "VecesCompradoJunto"
@@ -199,7 +199,7 @@ class ModeloProductos {
          LIMIT $2`,
         [idVariante, limite]
       );
-      return result.rows;
+      return Resultado.rows;
     } catch (error) {
       console.error('Error al obtener productos comprados juntos:', error);
       throw new Error('Error al obtener productos comprados juntos');
@@ -232,7 +232,7 @@ class ModeloProductos {
    * @param {Object} Datos
    * @returns {Promise<number>}
    */
-  async crear(Datos) {
+  async Crear(Datos) {
     const permitidos = [
       'ID_Categoría',
       'Nombre',
@@ -255,13 +255,13 @@ class ModeloProductos {
     const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
 
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `INSERT INTO "PRODUCTOS" (${columns})
          VALUES (${placeholders})
          RETURNING "ID_Producto"`,
         values
       );
-      return result.rows[0]['ID_Producto'];
+      return Resultado.rows[0]['ID_Producto'];
     } catch (error) {
       console.error('Error al crear producto:', error);
       throw new Error('Error al crear el producto');
@@ -271,26 +271,26 @@ class ModeloProductos {
   /**
    * Actualiza un producto por su ID y devuelve filas afectadas
    * @param {number} idProducto
-   * @param {Object} cambios
+   * @param {Object} Cambios
    * @returns {Promise<number>}
    */
-  async actualizar(idProducto, cambios) {
-    const campos = [];
-    const valores = [];
-    Object.keys(cambios).forEach((key, idx) => {
-      campos.push(`"${key}" = $${idx + 1}`);
-      valores.push(cambios[key]);
+  async Actualizar(idProducto, Cambios) {
+    const Campos = [];
+    const Valores = [];
+    Object.keys(Cambios).forEach((Clave, Índice) => {
+      Campos.push(`"${Clave}" = $${Índice + 1}`);
+      Valores.push(Cambios[Clave]);
     });
-    valores.push(idProducto);
+    Valores.push(idProducto);
 
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `UPDATE "PRODUCTOS"
-           SET ${campos.join(', ')}
-         WHERE "ID_Producto" = $${valores.length}`,
-        valores
+           SET ${Campos.join(', ')}
+         WHERE "ID_Producto" = $${Valores.length}`,
+        Valores
       );
-      return result.rowCount;
+      return Resultado.rowCount;
     } catch (error) {
       console.error('Error al actualizar producto:', error);
       throw new Error('Error al actualizar el producto');
@@ -304,12 +304,12 @@ class ModeloProductos {
    */
   async eliminar(idProducto) {
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `DELETE FROM "PRODUCTOS"
          WHERE "ID_Producto" = $1`,
         [idProducto]
       );
-      return result.rowCount;
+      return Resultado.rowCount;
     } catch (error) {
       console.error('Error al eliminar producto:', error);
       throw new Error('Error al eliminar el producto');

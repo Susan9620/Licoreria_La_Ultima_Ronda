@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnNuevoProd = document.getElementById('BtnNuevoProducto');
     const Botón_Guardar_Producto = document.getElementById('Botón_Guardar_Producto');
     const btnCancelarProd = document.getElementById('Botón_Cancelar_Producto');
-    let modoProducto = 'crear', idProductoActual = null;
+    let modoProducto = 'Crear', idProductoActual = null;
 
     // Helper: JWT en headers
     function authHeader() {
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
           ${json.Datos.map(p => `
             <tr>
               <td>${p.idPedido}</td>
-              <td>${p.idUsuario}</td>
+              <td>${p.ID_Usuario}</td>
               <td>${new Date(p.fecha).toLocaleString()}</td>
               <td>$${parseFloat(p.Total).toFixed(2)}</td>
               <td><span class="Estado_Texto ${p.estadoPedido}">${p.estadoPedido}</span></td>
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!resp.ok || !json.Éxito) throw new Error(json.Mensaje);
             const { pedido, items } = json.Datos;
             modalID.textContent = pedido.idPedido;
-            detUsuario.textContent = pedido.idUsuario;
+            detUsuario.textContent = pedido.ID_Usuario;
             detFecha.textContent = new Date(pedido.fecha).toLocaleString();
             detTotal.textContent = parseFloat(pedido.total).toFixed(2);
             detEstado.value = pedido.estadoPedido;
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Agregar botón Nuevo Producto
             const btnNuevo = document.createElement('button');
             btnNuevo.textContent = 'Nuevo Producto'; btnNuevo.className = 'Botones';
-            btnNuevo.onclick = () => abrirModal_Producto('crear');
+            btnNuevo.onclick = () => abrirModal_Producto('Crear');
             content.appendChild(btnNuevo);
             content.appendChild(table);
         } catch (e) {
@@ -207,13 +207,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    if (btnNuevoProd) btnNuevoProd.onclick = () => abrirModal_Producto('crear');
+    if (btnNuevoProd) btnNuevoProd.onclick = () => abrirModal_Producto('Crear');
     if (cerrarProdModal) cerrarProdModal.onclick = () => prodModal.classList.add('Oculto');
     if (btnCancelarProd) btnCancelarProd.onclick = () => prodModal.classList.add('Oculto');
 
     async function abrirModal_Producto(modo, id = null) {
         modoProducto = modo; idProductoActual = id;
-        document.getElementById('Título_Modal_Producto').textContent = modo === 'crear' ? 'Nuevo' : 'Editar';
+        document.getElementById('Título_Modal_Producto').textContent = modo === 'Crear' ? 'Nuevo' : 'Editar';
         // 1) Traer de nuevo las categorías (por si se han actualizado)
         await cargarCategoriasAdmin();
         // 2) Limpiar el formulario (resetear valores, variantes e imágenes) 
@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         let res, json;
         try {
-            if (modoProducto === 'crear') {
+            if (modoProducto === 'Crear') {
                 res = await fetch(`${baseUrl}/api/admin/productos`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeader() },
                     body: JSON.stringify(Datos)
@@ -299,8 +299,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     document.getElementById('Botón_Nueva_Variante').onclick = agregarFilaVariante;
     async function procesarVariantes(idProd) {
-        const filas = [...document.getElementById('Tabla_Variantes').rows];
-        for (let fila of filas) {
+        const Filas = [...document.getElementById('Tabla_Variantes').rows];
+        for (let fila of Filas) {
             const idVar = fila.querySelector('.EliminarVariante').dataset.id;
             const Datos = {
                 ID_Producto: idProd,
@@ -354,8 +354,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     document.getElementById('Botón_Nueva_Imagen').onclick = agregarFilaImagen;
     async function procesarImagenes(idProd) {
-        const filas = [...document.getElementById('Tabla_Imágenes').rows];
-        for (let fila of filas) {
+        const Filas = [...document.getElementById('Tabla_Imágenes').rows];
+        for (let fila of Filas) {
             const idImg = fila.querySelector('.EliminarImagen').dataset.id;
             const Datos = {
                 ID_Producto: idProd,

@@ -1,29 +1,34 @@
-const ModeloContacto = require('../modelos/modelo_contacto');
+const Modelo_Contacto = require('../modelos/modelo_contacto');
 
-class ControladorContacto {
-  // POST /api/contacto
-  async crear(req, res) {
+class Controlador_Contacto {
+  /**
+   * POST /api/contacto
+   * Crear y guardar un nuevo mensaje
+   */
+  async Crear(req, res) {
     try {
-      // Si el usuario está logueado, req.usuario.id; si no, null
-      const idUsuario = req.usuario?.id || null;
+      const ID_Usuario = req.usuario?.id || null;
       const { Mensaje } = req.body;
 
       if (!Mensaje || !Mensaje.trim()) {
         return res.status(400).json({ Éxito: false, Mensaje: 'El mensaje no puede estar vacío' });
       }
 
-      const id = await ModeloContacto.crear(idUsuario, Mensaje.trim());
+      const id = await Modelo_Contacto.Crear(ID_Usuario, Mensaje.trim());
       return res.status(201).json({ Éxito: true, Mensaje: 'Mensaje guardado', Datos: { id } });
     } catch (e) {
       console.error('Error creando mensaje de contacto:', e);
       return res.status(500).json({ Éxito: false, Mensaje: 'Error interno al guardar el mensaje' });
     }
   }
-
-  // GET /api/contacto  (si quieres verlos desde un panel)
-  async listar(req, res) {
+ 
+  /**
+   * GET /api/contacto
+   * Obtener todos los mensajes
+   */
+  async Listar(req, res) {
     try {
-      const Mensajes = await ModeloContacto.obtenerTodos();
+      const Mensajes = await Modelo_Contacto.obtenerTodos();
       return res.json({ Éxito: true, Datos: Mensajes });
     } catch (e) {
       console.error('Error listando mensajes de contacto:', e);
@@ -32,4 +37,4 @@ class ControladorContacto {
   }
 }
 
-module.exports = new ControladorContacto();
+module.exports = new Controlador_Contacto();

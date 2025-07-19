@@ -6,12 +6,12 @@ const { pool } = require('../configuraciones/configuraciones_bd');
 class ModeloListaDeseos {
   /**
    * Obtiene todos los productos en la lista de un usuario
-   * @param {number} idUsuario
+   * @param {number} ID_Usuario
    * @returns {Promise<Array>}
    */
-  async obtenerPorUsuario(idUsuario) {
+  async obtenerPorUsuario(ID_Usuario) {
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `
           SELECT
             ld."ID_Lista_Deseos"   AS id,
@@ -32,9 +32,9 @@ class ModeloListaDeseos {
           WHERE ld."ID_Usuario" = $1
           ORDER BY ld."Fecha_Agregado" DESC
         `,
-        [idUsuario]
+        [ID_Usuario]
       );
-      return result.rows;
+      return Resultado.rows;
     } catch (error) {
       console.error('Error al obtener lista de deseos:', error);
       throw error;
@@ -43,22 +43,22 @@ class ModeloListaDeseos {
 
   /**
    * Añade un producto a la lista de deseos de un usuario
-   * @param {number} idUsuario
+   * @param {number} ID_Usuario
    * @param {number} idProducto
    * @returns {Promise<Object>} - { id, productoId }
    */
-  async agregar(idUsuario, idProducto) {
+  async agregar(ID_Usuario, idProducto) {
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `
           INSERT INTO "LISTA_DESEOS" ("ID_Usuario", "ID_Producto")
           VALUES ($1, $2)
           RETURNING "ID_Lista_Deseos" AS id
         `,
-        [idUsuario, idProducto]
+        [ID_Usuario, idProducto]
       );
       return {
-        id: result.rows[0].id,
+        id: Resultado.rows[0].id,
         productoId: idProducto
       };
     } catch (error) {
@@ -69,21 +69,21 @@ class ModeloListaDeseos {
 
   /**
    * Elimina un producto de la lista de deseos de un usuario
-   * @param {number} idUsuario
+   * @param {number} ID_Usuario
    * @param {number} idProducto
    * @returns {Promise<number>} filas afectadas
    */
-  async eliminar(idUsuario, idProducto) {
+  async eliminar(ID_Usuario, idProducto) {
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `
           DELETE FROM "LISTA_DESEOS"
           WHERE "ID_Usuario" = $1
             AND "ID_Producto" = $2
         `,
-        [idUsuario, idProducto]
+        [ID_Usuario, idProducto]
       );
-      return result.rowCount;
+      return Resultado.rowCount;
     } catch (error) {
       console.error('Error al eliminar de lista de deseos:', error);
       throw error;

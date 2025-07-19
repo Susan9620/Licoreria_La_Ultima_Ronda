@@ -11,7 +11,7 @@ const ModeloImagenesProducto = {
    */
   async obtenerPorProducto(idProducto) {
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `SELECT
            "ID_Imagen",
            "ID_Producto",
@@ -29,7 +29,7 @@ const ModeloImagenesProducto = {
            "Orden" ASC`,
         [idProducto]
       );
-      return result.rows;
+      return Resultado.rows;
     } catch (error) {
       console.error("Error en modelo obtenerPorProducto:", error);
       throw error;
@@ -43,7 +43,7 @@ const ModeloImagenesProducto = {
    */
   async obtenerPrincipal(idProducto) {
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `SELECT
            "ID_Imagen",
            "ID_Producto",
@@ -60,7 +60,7 @@ const ModeloImagenesProducto = {
          LIMIT 1`,
         [idProducto]
       );
-      return result.rows[0] || null;
+      return Resultado.rows[0] || null;
     } catch (error) {
       console.error("Error en modelo obtenerPrincipal:", error);
       throw error;
@@ -72,7 +72,7 @@ const ModeloImagenesProducto = {
    * @param {Object} Datos
    * @returns {Promise<number>}
    */
-  async crear(Datos) {
+  async Crear(Datos) {
     const permitidos = [
       "ID_Producto",
       "ID_Variante",
@@ -91,13 +91,13 @@ const ModeloImagenesProducto = {
     const placeholders = values.map((_, i) => `$${i + 1}`).join(", ");
 
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `INSERT INTO "IMÁGENES_PRODUCTO" (${columns})
          VALUES (${placeholders})
          RETURNING "ID_Imagen"`,
         values
       );
-      return result.rows[0]["ID_Imagen"];
+      return Resultado.rows[0]["ID_Imagen"];
     } catch (error) {
       console.error("Error en modelo crear imagen de producto:", error);
       throw error;
@@ -107,12 +107,12 @@ const ModeloImagenesProducto = {
   /**
    * Actualiza una imagen de producto por su ID.
    * @param {number} idImagen
-   * @param {Object} cambios
+   * @param {Object} Cambios
    * @returns {Promise<number>} filas afectadas
    */
-  async actualizar(idImagen, cambios) {
+  async Actualizar(idImagen, Cambios) {
     const permitidos = ["URL", "Alt", "Principal", "Orden"];
-    const keys = Object.keys(cambios).filter(k => permitidos.includes(k));
+    const keys = Object.keys(Cambios).filter(k => permitidos.includes(k));
     if (keys.length === 0) {
       throw new Error("No se proporcionaron campos válidos para actualizar la imagen de producto");
     }
@@ -120,17 +120,17 @@ const ModeloImagenesProducto = {
     const sets = keys
       .map((k, i) => `"${k}" = $${i + 1}`)
       .join(", ");
-    const values = keys.map(k => cambios[k]);
+    const values = keys.map(k => Cambios[k]);
     values.push(idImagen); // último placeholder
 
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `UPDATE "IMÁGENES_PRODUCTO"
          SET ${sets}
          WHERE "ID_Imagen" = $${values.length}`,
         values
       );
-      return result.rowCount;
+      return Resultado.rowCount;
     } catch (error) {
       console.error("Error en modelo actualizar imagen de producto:", error);
       throw error;
@@ -144,12 +144,12 @@ const ModeloImagenesProducto = {
    */
   async eliminar(idImagen) {
     try {
-      const result = await pool.query(
+      const Resultado = await pool.query(
         `DELETE FROM "IMÁGENES_PRODUCTO"
          WHERE "ID_Imagen" = $1`,
         [idImagen]
       );
-      return result.rowCount;
+      return Resultado.rowCount;
     } catch (error) {
       console.error("Error en modelo eliminar imagen de producto:", error);
       throw error;
