@@ -1,4 +1,3 @@
-console.log('🔍 [PUT /admin/pedidos/:id/estado] req.body =', req.body);
 const modeloPedidos = require('../modelos/modelo_pedidos');
 
 class ControladorPedidos {
@@ -6,6 +5,7 @@ class ControladorPedidos {
    * POST /api/pedidos
    */
   async crearPedido(req, res) {
+    console.log('🔍 [PUT /admin/pedidos/:id/estado] req.body =', req.body);
     try {
       const ID_Usuario = req.usuario.id;
 
