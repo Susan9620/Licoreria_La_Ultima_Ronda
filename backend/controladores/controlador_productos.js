@@ -57,10 +57,10 @@ class ControladorProductos {
    * GET /api/productos/:id
    * Devuelve un producto por su ID
    */
-  async obtenerPorId(req, res) {
+  async Obtener_Por_ID(req, res) {
     try {
       const { id } = req.params;
-      const producto = await modeloProductos.obtenerPorId(id);
+      const producto = await modeloProductos.Obtener_Por_ID(id);
 
       if (!producto) {
         return res.status(404).json({
@@ -96,7 +96,7 @@ class ControladorProductos {
       }
 
       // 1) Obtener el producto y su variante predeterminada
-      const prod = await modeloProductos.obtenerPorId(ID_Producto);
+      const prod = await modeloProductos.Obtener_Por_ID(ID_Producto);
       if (!prod || !prod.ID_Variante) {
         return res
           .status(404)
@@ -105,8 +105,7 @@ class ControladorProductos {
       const idVariantePred = prod.ID_Variante;
 
       // 2) Llamar al modelo para obtener los “comprados juntos”
-      //    (En modelo_producto.js deberás implementar `obtenerProductosCompradosJuntos`)
-      const Filas = await modeloProductos.obtenerProductosCompradosJuntos(idVariantePred, 4);
+      const Filas = await modeloProductos.Obtener_Productos_Comprados_Juntos(idVariantePred, 4);
 
       return res.json({ Éxito: true, Datos: Filas });
     } catch (error) {
@@ -138,16 +137,16 @@ class ControladorProductos {
       }
 
       // 1) Insertar la reseña
-      await modeloReseñas.insertarReseña({ ID_Producto, ID_Usuario, valoracion: calificacion });
+      await modeloReseñas.Insertar_Reseñas({ ID_Producto, ID_Usuario, Valoración: calificacion });
 
       // 2) Recalcular y 3) actualizar
-      const { promedio, Total } = await modeloReseñas.obtenerPromedioYTotal(ID_Producto);
-      await modeloProductos.actualizarCalificacionYTotal(ID_Producto, promedio, Total);
+      const { Promedio, Total } = await modeloReseñas.Obtener_Promedio_Y_Total(ID_Producto);
+      await modeloProductos.Actualizar_Calificación_Y_Total(ID_Producto, Promedio, Total);
 
       return res.status(200).json({
         Éxito: true,
         Mensaje: 'Calificación registrada correctamente',
-        Datos: { promedio, Total }
+        Datos: { Promedio, Total }
       });
     } catch (error) {
       console.error('Error en calificarProducto:', error);
@@ -159,15 +158,15 @@ class ControladorProductos {
  * GET /api/productos/:id/calificacion
  * Devuelve la valoración que este usuario dio (o null si no valoró)
  */
-  async obtenerCalificacionUsuario(req, res) {
+  async Obtener_Calificación_Usuario(req, res) {
     try {
       const ID_Producto = parseInt(req.params.id, 10);
       const ID_Usuario = req.usuario.id;
-      const fila = await modeloReseñas.obtenerCalificacionUsuario(ID_Producto, ID_Usuario);
+      const fila = await modeloReseñas.Obtener_Calificación_Usuario(ID_Producto, ID_Usuario);
       // fila puede ser { Valoración: 4 } o undefined
-      return res.json({ Éxito: true, Datos: fila ? fila.valoracion : null });
+      return res.json({ Éxito: true, Datos: fila ? fila.Valoración : null });
     } catch (error) {
-      console.error('Error en obtenerCalificacionUsuario:', error);
+      console.error('Error en Obtener_Calificación_Usuario:', error);
       return res.status(500).json({ Éxito: false, Mensaje: 'Error al obtener calificación' });
     }
   }

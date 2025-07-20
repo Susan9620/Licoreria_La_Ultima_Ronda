@@ -1,7 +1,7 @@
 const { pool } = require('../configuraciones/configuraciones_bd');
 
 /**
- * Obtiene todas las variantes de un producto específico
+ * Obtener variantes de un producto específico
  * @param {number} ID_Producto
  * @returns {Promise<Array>}
  */
@@ -36,11 +36,11 @@ async function Obtener_Por_Producto(ID_Producto) {
 }
 
 /**
- * Obtiene una variante específica por su ID
+ * Obtener variante específica por su ID
  * @param {number} id
  * @returns {Promise<Object|null>}
  */
-async function obtenerPorId(id) {
+async function Obtener_Por_ID(id) {
   try {
     const Resultado = await pool.query(
       `SELECT
@@ -62,12 +62,12 @@ async function obtenerPorId(id) {
     );
     return Resultado.rows[0] || null;
   } catch (error) {
-    console.error('Error en modelo obtenerPorId:', error);
+    console.error('Error en modelo Obtener_Por_ID:', error);
     throw error;
   }
 }
 
 module.exports = {
   Obtener_Por_Producto,
-  obtenerPorId,
+  Obtener_Por_ID,
 };

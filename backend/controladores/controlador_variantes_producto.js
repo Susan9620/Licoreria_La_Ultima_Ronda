@@ -32,10 +32,10 @@ const Obtener_Por_Producto = async (req, res) => {
 /**
  * Obtener una variante específica por ID
  */
-const obtenerPorId = async (req, res) => {
+const Obtener_Por_ID = async (req, res) => {
   try {
     const { id } = req.params
-    const variante = await modeloVariantesProducto.obtenerPorId(id)
+    const variante = await modeloVariantesProducto.Obtener_Por_ID(id)
 
     if (!variante) {
       return res.status(404).json({
@@ -67,5 +67,5 @@ const obtenerPorId = async (req, res) => {
 
 module.exports = {
   Obtener_Por_Producto,
-  obtenerPorId,
+  Obtener_Por_ID,
 }

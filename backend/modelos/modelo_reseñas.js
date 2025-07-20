@@ -1,16 +1,16 @@
 const { pool } = require('../configuraciones/configuraciones_bd');
 
 /**
- * Inserta una nueva reseña para un producto
- * @param {{ ID_Producto: number, ID_Usuario: number, valoracion: number }} Datos
+ * Insertar nueva reseña para un producto
+ * @param {{ ID_Producto: number, ID_Usuario: number, Valoración: number }} Datos
  * @returns {Promise<void>}
  */
-async function insertarReseña({ ID_Producto, ID_Usuario, valoracion }) {
+async function Insertar_Reseñas({ ID_Producto, ID_Usuario, Valoración }) {
   try {
     await pool.query(
       `INSERT INTO "RESEÑAS" ("ID_Producto", "ID_Usuario", "Valoración")
        VALUES ($1, $2, $3)`,
-      [ID_Producto, ID_Usuario, valoracion]
+      [ID_Producto, ID_Usuario, Valoración]
     );
   } catch (error) {
     console.error('Error al insertar reseña:', error);
@@ -19,24 +19,24 @@ async function insertarReseña({ ID_Producto, ID_Usuario, valoracion }) {
 }
 
 /**
- * Obtiene el promedio y total de reseñas para un producto
+ * Obtener promedio y total de reseñas para un producto
  * @param {number} ID_Producto
- * @returns {Promise<{ promedio: number, Total: number }>}
+ * @returns {Promise<{ Promedio: number, Total: number }>}
  */
-async function obtenerPromedioYTotal(ID_Producto) {
+async function Obtener_Promedio_Y_Total(ID_Producto) {
   try {
     const Resultado = await pool.query(
       `SELECT
-         ROUND(AVG("Valoración")::numeric, 1) AS promedio,
+         ROUND(AVG("Valoración")::numeric, 1) AS Promedio,
          COUNT(*)                           AS Total
        FROM "RESEÑAS"
        WHERE "ID_Producto" = $1`,
       [ID_Producto]
     );
-    const row = Resultado.rows[0] || {};
+    const Fila = Resultado.rows[0] || {};
     return {
-      promedio: row.promedio ?? 0,
-      Total:    row.Total    ?? 0
+      Promedio: Fila.Promedio ?? 0,
+      Total:    Fila.Total    ?? 0
     };
   } catch (error) {
     console.error('Error al obtener promedio y total de reseñas:', error);
@@ -45,19 +45,19 @@ async function obtenerPromedioYTotal(ID_Producto) {
 }
 
 /**
- * Obtiene todas las reseñas de un producto, con datos de usuario
+ * Obtener reseñas de un producto con datos de usuario
  * @param {number} ID_Producto
  * @returns {Promise<Array>}
  */
-async function obtenerReseñasPorProducto(ID_Producto) {
+async function Obtener_Reseñas_Por_Producto(ID_Producto) {
   try {
     const Resultado = await pool.query(
       `SELECT
-         r."ID_Reseña"      AS idReseña,
+         r."ID_Reseña"      AS ID_Reseña,
          r."ID_Usuario"     AS ID_Usuario,
-         r."Valoración"     AS valoracion,
-         r."Fecha_Creación" AS fechaCreacion,
-         u."Nombre_Completo" AS nombreUsuario
+         r."Valoración"     AS Valoración,
+         r."Fecha_Creación" AS Fecha_Creación,
+         u."Nombre_Completo" AS Nombre_Usuario
        FROM "RESEÑAS" r
        JOIN "USUARIOS" u
          ON r."ID_Usuario" = u."ID_Usuario"
@@ -73,15 +73,15 @@ async function obtenerReseñasPorProducto(ID_Producto) {
 }
 
 /**
- * Obtiene la reseña de un usuario en un producto (si existe)
+ * Obtener reseña de un usuario en un producto
  * @param {number} ID_Producto
  * @param {number} ID_Usuario
- * @returns {Promise<{ valoracion: number }|null>}
+ * @returns {Promise<{ Valoración: number }|null>}
  */
-async function obtenerCalificacionUsuario(ID_Producto, ID_Usuario) {
+async function Obtener_Calificación_Usuario(ID_Producto, ID_Usuario) {
   try {
     const Resultado = await pool.query(
-      `SELECT "Valoración" AS valoracion
+      `SELECT "Valoración" AS Valoración
        FROM "RESEÑAS"
        WHERE "ID_Producto" = $1
          AND "ID_Usuario"  = $2`,
@@ -95,8 +95,8 @@ async function obtenerCalificacionUsuario(ID_Producto, ID_Usuario) {
 }
 
 module.exports = {
-  insertarReseña,
-  obtenerPromedioYTotal,
-  obtenerReseñasPorProducto,
-  obtenerCalificacionUsuario
+  Insertar_Reseñas,
+  Obtener_Promedio_Y_Total,
+  Obtener_Reseñas_Por_Producto,
+  Obtener_Calificación_Usuario
 };

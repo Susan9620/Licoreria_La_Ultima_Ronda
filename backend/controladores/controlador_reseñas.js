@@ -6,16 +6,16 @@ class ControladorReseñas {
    * POST /api/reseñas/:ID_Producto
    * Inserta una nueva reseña y actualiza la calificación del producto.
    */
-  async insertarReseña(req, res) {
+  async Insertar_Reseñas(req, res) {
     try {
       const ID_Producto = parseInt(req.params.ID_Producto, 10);
-      const { valoracion, ID_Usuario = null } = req.body;
+      const { Valoración, ID_Usuario = null } = req.body;
 
       if (
         isNaN(ID_Producto) ||
-        typeof valoracion !== 'number' ||
-        valoracion < 1 ||
-        valoracion > 5
+        typeof Valoración !== 'number' ||
+        Valoración < 1 ||
+        Valoración > 5
       ) {
         return res.status(400).json({
           Éxito: false,
@@ -24,31 +24,31 @@ class ControladorReseñas {
       }
 
       // 1) Insertar la reseña en la tabla RESEÑAS
-      await modeloReseñas.insertarReseña({
+      await modeloReseñas.Insertar_Reseñas({
         ID_Producto,
         ID_Usuario,
-        valoracion,
+        Valoración,
       });
 
       // 2) Recalcular promedio y total de reseñas para ese producto
-      const { promedio, Total } = await modeloReseñas.obtenerPromedioYTotal(
+      const { Promedio, Total } = await modeloReseñas.Obtener_Promedio_Y_Total(
         ID_Producto
       );
 
       // 3) Actualizar ese producto en su propia tabla (PRODUCTOS)
-      await modeloProductos.actualizarCalificacionYTotal(
+      await modeloProductos.Actualizar_Calificación_Y_Total(
         ID_Producto,
-        promedio,
+        Promedio,
         Total
       );
 
       return res.status(200).json({
         Éxito: true,
         Mensaje: 'Reseña registrada correctamente',
-        Datos: { promedio, Total },
+        Datos: { Promedio, Total },
       });
     } catch (error) {
-      console.error('Error en insertarReseña:', error);
+      console.error('Error en Insertar_Reseñas:', error);
       return res.status(500).json({
         Éxito: false,
         Mensaje: 'Error al guardar la reseña',
@@ -60,7 +60,7 @@ class ControladorReseñas {
    * GET /api/reseñas/:ID_Producto
    * Obtiene todas las reseñas de un producto (opcional).
    */
-  async obtenerReseñasPorProducto(req, res) {
+  async Obtener_Reseñas_Por_Producto(req, res) {
     try {
       const ID_Producto = parseInt(req.params.ID_Producto, 10);
       if (isNaN(ID_Producto)) {
@@ -70,7 +70,7 @@ class ControladorReseñas {
         });
       }
 
-      const reseñas = await modeloReseñas.obtenerReseñasPorProducto(
+      const reseñas = await modeloReseñas.Obtener_Reseñas_Por_Producto(
         ID_Producto
       );
       return res.status(200).json({
@@ -79,7 +79,7 @@ class ControladorReseñas {
         Mensaje: 'Reseñas obtenidas correctamente',
       });
     } catch (error) {
-      console.error('Error en obtenerReseñasPorProducto:', error);
+      console.error('Error en Obtener_Reseñas_Por_Producto:', error);
       return res.status(500).json({
         Éxito: false,
         Mensaje: 'Error al obtener reseñas',

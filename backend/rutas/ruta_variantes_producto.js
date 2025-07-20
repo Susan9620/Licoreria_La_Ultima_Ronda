@@ -15,7 +15,7 @@ router.get("/producto/:ID_Producto", controladorVariantesProducto.Obtener_Por_Pr
  * @desc    Obtener una variante específica por su ID
  * @access  Público
  */
-router.get("/:id", controladorVariantesProducto.obtenerPorId)
+router.get("/:id", controladorVariantesProducto.Obtener_Por_ID)
 
 // Ruta por defecto para testing
 router.get("/", (req, res) => {

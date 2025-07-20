@@ -29,7 +29,7 @@ class ControladorPedidos {
       if (Array.isArray(Items)) {
         Items.forEach((item, index) => {
           console.log(`📦 Item ${index + 1}:`);
-          console.log(`   - ID_Variante: ${item.ID_Variante} (tipo: ${typeof item.ID_Variante})`);
+          console.log(`   - ID_Variante: ${item.ID_Variante} (Tipo: ${typeof item.ID_Variante})`);
           console.log(`   - Cantidad: ${item.Cantidad}`);
           console.log(`   - Precio_Unitario: ${item.Precio_Unitario}`);
           console.log(`   - Subtotal: ${item.Subtotal}`);
@@ -87,7 +87,7 @@ class ControladorPedidos {
       const id = parseInt(req.params.id, 10);
       if (isNaN(id)) return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido' });
 
-      const Pedido = await modeloPedidos.obtenerPorId(id);
+      const Pedido = await modeloPedidos.Obtener_Por_ID(id);
       if (!Pedido) return res.status(404).json({ Éxito: false, Mensaje: 'Pedido no encontrado' });
 
       res.json({ Éxito: true, Datos: Pedido });

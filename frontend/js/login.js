@@ -53,13 +53,13 @@ document.addEventListener('DOMContentLoaded', function () {
         if (formLogin) {
             formLogin.addEventListener('submit', async e => {
                 e.preventDefault();
-                const correo = formLogin.querySelector('input[name="Usuario"], input[name="Correo_Electrónico"]').value;
+                const Correo = formLogin.querySelector('input[name="Usuario"], input[name="Correo_Electrónico"]').value;
                 const contraseña = formLogin.querySelector('input[name="Contraseña"]').value;
                 try {
                     const resp = await fetch(`${API_BASE}/api/usuarios/login`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ Correo_Electrónico: correo, Contraseña: contraseña })
+                        body: JSON.stringify({ Correo_Electrónico: Correo, Contraseña: contraseña })
                     });
                     const json = await resp.json();
                     if (!json.Éxito) throw new Error(json.Mensaje);

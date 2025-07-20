@@ -482,9 +482,8 @@ function Inicializar_Promociones(Datos_Promociones) {
 
     Datos_Promociones.forEach(p => {
         const Clon = Template.content.cloneNode(true);
-        Clon.querySelector('.Título_Promoción').textContent = p.titulo;
-        Clon.querySelector('.Descripción_Promoción').textContent = p.descripcion;
-        // puedes usar p.tipo/parametros para personalizar el botón o enlace
+        Clon.querySelector('.Título_Promoción').textContent = p.Título;
+        Clon.querySelector('.Descripción_Promoción').textContent = p.Descripción;
         Contenedor.appendChild(Clon);
     });
 

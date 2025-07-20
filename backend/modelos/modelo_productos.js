@@ -114,11 +114,11 @@ class Modelo_Productos {
   }
 
   /**
-   * Obtiene los datos completos de un producto por su ID
+   * Obtener datos completos de un producto por su ID
    * @param {number} id
    * @returns {Promise<Object|null>}
    */
-  async obtenerPorId(id) {
+  async Obtener_Por_ID(id) {
     try {
       const Resultado = await pool.query(
         `SELECT
@@ -173,17 +173,17 @@ class Modelo_Productos {
   }
 
   /**
-   * Obtiene productos que se compran juntos con la variante dada
+   * Obtener productos que se compran juntos con la variante dada
    * @param {number} ID_Variante
    * @param {number} Límite
    * @returns {Promise<Array>}
    */
-  async obtenerProductosCompradosJuntos(ID_Variante, Límite = 4) {
+  async Obtener_Productos_Comprados_Juntos(ID_Variante, Límite = 4) {
     try {
       const Resultado = await pool.query(
         `SELECT
            v2."ID_Producto"           AS "ID_Producto",
-           COUNT(*)                   AS "VecesCompradoJunto"
+           COUNT(*)                   AS "Veces_Comprado_Junto"
          FROM "DETALLE_PEDIDO" dp1
          JOIN "DETALLE_PEDIDO" dp2
            ON dp1."ID_Pedido"   = dp2."ID_Pedido"
@@ -192,7 +192,7 @@ class Modelo_Productos {
            ON dp2."ID_Variante" = v2."ID_Variante_Producto"
          WHERE dp1."ID_Variante" = $1
          GROUP BY v2."ID_Producto"
-         ORDER BY "VecesCompradoJunto" DESC
+         ORDER BY "Veces_Comprado_Junto" DESC
          LIMIT $2`,
         [ID_Variante, Límite]
       );
@@ -204,19 +204,19 @@ class Modelo_Productos {
   }
 
   /**
-   * Actualiza Calificación y Total_Reseñas de un producto
+   * Actualizar calificación y total de reseñas de un producto
    * @param {number} ID_Producto
-   * @param {number} promedio
+   * @param {number} Promedio
    * @param {number} Total
    */
-  async actualizarCalificacionYTotal(ID_Producto, promedio, Total) {
+  async Actualizar_Calificación_Y_Total(ID_Producto, Promedio, Total) {
     try {
       await pool.query(
         `UPDATE "PRODUCTOS"
            SET "Calificación" = $1,
                "Total_Reseñas" = $2
          WHERE "ID_Producto" = $3`,
-        [promedio, Total, ID_Producto]
+        [Promedio, Total, ID_Producto]
       );
     } catch (error) {
       console.error('Error al actualizar calificación y total de reseñas:', error);
@@ -225,7 +225,7 @@ class Modelo_Productos {
   }
 
   /**
-   * Crea un producto con los campos válidos y devuelve su ID
+   * Crear producto con los campos válidos y devolver su ID
    * @param {Object} Datos
    * @returns {Promise<number>}
    */
@@ -266,7 +266,7 @@ class Modelo_Productos {
   }
 
   /**
-   * Actualiza un producto por su ID y devuelve filas afectadas
+   * Actualizar producto por su ID
    * @param {number} ID_Producto
    * @param {Object} Cambios
    * @returns {Promise<number>}
@@ -295,7 +295,7 @@ class Modelo_Productos {
   }
 
   /**
-   * Elimina un producto por su ID y devuelve filas afectadas
+   * Eliminar producto por su ID
    * @param {number} ID_Producto
    * @returns {Promise<number>}
    */

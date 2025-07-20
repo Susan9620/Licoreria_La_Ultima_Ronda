@@ -3,7 +3,7 @@ const Modelo_Categorías = require('../modelos/modelo_categorías');
 class Controlador_Categorías {
   /**
    * GET /api/Categorías
-   * Devolver todas las categorías activas
+   * Devolver categorías activas
    */
   async Obtener_Categorías(req, res) {
     try {

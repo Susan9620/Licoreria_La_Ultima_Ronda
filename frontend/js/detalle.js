@@ -135,9 +135,9 @@ function renderizarProducto() {
   const Nombre_Producto = document.querySelector(".Nombre_Producto")
   if (Nombre_Producto) Nombre_Producto.textContent = productoActual.Nombre
 
-  const descripcion = document.querySelector(".Descripción_Breve")
-  if (descripcion) {
-    descripcion.textContent =
+  const Descripción = document.querySelector(".Descripción_Breve")
+  if (Descripción) {
+    Descripción.textContent =
       productoActual.Descripción ||
       productoActual.Descripción_Corta ||
       "Sin descripción disponible"
@@ -299,7 +299,7 @@ async function initCalificacionUsuario() {
         const json = await resp.json();
         if (!resp.ok || !json.Éxito) throw new Error(json.Mensaje || 'Error');
         // actualizar media y total en UI
-        productoActual.Calificación_Media = json.Datos.promedio;
+        productoActual.Calificación_Media = json.Datos.Promedio;
         productoActual.Total_Reseñas = json.Datos.Total;
         actualizarCalificacion();
         // bloquear definitivamente
@@ -802,7 +802,7 @@ async function cargarYRenderizarCompradosJuntos(ID_Producto) {
     if (!resp.ok) return;
     const json = await resp.json();
     if (!json.Éxito) return;
-    const Datos = json.Datos; // [{ ID_Producto, VecesCompradoJunto }, ...]
+    const Datos = json.Datos;
     if (!Array.isArray(Datos) || Datos.length === 0) return;
 
     // 2) IDs y detalles de cada producto
@@ -988,11 +988,11 @@ function mostrarError(Mensaje) {
 }
 
 // Función de notificación
-function mostrarNotificacion(Mensaje, tipo) {
+function mostrarNotificacion(Mensaje, Tipo) {
   if (typeof window.Mostrar_Notificación === "function") {
-    window.Mostrar_Notificación(Mensaje, tipo)
+    window.Mostrar_Notificación(Mensaje, Tipo)
   } else {
-    console.log(`${tipo}: ${Mensaje}`)
+    console.log(`${Tipo}: ${Mensaje}`)
   }
 }
 

@@ -1,25 +1,22 @@
 const { pool } = require('../configuraciones/configuraciones_bd');
 
-/**
- * Modelo para gestionar las promociones en PostgreSQL
- */
-class ModeloPromociones {
+class Modelo_Promociones {
   /**
-   * Obtiene todas las promociones vigentes
-   * @returns {Promise<Array>} - Lista de promociones
+   * Obtener todas las promociones activas
+   * @returns {Promise<Array>}
    */
-  async obtenerPromocionesActivas() {
+  async Obtener_Promociones_Activas() {
     try {
       const Resultado = await pool.query(`
         SELECT
           "ID_Promoción"   AS id,
-          "ID_Categoría"   AS categoriaId,
-          "Título"         AS titulo,
-          "Descripción"    AS descripcion,
-          "Fecha_Inicio"   AS fechaInicio,
-          "Fecha_Fin"      AS fechaFin,
-          "Tipo"           AS tipo,
-          "Parámetros"     AS parametros
+          "ID_Categoría"   AS Categoría_ID,
+          "Título"         AS Título,
+          "Descripción"    AS Descripción,
+          "Fecha_Inicio"   AS Fecha_Inicio,
+          "Fecha_Fin"      AS Fecha_Fin,
+          "Tipo"           AS Tipo,
+          "Parámetros"     AS Parámetros
         FROM "PROMOCIONES"
         WHERE ("Fecha_Inicio" IS NULL OR "Fecha_Inicio" <= CURRENT_DATE)
           AND ("Fecha_Fin"    IS NULL OR "Fecha_Fin"    >= CURRENT_DATE)
@@ -33,7 +30,7 @@ class ModeloPromociones {
   }
 
   /**
-   * Inserta una nueva promoción y devuelve su ID.
+   * Insertar nueva promoción y devolver su ID
    * @param {Object} Datos
    * @returns {Promise<number>}
    */
@@ -75,12 +72,12 @@ class ModeloPromociones {
   }
 
   /**
-   * Actualiza una promoción por su ID.
-   * @param {number} idPromocion
+   * Actualizar promoción por su ID
+   * @param {number} ID_Promoción
    * @param {Object} Cambios
-   * @returns {Promise<number>} filas afectadas
+   * @returns {Promise<number>}
    */
-  async Actualizar(idPromocion, Cambios) {
+  async Actualizar(ID_Promoción, Cambios) {
     const Permitidos = [
       'ID_Categoría',
       'Título',
@@ -103,7 +100,7 @@ class ModeloPromociones {
         ? JSON.stringify(Cambios[k])
         : Cambios[k]
     );
-    Valores.push(idPromocion);
+    Valores.push(ID_Promoción);
 
     try {
       const Resultado = await pool.query(
@@ -114,29 +111,29 @@ class ModeloPromociones {
       );
       return Resultado.rowCount;
     } catch (error) {
-      console.error(`Error al actualizar promoción ${idPromocion}:`, error);
+      console.error(`Error al actualizar promoción ${ID_Promoción}:`, error);
       throw new Error('Error al actualizar la promoción');
     }
   }
 
   /**
-   * Elimina una promoción por su ID.
-   * @param {number} idPromocion
-   * @returns {Promise<number>} filas afectadas
+   * Eliminar promoción por su ID
+   * @param {number} ID_Promoción
+   * @returns {Promise<number>}
    */
-  async Eliminar(idPromocion) {
+  async Eliminar(ID_Promoción) {
     try {
       const Resultado = await pool.query(
         `DELETE FROM "PROMOCIONES"
          WHERE "ID_Promoción" = $1`,
-        [idPromocion]
+        [ID_Promoción]
       );
       return Resultado.rowCount;
     } catch (error) {
-      console.error(`Error al eliminar promoción ${idPromocion}:`, error);
+      console.error(`Error al eliminar promoción ${ID_Promoción}:`, error);
       throw new Error('Error al eliminar la promoción');
     }
   }
 }
 
-module.exports = new ModeloPromociones();
+module.exports = new Modelo_Promociones();

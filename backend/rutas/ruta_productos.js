@@ -32,13 +32,13 @@ router.post('/:id/calificar', verificarToken, controladorProductos.calificarProd
  * @route   GET /api/Productos/:id/calificacion
  * @desc    Obtener la valoración del usuario
  */
-router.get('/:id/calificacion', verificarToken, controladorProductos.obtenerCalificacionUsuario);
+router.get('/:id/calificacion', verificarToken, controladorProductos.Obtener_Calificación_Usuario);
 
 
 /**
  * @route   GET /api/Productos/:id
  * @desc    Obtener un producto por su ID
  */
-router.get('/:id', controladorProductos.obtenerPorId);
+router.get('/:id', controladorProductos.Obtener_Por_ID);
 
 module.exports = router;

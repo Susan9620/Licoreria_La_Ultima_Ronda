@@ -93,7 +93,7 @@ const generarToken = (usuario) => {
   const payload = {
     id: usuario.ID_Usuario,
     nombre: usuario.Nombre_Completo,
-    correo: usuario.Correo_Electrónico,
+    Correo: usuario.Correo_Electrónico,
     rol: usuario.Rol
   };
 

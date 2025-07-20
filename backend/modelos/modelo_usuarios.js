@@ -1,12 +1,12 @@
 const { pool } = require('../configuraciones/configuraciones_bd');
 
-class ModeloUsuarios {
+class Modelo_Usuarios {
   /**
-   * Obtiene un usuario activo por su correo electrónico
-   * @param {string} correo
+   * Obtener usuario activo por su correo electrónico
+   * @param {string} Correo
    * @returns {Promise<Object|null>}
    */
-  async obtenerPorCorreo(correo) {
+  async Obtener_Por_Correo(Correo) {
     try {
       const Resultado = await pool.query(
         `SELECT *
@@ -14,7 +14,7 @@ class ModeloUsuarios {
           WHERE "Correo_Electrónico" = $1
             AND "Activo" = TRUE
           LIMIT 1`,
-        [correo]
+        [Correo]
       );
       return Resultado.rows[0] || null;
     } catch (error) {
@@ -24,10 +24,10 @@ class ModeloUsuarios {
   }
 
   /**
-   * Lista todos los usuarios activos
+   * Obtener todos los usuarios activos
    * @returns {Promise<Array>}
    */
-  async listarTodos() {
+  async Listar_Todos() {
     try {
       const Resultado = await pool.query(
         `SELECT
@@ -47,11 +47,11 @@ class ModeloUsuarios {
   }
 
   /**
-   * Obtiene un usuario activo por su ID
+   * Obtener usuario activo por su ID
    * @param {number} id
    * @returns {Promise<Object|null>}
    */
-  async obtenerPorId(id) {
+  async Obtener_Por_ID(id) {
     try {
       const Resultado = await pool.query(
         `SELECT
@@ -73,7 +73,7 @@ class ModeloUsuarios {
   }
 
   /**
-   * Crea un usuario con los campos permitidos y devuelve su ID
+   * Crear usuario con los campos permitidos y devolver su ID
    * @param {Object} Datos
    * @returns {Promise<number>}
    */
@@ -113,10 +113,10 @@ class ModeloUsuarios {
   }
 
   /**
-   * Actualiza un usuario por su ID, sólo con campos permitidos
+   * Actualizar un usuario por su ID sólo con campos permitidos
    * @param {number} ID_Usuario
    * @param {Object} Cambios
-   * @returns {Promise<number>} filas afectadas
+   * @returns {Promise<number>}
    */
   async Actualizar(ID_Usuario, Cambios) {
     const Permitidos = [
@@ -154,9 +154,9 @@ class ModeloUsuarios {
   }
 
   /**
-   * Elimina (borra) un usuario por su ID
+   * Eliminar usuario por su ID
    * @param {number} ID_Usuario
-   * @returns {Promise<number>} filas afectadas
+   * @returns {Promise<number>}
    */
   async Eliminar(ID_Usuario) {
     try {
@@ -173,4 +173,4 @@ class ModeloUsuarios {
   }
 }
 
-module.exports = new ModeloUsuarios();
+module.exports = new Modelo_Usuarios();

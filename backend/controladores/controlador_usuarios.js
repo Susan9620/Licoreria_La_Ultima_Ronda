@@ -41,13 +41,13 @@ class ControladorUsuarios {
   async login(req, res) {
     try {
       // Aceptar ambas variantes de nombre de campo
-      const correo = req.body.Correo_Electrónico || req.body.correo;
+      const Correo = req.body.Correo_Electrónico || req.body.Correo;
       const contraseña = req.body.Contraseña || req.body.contraseña;
-      if (!correo || !contraseña) {
+      if (!Correo || !contraseña) {
         return res.status(400).json({ Éxito: false, Mensaje: 'Faltan credenciales' });
       }
       // Buscar usuario activo
-      const usuario = await modeloUsuarios.obtenerPorCorreo(correo);
+      const usuario = await modeloUsuarios.Obtener_Por_Correo(Correo);
       if (!usuario) {
         return res.status(401).json({ Éxito: false, Mensaje: 'Credenciales inválidas' });
       }
@@ -69,7 +69,7 @@ class ControladorUsuarios {
   // GET /api/usuarios
   async Listar(req, res) {
     try {
-      const usuarios = await modeloUsuarios.listarTodos();
+      const usuarios = await modeloUsuarios.Listar_Todos();
       res.json({ Éxito: true, Datos: usuarios });
     } catch (err) {
       console.error(err);
@@ -84,7 +84,7 @@ class ControladorUsuarios {
   async perfil(req, res) {
     try {
       // req.usuario.id lo pone tu middleware verificarToken 
-      const usuario = await modeloUsuarios.obtenerPorId(req.usuario.id);
+      const usuario = await modeloUsuarios.Obtener_Por_ID(req.usuario.id);
       if (!usuario) {
         return res
           .status(404)

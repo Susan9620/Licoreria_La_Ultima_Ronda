@@ -130,13 +130,13 @@ document.addEventListener('DOMContentLoaded', function () {
                         const nombre = tarjeta.querySelector('h3').textContent.trim();
                         const precioTexto = tarjeta.querySelector('.Precio').textContent.trim();
                         const precio = parseFloat(precioTexto.replace(/[^0-9.,-]+/g, '').replace(',', '.')) || 0;
-                        const descripcion = tarjeta.querySelector('.Descripción').textContent.trim();
+                        const Descripción = tarjeta.querySelector('.Descripción').textContent.trim();
                         const Imagen = tarjeta.querySelector('img').src;
                         localStorage.setItem('Producto_Detalle', JSON.stringify({
                             id: ID,
                             Nombre: nombre,
                             Precio: precio,
-                            Descripción: descripcion,
+                            Descripción: Descripción,
                             Imágenes: [Imagen]
                         }));
                     });

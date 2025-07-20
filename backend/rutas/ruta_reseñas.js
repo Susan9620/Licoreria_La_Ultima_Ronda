@@ -8,13 +8,13 @@ const router = express.Router();
  * @desc    Inserta una nueva reseña y actualiza la calificación del producto
  * @access  Público (o privado si implementas autenticación)
  */
-router.post('/:ID_Producto', controladorReseñas.insertarReseña);
+router.post('/:ID_Producto', controladorReseñas.Insertar_Reseñas);
 
 /**
  * @route   GET /api/reseñas/:ID_Producto
  * @desc    Obtiene todas las reseñas de un producto
  * @access  Público
  */
-router.get('/:ID_Producto', controladorReseñas.obtenerReseñasPorProducto);
+router.get('/:ID_Producto', controladorReseñas.Obtener_Reseñas_Por_Producto);
 
 module.exports = router;
