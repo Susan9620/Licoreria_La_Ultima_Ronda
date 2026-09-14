@@ -1,3 +1,6 @@
+if (typeof global.SlowBuffer === 'undefined' && typeof Buffer !== 'undefined') {
+  global.SlowBuffer = Buffer;
+}
 const express = require('express');
 const cors = require('cors');
 const { configurarServidor } = require('./configuraciones/configuraciones_servidor');

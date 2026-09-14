@@ -1,3 +1,6 @@
+if (typeof global.SlowBuffer === 'undefined' && typeof Buffer !== 'undefined') {
+  global.SlowBuffer = Buffer;
+}
 const path = require('path');
 const express = require('express');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
