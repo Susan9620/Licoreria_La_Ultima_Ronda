@@ -1,4 +1,8 @@
 const { pool } = require('../configuraciones/configuraciones_bd');
+let datosIniciales = null;
+try {
+  datosIniciales = require('../semillas/datos_iniciales.json');
+} catch (e) {}
 
 /**
  * Obtener variantes de un producto específico
@@ -6,6 +10,7 @@ const { pool } = require('../configuraciones/configuraciones_bd');
  * @returns {Promise<Array>}
  */
 async function Obtener_Por_Producto(ID_Producto) {
+  const numId = parseInt(ID_Producto, 10);
   try {
     const Resultado = await pool.query(
       `SELECT
@@ -26,12 +31,19 @@ async function Obtener_Por_Producto(ID_Producto) {
        ORDER BY
          "Predeterminada" DESC,
          "Precio" ASC`,
-      [ID_Producto]
+      [numId]
     );
-    return Resultado.rows;
+    if (Resultado.rows && Resultado.rows.length > 0) return Resultado.rows;
+    if (datosIniciales?.variantes) {
+      return datosIniciales.variantes.filter(v => v.ID_Producto === numId);
+    }
+    return [];
   } catch (error) {
-    console.error('Error en modelo Obtener_Por_Producto:', error);
-    throw error;
+    console.warn('⚠️ Error en modelo Obtener_Por_Producto de variantes, usando datos de respaldo:', error.message);
+    if (datosIniciales?.variantes) {
+      return datosIniciales.variantes.filter(v => v.ID_Producto === numId);
+    }
+    return [];
   }
 }
 

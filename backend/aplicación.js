@@ -21,17 +21,22 @@ configurarServidor(app);
 // Servir archivos estáticos del frontend
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
-// Verificar conexión a base de datos
-testConnection().then(connected => {
+// Verificar conexión a base de datos y sembrar datos si es necesario
+const { seedDatabase } = require('./semillas/seed');
+testConnection().then(async connected => {
   if (connected) {
     console.log('🛢️ Base de datos lista para operar');
+    try {
+      await seedDatabase();
+    } catch (seedErr) {
+      console.warn('⚠️ Advertencia en auto-seeder:', seedErr.message);
+    }
   } else {
-    console.warn('⚠️ La aplicación continuará funcionando sin base de datos');
-    console.warn('⚠️ Algunas funciones pueden no estar disponibles');
+    console.warn('⚠️ La aplicación continuará funcionando con el catálogo de respaldo');
   }
 }).catch(err => {
   console.error('❌ Error crítico al conectar a la base de datos:', err);
-  console.warn('⚠️ La aplicación continuará funcionando en modo limitado');
+  console.warn('⚠️ La aplicación continuará funcionando en modo respaldo');
 });
 
 // Crear directorio de uploads si no existe

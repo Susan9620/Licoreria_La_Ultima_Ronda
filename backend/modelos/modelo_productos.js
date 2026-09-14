@@ -1,4 +1,9 @@
 const { pool } = require('../configuraciones/configuraciones_bd');
+const path = require('path');
+let datosIniciales = null;
+try {
+  datosIniciales = require('../semillas/datos_iniciales.json');
+} catch (e) {}
 
 class Modelo_Productos {
   /**
@@ -32,9 +37,13 @@ class Modelo_Productos {
            ON p."ID_Producto" = v."ID_Producto"
            AND v."Activo" = TRUE
            AND v."Predeterminada" = TRUE
-         LEFT JOIN "IMÁGENES_PRODUCTO" i
-           ON p."ID_Producto" = i."ID_Producto"
-           AND i."Principal" = TRUE
+         LEFT JOIN LATERAL (
+           SELECT i."URL"
+           FROM "IMÁGENES_PRODUCTO" i
+           WHERE i."ID_Producto" = p."ID_Producto"
+           ORDER BY (CASE WHEN i."Principal" = TRUE THEN 0 ELSE 1 END), i."ID_Imagen" ASC
+           LIMIT 1
+         ) i ON TRUE
          LEFT JOIN "RESEÑAS" r
            ON p."ID_Producto" = r."ID_Producto"
          WHERE p."Destacado" = TRUE
@@ -48,10 +57,19 @@ class Modelo_Productos {
          LIMIT $1`,
         [Límite]
       );
-      return Resultado.rows;
+      if (Resultado.rows && Resultado.rows.length > 0) {
+        return Resultado.rows;
+      }
+      if (datosIniciales?.catalogoCompleto) {
+        return datosIniciales.catalogoCompleto.filter(p => p.Destacado).slice(0, Límite);
+      }
+      return [];
     } catch (error) {
-      console.error('Error al obtener productos destacados:', error);
-      throw new Error('Error al obtener los productos destacados');
+      console.warn('⚠️ Error al obtener productos destacados de BD, usando datos de respaldo:', error.message);
+      if (datosIniciales?.catalogoCompleto) {
+        return datosIniciales.catalogoCompleto.filter(p => p.Destacado).slice(0, Límite);
+      }
+      return [];
     }
   }
 
@@ -105,9 +123,18 @@ class Modelo_Productos {
         ORDER BY p."Nombre" ASC;
 
       `);
-      return Productos.rows;
+      if (Productos.rows && Productos.rows.length > 0) {
+        return Productos.rows;
+      }
+      if (datosIniciales?.catalogoCompleto) {
+        return datosIniciales.catalogoCompleto;
+      }
+      return [];
     } catch (error) {
-      console.error('Error al obtener todos los productos:', error);
+      console.warn('⚠️ Error al consultar BD en Obtener_Todos, usando catálogo de respaldo:', error.message);
+      if (datosIniciales?.catalogoCompleto) {
+        return datosIniciales.catalogoCompleto;
+      }
       throw new Error('Error al obtener todos los productos');
     }
   }
@@ -118,6 +145,7 @@ class Modelo_Productos {
    * @returns {Promise<Object|null>}
    */
   async Obtener_Por_ID(id) {
+    const numId = parseInt(id, 10);
     try {
       const Resultado = await pool.query(
         `SELECT
@@ -162,16 +190,24 @@ class Modelo_Productos {
            ON p."ID_Producto" = rr."ID_Producto"
          WHERE p."ID_Producto" = $1
          GROUP BY
-           p."ID_Producto", c."Nombre",
+           p."ID_Producto", p."Nombre", p."Descripción", p."Descripción_Corta",
+           p."Slug", p."Etiqueta", p."Cómo_Disfrutarlo", c."Nombre",
            v."ID_Variante_Producto", v."Nombre_Variante", v."Graduación",
            v."Precio", v."Precio_Oferta", v."Stock", i."URL",
            rr."Calificación_Media", rr."Total_Reseñas"`,
-        [id]
+        [numId]
       );
-      return Resultado.rows[0] || null;
+      if (Resultado.rows[0]) return Resultado.rows[0];
+      if (datosIniciales?.catalogoCompleto) {
+        return datosIniciales.catalogoCompleto.find(p => p.ID_Producto === numId) || null;
+      }
+      return null;
     } catch (error) {
-      console.error('Error al obtener producto por ID:', error);
-      throw new Error('Error al obtener producto');
+      console.warn(`⚠️ Error al consultar BD en Obtener_Por_ID(${id}), usando datos de respaldo:`, error.message);
+      if (datosIniciales?.catalogoCompleto) {
+        return datosIniciales.catalogoCompleto.find(p => p.ID_Producto === numId) || null;
+      }
+      return null;
     }
   }
 

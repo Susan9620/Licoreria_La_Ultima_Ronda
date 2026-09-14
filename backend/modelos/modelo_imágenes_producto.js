@@ -1,4 +1,8 @@
 const { pool } = require("../configuraciones/configuraciones_bd");
+let datosIniciales = null;
+try {
+  datosIniciales = require('../semillas/datos_iniciales.json');
+} catch (e) {}
 
 const Modelo_Imágenes_Producto = {
   /**
@@ -7,6 +11,7 @@ const Modelo_Imágenes_Producto = {
    * @returns {Promise<Array>}
    */
   async Obtener_Por_Producto(ID_Producto) {
+    const numId = parseInt(ID_Producto, 10);
     try {
       const Resultado = await pool.query(
         `SELECT
@@ -24,12 +29,19 @@ const Modelo_Imágenes_Producto = {
          ORDER BY
            "Principal" DESC,
            "Orden" ASC`,
-        [ID_Producto]
+        [numId]
       );
-      return Resultado.rows;
+      if (Resultado.rows && Resultado.rows.length > 0) return Resultado.rows;
+      if (datosIniciales?.imagenes) {
+        return datosIniciales.imagenes.filter(i => i.ID_Producto === numId);
+      }
+      return [];
     } catch (error) {
-      console.error("Error en modelo Obtener_Por_Producto:", error);
-      throw error;
+      console.warn("⚠️ Error en modelo Obtener_Por_Producto, usando datos de respaldo:", error.message);
+      if (datosIniciales?.imagenes) {
+        return datosIniciales.imagenes.filter(i => i.ID_Producto === numId);
+      }
+      return [];
     }
   },
 
