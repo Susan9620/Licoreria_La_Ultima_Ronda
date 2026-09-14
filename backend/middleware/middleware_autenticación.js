@@ -30,7 +30,8 @@ const verificarToken = (req, res, next) => {
     }
 
     // Verificar que el token sea válido
-    const verificado = JWT.verify(Token, process.env.JWT_SECRET);
+    const secret = process.env.JWT_SECRET || 'licoreria_secret_key_muy_segura_2025';
+    const verificado = JWT.verify(Token, secret);
     req.Usuario = verificado;
     next();
   } catch (error) {
@@ -98,10 +99,11 @@ const generarToken = (Usuario) => {
   };
 
   // Generar y retornar el token
+  const secret = process.env.JWT_SECRET || 'licoreria_secret_key_muy_segura_2025';
   return JWT.sign(
     Carga_Datos,
-    process.env.JWT_SECRET,
-    { Expira_En: process.env.JWT_EXPIRES_IN || '24h' }
+    secret,
+    { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
   );
 };
 

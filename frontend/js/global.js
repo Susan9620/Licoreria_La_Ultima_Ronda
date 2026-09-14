@@ -1,5 +1,23 @@
 // global.js
-const baseUrl = 'https://licoreria-la-ultima-ronda.onrender.com';
+const baseUrl = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? ''
+    : 'https://licoreria-la-ultima-ronda.onrender.com';
+
+// Garantizar que tuJwt y window.tuJwt lean siempre de localStorage
+try {
+    Object.defineProperty(window, 'tuJwt', {
+        get() {
+            return localStorage.getItem('Token') || null;
+        },
+        set(val) {
+            if (val) localStorage.setItem('Token', val);
+            else localStorage.removeItem('Token');
+        },
+        configurable: true
+    });
+} catch (e) {
+    window.tuJwt = localStorage.getItem('Token');
+}
 
 // —————————————————————————————————————————————————————————
 // 1) INYECCIÓN DEL MODAL Y REGISTRO DE EVENTOS AL CARGAR EL DOM
@@ -24,7 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
     setupLogoutModalEvents();
 
     // 1.3) Refrescar estado de usuario en caliente
-    window.actualizarUsuarioLogueado();
+    if (typeof window.actualizarUsuarioLogueado === 'function') {
+        window.actualizarUsuarioLogueado();
+    }
 });
 
 // —————————————————————————————————————————————————————————
@@ -381,7 +401,7 @@ const Carrito = {
                 e.preventDefault();
                 e.stopPropagation();
 
-                if (!tuJwt) {
+                if (!localStorage.getItem('Token') && !window.tuJwt) {
                     const modal = document.getElementById('Modal_Login');
                     if (modal) modal.classList.add('show');
                     return;
@@ -456,7 +476,7 @@ const Carrito = {
                 e.preventDefault();
                 e.stopPropagation();
 
-                if (!tuJwt) {
+                if (!localStorage.getItem('Token') && !window.tuJwt) {
                     const modal = document.getElementById('Modal_Login');
                     if (modal) modal.classList.add('show');
                     return;
@@ -607,7 +627,7 @@ const Carrito = {
                 e.preventDefault();
                 e.stopPropagation();
 
-                if (!tuJwt) {
+                if (!localStorage.getItem('Token') && !window.tuJwt) {
                     const modal = document.getElementById('Modal_Login');
                     if (modal) modal.classList.add('show');
                     return;
@@ -976,7 +996,7 @@ const Lista_Deseos = {
                     e.preventDefault();
                     e.stopPropagation();
 
-                    if (!tuJwt) {
+                    if (!localStorage.getItem('Token') && !window.tuJwt) {
                         const modal = document.getElementById('Modal_Login');
                         if (modal) modal.classList.add('show');
                         return;

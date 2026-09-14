@@ -16,7 +16,7 @@ class Controlador_Usuarios {
       }
       // Hashear contraseña
       const Salt = await Bcrypt.genSalt(10);
-      const Hash = await Bcrypt.Hash(Contraseña, Salt);
+      const Hash = await Bcrypt.hash(Contraseña, Salt);
       // Crear usuario
       const Nuevo = await Modelo_Usuarios.Crear({
         Nombre_Completo,
@@ -27,7 +27,7 @@ class Controlador_Usuarios {
     } catch (err) {
       console.error('Error al registrar usuario:', err);
       // Duplicado de correo
-      if (err.code === 'ER_DUP_ENTRY') {
+      if (err.code === 'ER_DUP_ENTRY' || err.code === '23505') {
         return res.status(409).json({ Éxito: false, Mensaje: 'Ese correo ya está registrado' });
       }
       return res.status(500).json({ Éxito: false, Mensaje: 'Error al registrar usuario' });
@@ -58,7 +58,8 @@ class Controlador_Usuarios {
       }
       // Generar token
       const Carga_Datos = { id: Usuario.ID_Usuario, Email: Usuario.Correo_Electrónico, Rol: Usuario.Rol };
-      const Token = JWT.sign(Carga_Datos, process.env.JWT_SECRET, { Expira_En: process.env.JWT_EXPIRES_IN || '8h' });
+      const secret = process.env.JWT_SECRET || 'licoreria_secret_key_muy_segura_2025';
+      const Token = JWT.sign(Carga_Datos, secret, { expiresIn: process.env.JWT_EXPIRES_IN || '24h' });
       return res.json({ Éxito: true, Token: Token });
     } catch (err) {
       console.error('Error al iniciar sesión:', err);

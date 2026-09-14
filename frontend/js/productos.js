@@ -328,7 +328,8 @@ document.addEventListener('DOMContentLoaded', function () {
             e.stopPropagation();
 
             // 5.1) Validar sesión
-            if (!tuJwt) {
+            const TokenActual = localStorage.getItem('Token') || window.tuJwt;
+            if (!TokenActual) {
                 const modalLogin = document.getElementById('Modal_Login');
                 if (modalLogin) modalLogin.classList.add('show');
                 return;
@@ -368,7 +369,8 @@ document.addEventListener('DOMContentLoaded', function () {
             e.stopPropagation();
 
             // 5.6.1) Validar sesión
-            if (!tuJwt) {
+            const TokenActual = localStorage.getItem('Token') || window.tuJwt;
+            if (!TokenActual) {
                 const modalLogin = document.getElementById('Modal_Login');
                 if (modalLogin) modalLogin.classList.add('show');
                 return;
