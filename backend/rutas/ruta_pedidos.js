@@ -1,41 +1,41 @@
 const express = require('express');
-const { verificarToken } = require('../middleware/middleware_autenticación');
+const { Verificar_Token } = require('../middleware/middleware_autenticación');
 const ctrl = require('../controladores/controlador_pedidos');
 
-const router = express.Router();
+const Ruta = express.Router();
 
 /**
- * @route   POST /api/pedidos
+ * @route   POST /api/Pedidos
  * @desc    Crear pedido
  */
-router.post('/', verificarToken, ctrl.crearPedido);
+Ruta.post('/', Verificar_Token, ctrl.Crear_Pedido);
 
 /**
- * @route   GET /api/pedidos/usuario
+ * @route   GET /api/Pedidos/usuario
  * @desc    Historial de pedidos del usuario autenticado
  */
-router.get(
+Ruta.get(
     '/usuario',
-    verificarToken,
+    Verificar_Token,
     (req, res, next) => {
-        console.log(`→ [Pedidos] Llega GET /api/pedidos/usuario (usuario ${req.usuario.id})`);
+        console.log(`→ [Pedidos] Llega GET /api/Pedidos/usuario (usuario ${req.usuario.id})`);
         next();
     },
-    ctrl.obtenerPedidosPorUsuario
+    ctrl.Obtener_Pedidos_Por_Usuario
 );
 
 /**
- * @route   GET /api/pedidos/:id
+ * @route   GET /api/Pedidos/:id
  * @desc    Obtener pedido con detalle
  */
-router.get(
+Ruta.get(
     '/:id',
-    verificarToken,
+    Verificar_Token,
     (req, res, next) => {
-        console.log(`→ [Pedidos] Llega GET /api/pedidos/${req.params.id}`);
+        console.log(`→ [Pedidos] Llega GET /api/Pedidos/${req.params.id}`);
         next();
     },
-    ctrl.obtenerPedido
+    ctrl.Obtener_Pedido
 );
 
-module.exports = router;
+module.exports = Ruta;

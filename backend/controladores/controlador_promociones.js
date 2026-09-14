@@ -1,20 +1,38 @@
-const modeloPromociones = require('../modelos/modelo_promociones');
+const Modelo_Promociones = require('../modelos/modelo_promociones');
 
-/**
- * Controlador para gestionar las promociones
- */
-class ControladorPromociones {
+class Controlador_Promociones {
   /**
-   * GET /api/promociones
+   * GET /api/Promociones
    * Devuelve todas las promociones activas y vigentes
    */
-  async obtenerPromociones(req, res) {
+  async Obtener_Promociones(req, res) {
     try {
-      const promociones = await modeloPromociones.obtenerPromocionesActivas();
+      let Promociones = [];
+      try {
+        Promociones = await Modelo_Promociones.Obtener_Promociones_Activas();
+      } catch (dbErr) {
+        console.warn('⚠️ No se pudieron obtener promociones desde BD, usando datos por defecto');
+      }
+
+      if (!Promociones || Promociones.length === 0) {
+        Promociones = [
+          {
+            ID_Promoción: 1,
+            Título: '2x1 en Granizados',
+            Descripción: 'Todos los jueves aprovecha nuestra promo 2x1 en todos los sabores de granizados artesanales.'
+          },
+          {
+            ID_Promoción: 2,
+            Título: 'Combo Fiesta Fin de Semana',
+            Descripción: 'Llévate 1 Botella de Ron + 2 Refrescos + Hielo a precio especial de promoción.'
+          }
+        ];
+      }
+
       res.status(200).json({
         Éxito: true,
         Mensaje: 'Promociones obtenidas correctamente',
-        Datos: promociones
+        Datos: Promociones
       });
     } catch (error) {
       console.error('Error en controlador de promociones:', error);
@@ -27,12 +45,12 @@ class ControladorPromociones {
   }
 
   /**
-   * POST /api/admin/promociones
-   * Crea una nueva promoción (solo Admin)
+   * POST /api/Administrador/Promociones
+   * Crea una nueva promoción (solo Administrador)
    */
-  async crearPromocion(req, res) {
+  async Crear_Promoción(req, res) {
     try {
-      const id = await modeloPromociones.Crear(req.body);
+      const id = await Modelo_Promociones.Crear(req.body);
       return res.status(201).json({
         Éxito: true,
         Mensaje: 'Promoción creada correctamente',
@@ -45,17 +63,17 @@ class ControladorPromociones {
   }
 
   /**
-   * PUT /api/admin/promociones/:id
-   * Actualiza una promoción existente (solo Admin)
+   * PUT /api/Administrador/Promociones/:id
+   * Actualiza una promoción existente (solo Administrador)
    */
-  async actualizarPromocion(req, res) {
+  async Actualizar_Promoción(req, res) {
     try {
       const id = parseInt(req.params.id, 10);
       if (isNaN(id)) {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
 
-      const Filas = await modeloPromociones.Actualizar(id, req.body);
+      const Filas = await Modelo_Promociones.Actualizar(id, req.body);
       if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Promoción no encontrada.' });
       }
@@ -68,17 +86,17 @@ class ControladorPromociones {
   }
 
   /**
-   * DELETE /api/admin/promociones/:id
-   * Elimina una promoción (solo Admin)
+   * DELETE /api/Administrador/Promociones/:id
+   * Elimina una promoción (solo Administrador)
    */
-  async eliminarPromocion(req, res) {
+  async Eliminar_Promoción(req, res) {
     try {
       const id = parseInt(req.params.id, 10);
       if (isNaN(id)) {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
 
-      const Filas = await modeloPromociones.eliminar(id);
+      const Filas = await Modelo_Promociones.eliminar(id);
       if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Promoción no encontrada.' });
       }
@@ -91,4 +109,4 @@ class ControladorPromociones {
   }
 }
 
-module.exports = new ControladorPromociones();
+module.exports = new Controlador_Promociones();

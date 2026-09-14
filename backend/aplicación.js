@@ -41,9 +41,9 @@ if (!fs.existsSync(uploadsDir)) {
 }
 
 // Ruta de estado de la API
-app.get('/api/estado', (req, res) => {
+app.get('/api/Estado', (req, res) => {
   res.json({
-    estado: 'en línea',
+    Estado: 'en línea',
     versión: '1.0.0',
     entorno: process.env.NODE_ENV,
     hora: new Date().toISOString()
@@ -51,38 +51,41 @@ app.get('/api/estado', (req, res) => {
 });
 
 // Registrar rutas de la API
-app.use('/api/Categorías', require('./rutas/ruta_categorías'));
-app.use('/api/carrusel', require('./rutas/ruta_imágenes_carrusel'));
-app.use('/api/Productos', require('./rutas/ruta_productos'));
-app.use('/api/variantes', require('./rutas/ruta_variantes_producto'));
-app.use('/api/imagenes', require('./rutas/ruta_imágenes_producto'));
-app.use('/api/usuarios', require('./rutas/ruta_usuarios'));
-app.use('/api/promociones', require('./rutas/ruta_promociones'));
-app.use('/api/deseos', require('./rutas/ruta_lista_deseos'));
-app.use('/api/inicio', require('./rutas/ruta_inicio'));
-app.use('/api/reseñas', require('./rutas/ruta_reseñas'));
-app.use('/api/pedidos', require('./rutas/ruta_pedidos'));
-app.use('/api/contacto', require('./rutas/ruta_contacto'));
-app.use('/api/admin', require('./rutas/ruta_administrador'));
+app.use(['/api/Categorías', '/api/Categorias', '/api/Categor%C3%ADas'], require('./rutas/ruta_categorías'));
+app.use(['/api/Carrusel', '/api/carrusel'], require('./rutas/ruta_imágenes_carrusel'));
+app.use(['/api/Productos', '/api/productos'], require('./rutas/ruta_productos'));
+app.use(['/api/Variantes', '/api/variantes'], require('./rutas/ruta_variantes_producto'));
+app.use(['/api/Imágenes', '/api/Imagenes', '/api/Im%C3%A1genes'], require('./rutas/ruta_imágenes_producto'));
+app.use(['/api/Usuarios', '/api/usuarios'], require('./rutas/ruta_usuarios'));
+app.use(['/api/Promociones', '/api/promociones', '/api/Promoci%C3%B3n', '/api/Promocion'], require('./rutas/ruta_promociones'));
+app.use(['/api/Deseos', '/api/deseos'], require('./rutas/ruta_lista_deseos'));
+app.use(['/api/Inicio', '/api/inicio'], require('./rutas/ruta_inicio'));
+app.use(['/api/Reseñas', '/api/Resenas', '/api/Rese%C3%B1as'], require('./rutas/ruta_reseñas'));
+app.use(['/api/Pedidos', '/api/pedidos'], require('./rutas/ruta_pedidos'));
+app.use(['/api/Contacto', '/api/contacto'], require('./rutas/ruta_contacto'));
+app.use(['/api/Administrador', '/api/administrador', '/api/Administración', '/api/Administraci%C3%B3n'], require('./rutas/ruta_administrador'));
 
-// Servir frontend en desarrollo
-if (process.env.NODE_ENV === 'development') {
-  app.get('/', (req, res) =>
-    res.sendFile(path.join(__dirname, '..', 'frontend', 'páginas', 'index', 'index.html'))
-  );
-}
+// Servir frontend
+const frontendDir = path.join(__dirname, '..', 'frontend');
+app.get('/', (req, res) => {
+  res.sendFile(path.join(frontendDir, 'html', 'index.html'));
+});
 
-// Servir frontend en producción
-if (process.env.NODE_ENV === 'production') {
-  const frontendDir = path.join(__dirname, '..', 'frontend');
-  
-  // Todas las rutas no-API serán dirigidas al frontend
-  app.get('*', (req, res) => {
-    if (!req.path.startsWith('/api')) {
-      res.sendFile(path.join(frontendDir, 'páginas', 'index', 'index.html'));
-    }
-  });
-}
+// Enrutamiento SPA/estáticos para producción o desarrollo
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    return next();
+  }
+  const possibleHtml = path.join(frontendDir, 'html', req.path.endsWith('.html') ? req.path : `${req.path}.html`);
+  if (fs.existsSync(possibleHtml) && fs.statSync(possibleHtml).isFile()) {
+    return res.sendFile(possibleHtml);
+  }
+  const directPath = path.join(frontendDir, req.path);
+  if (fs.existsSync(directPath) && fs.statSync(directPath).isFile()) {
+    return res.sendFile(directPath);
+  }
+  res.sendFile(path.join(frontendDir, 'html', 'index.html'));
+});
 
 // Middleware para manejar rutas no encontradas
 app.use(notFoundHandler);

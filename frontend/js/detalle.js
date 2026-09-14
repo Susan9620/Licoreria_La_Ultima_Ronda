@@ -1,4 +1,6 @@
-const API_BASE = 'https://licoreria-la-ultima-ronda.onrender.com';
+const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? ''
+    : 'https://licoreria-la-ultima-ronda.onrender.com';
 
 // Variables globales para el producto
 let productoActual = null
@@ -83,7 +85,7 @@ async function cargarDatosProducto() {
 // Cargar variantes del producto
 async function cargarVariantesProducto(ID_Producto) {
   try {
-    const respuestaVariantes = await fetch(`${API_BASE}/api/variantes/producto/${ID_Producto}`)
+    const respuestaVariantes = await fetch(`${API_BASE}/api/Variantes/Producto/${ID_Producto}`)
     if (respuestaVariantes.ok) {
       const DatosVariantes = await respuestaVariantes.json()
       if (DatosVariantes.Éxito && DatosVariantes.Datos) {
@@ -102,7 +104,7 @@ async function cargarVariantesProducto(ID_Producto) {
 // Cargar imágenes del producto
 async function cargarImagenesProducto(ID_Producto) {
   try {
-    const respuestaImagenes = await fetch(`${API_BASE}/api/imagenes/producto/${ID_Producto}`)
+    const respuestaImagenes = await fetch(`${API_BASE}/api/Imágenes/Producto/${ID_Producto}`)
     if (respuestaImagenes.ok) {
       const DatosImagenes = await respuestaImagenes.json()
       if (DatosImagenes.Éxito && DatosImagenes.Datos) {
@@ -164,7 +166,7 @@ function renderizarProducto() {
 
     // 2) al renderizar, comprobamos si ya está en deseos y marcamos
     const yaEnDeseos = Lista_Deseos.Artículos.some(
-      item => item.ID == productoActual.ID_Producto
+      Item => Item.ID == productoActual.ID_Producto
     );
     btnLista.classList.toggle('Activo', yaEnDeseos);
 
@@ -172,7 +174,7 @@ function renderizarProducto() {
     btnLista.onclick = async (e) => {
       e.preventDefault();
       e.stopPropagation();
-      if (!localStorage.getItem('token')) {
+      if (!localStorage.getItem('Token')) {
         document.getElementById('Modal_Login')?.classList.add('show');
         return;
       }
@@ -239,11 +241,11 @@ async function initCalificacionUsuario() {
   let valorSeleccionado = 0;
 
   // ❶ Si hay token, consulta si ya valoró
-  const token = localStorage.getItem('token');
-  if (token) {
+  const Token = localStorage.getItem('Token');
+  if (Token) {
     try {
-      const resp = await fetch(`${API_BASE}/api/Productos/${productoActual.ID_Producto}/calificacion`, {
-        headers: { 'Authorization': 'Bearer ' + token }
+      const resp = await fetch(`${API_BASE}/api/Productos/${productoActual.ID_Producto}/Calificación`, {
+        headers: { 'Authorization': 'Bearer ' + Token }
       });
       const json = await resp.json();
       if (resp.ok && json.Éxito && json.Datos !== null) {
@@ -283,7 +285,7 @@ async function initCalificacionUsuario() {
       valorSeleccionado = v;
       resaltarHasta(v);
 
-      if (!token) {
+      if (!Token) {
         abrirModalLogin();
         return;
       }
@@ -292,9 +294,9 @@ async function initCalificacionUsuario() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token
+            'Authorization': 'Bearer ' + Token
           },
-          body: JSON.stringify({ calificacion: v })
+          body: JSON.stringify({ Calificación: v })
         });
         const json = await resp.json();
         if (!resp.ok || !json.Éxito) throw new Error(json.Mensaje || 'Error');
@@ -377,7 +379,7 @@ function initZoom() {
 function actualizarMigasPan() {
   if (!productoActual) return;
 
-  // 1) Cambiar el nombre del producto (la parte final)
+  // 1) Cambiar el nombre del producto
   const migasActual = document.querySelector(".Contenedor_Migas_Pan .Actual");
   if (migasActual) {
     migasActual.textContent = productoActual.Nombre;
@@ -425,7 +427,7 @@ function actualizarCalificacion() {
   const calificacionProducto = document.querySelector(".Calificación_Producto")
   if (!calificacionProducto) return
 
-  const calificacion = parseFloat(productoActual.Calificación_Media) || 0;
+  const Calificación = parseFloat(productoActual.Calificación_Media) || 0;
   const totalReseñas = parseInt(productoActual.Total_Reseñas) || 0;
 
   // Actualizar estrellas
@@ -434,9 +436,9 @@ function actualizarCalificacion() {
     estrellas.innerHTML = ""
     for (let i = 1; i <= 5; i++) {
       const estrella = document.createElement("i")
-      if (i <= Math.floor(calificacion)) {
+      if (i <= Math.floor(Calificación)) {
         estrella.className = "fas fa-star"
-      } else if (i === Math.ceil(calificacion) && !Number.isInteger(calificacion)) {
+      } else if (i === Math.ceil(Calificación) && !Number.isInteger(Calificación)) {
         estrella.className = "fas fa-star-half-alt"
       } else {
         estrella.className = "far fa-star"
@@ -552,25 +554,25 @@ function actualizarVariantes() {
       tipoOpcion.style.display = "block"
     }
 
-    variantesProducto.forEach((variante, index) => {
+    variantesProducto.forEach((Variante, index) => {
       const opcion = document.createElement("div")
-      opcion.className = `Opción ${variante.Predeterminada || index === 0 ? "Seleccionado" : ""}`
+      opcion.className = `Opción ${Variante.Predeterminada || index === 0 ? "Seleccionado" : ""}`
 
       // Construir texto de la variante (prioriza Nombre_Variante; si no existe, usa Medida)
       let textoVariante = ""
-      if (variante.Nombre_Variante) {
-        textoVariante = variante.Nombre_Variante
-      } else if (variante.Medida) {
-        textoVariante = variante.Medida
+      if (Variante.Nombre_Variante) {
+        textoVariante = Variante.Nombre_Variante
+      } else if (Variante.Medida) {
+        textoVariante = Variante.Medida
       } else {
         textoVariante = `Variante ${index + 1}`
       }
 
       opcion.textContent = textoVariante
-      opcion.setAttribute("data-variante-id", variante.ID_Variante_Producto)
-      opcion.setAttribute("data-precio", variante.Precio || 0)
-      opcion.setAttribute("data-precio-oferta", variante.Precio_Oferta || "")
-      opcion.setAttribute("data-stock", variante.Stock || 0)
+      opcion.setAttribute("data-variante-id", Variante.ID_Variante_Producto)
+      opcion.setAttribute("data-precio", Variante.Precio || 0)
+      opcion.setAttribute("data-precio-oferta", Variante.Precio_Oferta || "")
+      opcion.setAttribute("data-stock", Variante.Stock || 0)
 
       contenedorOpciones.appendChild(opcion)
     })
@@ -759,32 +761,32 @@ function renderizarProductosRelacionados(Productos) {
 
   contenedor.innerHTML = ""
 
-  Productos.forEach(producto => {
+  Productos.forEach(Producto => {
     const tarjeta = document.createElement("div")
     tarjeta.className = "Tarjeta_Producto"
 
     const precio = parseFloat(
-      producto.Precio_Oferta && parseFloat(producto.Precio_Oferta) < parseFloat(producto.Precio)
-        ? producto.Precio_Oferta
-        : producto.Precio
+      Producto.Precio_Oferta && parseFloat(Producto.Precio_Oferta) < parseFloat(Producto.Precio)
+        ? Producto.Precio_Oferta
+        : Producto.Precio
     ) || 0
 
-    const URL_Imagen = producto.Imagen_URL || "https://via.placeholder.com/320x200?text=Sin+Imagen"
+    const URL_Imagen = Producto.Imagen_URL || "https://via.placeholder.com/320x200?text=Sin+Imagen"
 
     tarjeta.innerHTML = `
       <div class="Imagen_Tarjeta">
-        <img src="${URL_Imagen}" alt="${producto.Nombre}">
+        <img src="${URL_Imagen}" alt="${Producto.Nombre}">
       </div>
       <div class="Cuerpo_Tarjeta">
-        <h3 class="Título_Producto">${producto.Nombre}</h3>
+        <h3 class="Título_Producto">${Producto.Nombre}</h3>
         <div class="Información_Producto">
           <div class="Precio_Tarjeta">$${precio.toFixed(2)}</div>
           <div class="Estrellas_Tarjeta">
-            ${generarEstrellas(producto.Calificación_Media || 0)}
+            ${generarEstrellas(Producto.Calificación_Media || 0)}
           </div>
         </div>
         <div class="Botones_Tarjeta">
-          <button class="Botones Botón_Primario Botón_Tarjeta" onclick="window.location.href='detalle.html?id=${producto.ID_Producto}'">
+          <button class="Botones Botón_Primario Botón_Tarjeta" onclick="window.location.href='detalle.html?id=${Producto.ID_Producto}'">
             Ver Producto
           </button>
         </div>
@@ -798,7 +800,7 @@ function renderizarProductosRelacionados(Productos) {
 async function cargarYRenderizarCompradosJuntos(ID_Producto) {
   try {
     // 1) Traer los IDs de "comprados juntos"
-    const resp = await fetch(`${API_BASE}/api/Productos/${ID_Producto}/compradosjuntos`);
+    const resp = await fetch(`${API_BASE}/api/Productos/${ID_Producto}/Comprados_Juntos`);
     if (!resp.ok) return;
     const json = await resp.json();
     if (!json.Éxito) return;
@@ -806,14 +808,14 @@ async function cargarYRenderizarCompradosJuntos(ID_Producto) {
     if (!Array.isArray(Datos) || Datos.length === 0) return;
 
     // 2) IDs y detalles de cada producto
-    const ids = Datos.map(item => item.ID_Producto);
+    const ids = Datos.map(Item => Item.ID_Producto);
     const Productos = await cargarDatosDeProductos(ids);
 
     // 3) Traer variantes predeterminadas para cada producto
     const variantesMap = {};
     await Promise.all(Productos.map(async p => {
       try {
-        const r = await fetch(`${API_BASE}/api/variantes/producto/${p.ID_Producto}`);
+        const r = await fetch(`${API_BASE}/api/Variantes/Producto/${p.ID_Producto}`);
         if (!r.ok) return;
         const j = await r.json();
         if (j.Éxito && Array.isArray(j.Datos) && j.Datos.length) {
@@ -886,9 +888,9 @@ async function cargarYRenderizarCompradosJuntos(ID_Producto) {
 }
 
 // Generar HTML de estrellas
-function generarEstrellas(calificacion) {
+function generarEstrellas(Calificación) {
   let html = ""
-  const cal = parseFloat(calificacion) || 0
+  const cal = parseFloat(Calificación) || 0
   for (let i = 1; i <= 5; i++) {
     if (i <= Math.floor(cal)) {
       html += '<i class="fas fa-star"></i>'
@@ -1107,8 +1109,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     botonMas.addEventListener("click", () => {
       // 1) Obtenemos la variante actual y su stock
-      const variante = obtenerVarianteActual()
-      const stock = variante?.Stock ?? Infinity
+      const Variante = obtenerVarianteActual()
+      const stock = Variante?.Stock ?? Infinity
 
       // 2) Solo incrementamos si no excedemos el stock
       if (Cantidad < stock) {
@@ -1141,7 +1143,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   })
 
-  // Inicializa la lista de deseos (trae datos) 
+  // Inicializa la lista de deseos
   if (window.Lista_Deseos?.Inicializar) {
     Lista_Deseos.Inicializar();
   }
@@ -1159,15 +1161,15 @@ document.addEventListener("DOMContentLoaded", () => {
         10
       );
 
-      const variante = obtenerVarianteActual();
-      const stock = variante?.Stock ?? 0;
+      const Variante = obtenerVarianteActual();
+      const stock = Variante?.Stock ?? 0;
 
       if (Cantidad > stock) {
         Mostrar_Notificación(`No puedes añadir más de ${stock} unidades disponibles.`, 'Error');
         return;
       }
 
-      const Nombre_Variante = variante?.Nombre_Variante ?? '';
+      const Nombre_Variante = Variante?.Nombre_Variante ?? '';
       const nombreCompleto = Nombre_Variante
         ? `${productoActual.Nombre} – ${Nombre_Variante}`
         : productoActual.Nombre;

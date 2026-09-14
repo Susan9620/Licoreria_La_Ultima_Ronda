@@ -1,13 +1,13 @@
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const modeloUsuarios = require('../modelos/modelo_usuarios');
+const Bcrypt = require('bcryptjs');
+const JWT = require('jsonwebtoken');
+const Modelo_Usuarios = require('../modelos/modelo_usuarios');
 
-class ControladorUsuarios {
+class Controlador_Usuarios {
   /**
-   * POST /api/usuarios/register
-   * Crear un nuevo usuario con contraseña hasheada
+   * POST /api/Usuarios/Registro
+   * Crear nuevo usuario con contraseña hasheada
    */
-  async register(req, res) {
+  async Registro(req, res) {
     try {
       const { Nombre_Completo, Correo_Electrónico, Contraseña } = req.body;
       // Validar campos
@@ -15,15 +15,15 @@ class ControladorUsuarios {
         return res.status(400).json({ Éxito: false, Mensaje: 'Faltan Datos' });
       }
       // Hashear contraseña
-      const salt = await bcrypt.genSalt(10);
-      const hash = await bcrypt.hash(Contraseña, salt);
+      const Salt = await Bcrypt.genSalt(10);
+      const Hash = await Bcrypt.Hash(Contraseña, Salt);
       // Crear usuario
-      const nuevo = await modeloUsuarios.Crear({
+      const Nuevo = await Modelo_Usuarios.Crear({
         Nombre_Completo,
         Correo_Electrónico,
-        Contraseña: hash
+        Contraseña: Hash
       });
-      return res.status(201).json({ Éxito: true, Datos: { id: nuevo.insertId, Correo_Electrónico } });
+      return res.status(201).json({ Éxito: true, Datos: { id: Nuevo.Insertar_ID, Correo_Electrónico } });
     } catch (err) {
       console.error('Error al registrar usuario:', err);
       // Duplicado de correo
@@ -35,42 +35,45 @@ class ControladorUsuarios {
   }
 
   /**
-   * POST /api/usuarios/login
-   * Autentica usuario y devuelve JWT
+   * POST /api/Usuarios/Login
+   * Autenticar usuario y obtener JWT
    */
-  async login(req, res) {
+  async Login(req, res) {
     try {
       // Aceptar ambas variantes de nombre de campo
       const Correo = req.body.Correo_Electrónico || req.body.Correo;
-      const contraseña = req.body.Contraseña || req.body.contraseña;
-      if (!Correo || !contraseña) {
+      const Contraseña = req.body.Contraseña || req.body.Contraseña;
+      if (!Correo || !Contraseña) {
         return res.status(400).json({ Éxito: false, Mensaje: 'Faltan credenciales' });
       }
       // Buscar usuario activo
-      const usuario = await modeloUsuarios.Obtener_Por_Correo(Correo);
-      if (!usuario) {
+      const Usuario = await Modelo_Usuarios.Obtener_Por_Correo(Correo);
+      if (!Usuario) {
         return res.status(401).json({ Éxito: false, Mensaje: 'Credenciales inválidas' });
       }
       // Verificar contraseña
-      const match = await bcrypt.compare(contraseña, usuario.Contraseña);
-      if (!match) {
+      const Match = await Bcrypt.compare(Contraseña, Usuario.Contraseña);
+      if (!Match) {
         return res.status(401).json({ Éxito: false, Mensaje: 'Credenciales inválidas' });
       }
       // Generar token
-      const payload = { id: usuario.ID_Usuario, email: usuario.Correo_Electrónico, rol: usuario.Rol };
-      const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN || '8h' });
-      return res.json({ Éxito: true, token });
+      const Carga_Datos = { id: Usuario.ID_Usuario, Email: Usuario.Correo_Electrónico, Rol: Usuario.Rol };
+      const Token = JWT.sign(Carga_Datos, process.env.JWT_SECRET, { Expira_En: process.env.JWT_EXPIRES_IN || '8h' });
+      return res.json({ Éxito: true, Token: Token });
     } catch (err) {
       console.error('Error al iniciar sesión:', err);
       return res.status(500).json({ Éxito: false, Mensaje: 'Error al iniciar sesión' });
     }
   }
 
-  // GET /api/usuarios
+  /**
+   * GET /api/Usuarios
+   * Obtener usuarios registrados
+   */
   async Listar(req, res) {
     try {
-      const usuarios = await modeloUsuarios.Listar_Todos();
-      res.json({ Éxito: true, Datos: usuarios });
+      const Usuarios = await Modelo_Usuarios.Listar_Todos();
+      res.json({ Éxito: true, Datos: Usuarios });
     } catch (err) {
       console.error(err);
       res.status(500).json({ Éxito: false, Mensaje: 'Error al obtener usuarios' });
@@ -78,20 +81,19 @@ class ControladorUsuarios {
   }
 
   /**
-   * GET /api/usuarios/me 
-   * Devuelve los datos básicos del usuario logueado 
+   * GET /api/Usuarios/me 
+   * Obtener datos básicos del usuario logueado 
    */
-  async perfil(req, res) {
+  async Perfil(req, res) {
     try {
-      // req.usuario.id lo pone tu middleware verificarToken 
-      const usuario = await modeloUsuarios.Obtener_Por_ID(req.usuario.id);
-      if (!usuario) {
+      const Usuario = await Modelo_Usuarios.Obtener_Por_ID(req.Usuario.id);
+      if (!Usuario) {
         return res
           .status(404)
           .json({ Éxito: false, Mensaje: 'Usuario no encontrado' });
       }
-      // Extraemos solo los campos públicos 
-      const { Nombre_Completo, Correo_Electrónico, Teléfono } = usuario;
+      // Extraer solo los campos públicos 
+      const { Nombre_Completo, Correo_Electrónico, Teléfono } = Usuario;
       res.json({
         Éxito: true,
         Datos: { Nombre_Completo, Correo_Electrónico, Teléfono }
@@ -105,12 +107,11 @@ class ControladorUsuarios {
   }
 
   /**
-   * POST /api/admin/usuarios
-   * Crea un nuevo usuario (solo Admin)
+   * POST /api/Administrador/Usuarios
+   * Crear usuario (solo Administrador)
    */
-  async crearUsuario(req, res) {
+  async Crear_Usuario(req, res) {
     try {
-      // Desestructura todos los campos
       const {
         Nombre_Completo,
         Correo_Electrónico,
@@ -128,13 +129,13 @@ class ControladorUsuarios {
       }
 
       // Hash de la contraseña
-      const hash = await bcrypt.hash(Contraseña, 10);
+      const Hash = await Bcrypt.Hash(Contraseña, 10);
 
-      // Pasa un objeto con todas las claves a tu modelo
-      const id = await modeloUsuarios.Crear({
+      // Pasar un objeto con todas las claves al modelo
+      const id = await Modelo_Usuarios.Crear({
         Nombre_Completo,
         Correo_Electrónico,
-        Contraseña: hash,
+        Contraseña: Hash,
         Fecha_Nacimiento,
         Teléfono,
         Dirección,
@@ -155,21 +156,20 @@ class ControladorUsuarios {
   }
 
   /**
-   * PUT /api/admin/usuarios/:id
-   * Actualiza un usuario existente (solo Admin)
+   * PUT /api/Administrador/Usuarios/:id
+   * Actualizar usuario existente (solo Administrador)
    */
-  async actualizarUsuario(req, res) {
+  async Actualizar_Usuario(req, res) {
     try {
       const id = parseInt(req.params.id, 10);
       if (isNaN(id)) {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
       const Cambios = { ...req.body };
-      // Si vienen contraseña, la hasheamos
       if (Cambios.Contraseña) {
-        Cambios.Contraseña = await bcrypt.hash(Cambios.Contraseña, 10);
+        Cambios.Contraseña = await Bcrypt.Hash(Cambios.Contraseña, 10);
       }
-      const Filas = await modeloUsuarios.Actualizar(id, Cambios);
+      const Filas = await Modelo_Usuarios.Actualizar(id, Cambios);
       if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Usuario no encontrado.' });
       }
@@ -181,16 +181,16 @@ class ControladorUsuarios {
   }
 
   /**
-   * DELETE /api/admin/usuarios/:id
-   * Elimina un usuario (solo Admin)
+   * DELETE /api/Administrador/Usuarios/:id
+   * Eliminar usuario (solo Administrador)
    */
-  async eliminarUsuario(req, res) {
+  async Eliminar_Usuario(req, res) {
     try {
       const id = parseInt(req.params.id, 10);
       if (isNaN(id)) {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
-      const Filas = await modeloUsuarios.Eliminar(id);
+      const Filas = await Modelo_Usuarios.Eliminar(id);
       if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Usuario no encontrado.' });
       }
@@ -202,4 +202,4 @@ class ControladorUsuarios {
   }
 }
 
-module.exports = new ControladorUsuarios();
+module.exports = new Controlador_Usuarios();

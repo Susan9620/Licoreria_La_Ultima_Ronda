@@ -89,8 +89,7 @@ class Modelo_Productos {
           SELECT i."URL"
           FROM "IMÁGENES_PRODUCTO" i
           WHERE i."ID_Producto" = p."ID_Producto"
-            AND i."Principal" = TRUE
-          ORDER BY i."ID_Imagen" ASC
+          ORDER BY (CASE WHEN i."Principal" = TRUE THEN 0 ELSE 1 END), i."ID_Imagen" ASC
           LIMIT 1
         ) i ON TRUE
         LEFT JOIN (
@@ -145,9 +144,13 @@ class Modelo_Productos {
          LEFT JOIN "VARIANTES_PRODUCTO" v
            ON p."ID_Producto" = v."ID_Producto"
            AND v."Activo" = TRUE
-         LEFT JOIN "IMÁGENES_PRODUCTO" i
-           ON p."ID_Producto" = i."ID_Producto"
-           AND i."Principal" = TRUE
+          LEFT JOIN LATERAL (
+            SELECT i."URL"
+            FROM "IMÁGENES_PRODUCTO" i
+            WHERE i."ID_Producto" = p."ID_Producto"
+            ORDER BY (CASE WHEN i."Principal" = TRUE THEN 0 ELSE 1 END), i."ID_Imagen" ASC
+            LIMIT 1
+          ) i ON TRUE
          LEFT JOIN (
            SELECT
              "ID_Producto",

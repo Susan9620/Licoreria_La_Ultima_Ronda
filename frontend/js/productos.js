@@ -1,10 +1,12 @@
-const API_BASE = 'https://licoreria-la-ultima-ronda.onrender.com';
+const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? ''
+    : 'https://licoreria-la-ultima-ronda.onrender.com';
 
 /**
  * Devuelve HTML con estrellas llenas, medias o vacías según la calificación (0–5).
  */
-function Generar_Estrellas(calificacion) {
-    const valor = Math.round(parseFloat(calificacion) * 2) / 2; // a .0 o .5
+function Generar_Estrellas(Calificación) {
+    const valor = Math.round(parseFloat(Calificación) * 2) / 2; // a .0 o .5
     let html = '';
     for (let i = 1; i <= 5; i++) {
         if (i <= valor) {
@@ -86,9 +88,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 // 3) datos básicos
+                const LOGO_PLACEHOLDER = 'https://res.cloudinary.com/dq4yyycio/image/upload/v1745784729/Logo_ixx6lt.png';
                 const imgEl = clon.querySelector('img');
-                imgEl.src = p.Imagen_URL;
+                imgEl.src = (p.Imagen_URL && p.Imagen_URL.trim() !== '') ? p.Imagen_URL : LOGO_PLACEHOLDER;
                 imgEl.alt = p.Nombre;
+                imgEl.onerror = function () {
+                    this.onerror = null;
+                    this.src = LOGO_PLACEHOLDER;
+                };
                 clon.querySelector('h3').textContent = p.Nombre;
                 clon.querySelector('.Descripción').textContent = p.Descripción_Corta;
                 clon.querySelector('.Precio').innerHTML =
@@ -102,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // 5.1) Aplicar estado "Activo" si ya está en la lista de deseos
                 const btnFav = clon.querySelector('.Botón_Favorito');
-                if (window.Lista_Deseos && window.Lista_Deseos.Artículos.some(item => item.ID == p.ID_Producto)) {
+                if (window.Lista_Deseos && window.Lista_Deseos.Artículos.some(Item => Item.ID == p.ID_Producto)) {
                     btnFav.classList.add('Activo');
                 }
 
@@ -171,13 +178,25 @@ document.addEventListener('DOMContentLoaded', function () {
     function Filtrar_Productos() {
         // Primero filtramos por categoría y búsqueda
         Productos_Filtrados = Array.from(Productos).filter(Producto => {
-            const Categoría_Producto = Producto.dataset.category;
+            const Categoría_Producto = (Producto.dataset.category || '').trim();
             const Nombre_Producto = Producto.querySelector('h3').textContent.toLowerCase();
-            const Texto_Búsqueda = Campo_Búsqueda.value.toLowerCase();
+            const Texto_Búsqueda = Campo_Búsqueda.value.toLowerCase().trim();
 
-            // Filtro por categoría
-            if (Filtro_Actual !== 'Todos' && Categoría_Producto !== Filtro_Actual) {
-                return false;
+            // Filtro por categoría flexible y normalizado
+            if (Filtro_Actual && Filtro_Actual !== 'Todos') {
+                const f = Filtro_Actual.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+                const c = Categoría_Producto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+
+                const coincide = c === f || c.includes(f) || f.includes(c) ||
+                    (f.includes('granizado') && c.includes('granizado')) ||
+                    (f.includes('frappe') && c.includes('frappe')) ||
+                    (f.includes('coctel') && c.includes('coctel')) ||
+                    (f.includes('snack') && c.includes('snack')) ||
+                    (f.includes('pack') && (c.includes('pack') || c.includes('snack') || c.includes('licor')));
+
+                if (!coincide) {
+                    return false;
+                }
             }
 
             // Filtro por búsqueda
@@ -262,7 +281,7 @@ document.addEventListener('DOMContentLoaded', function () {
         Modal_Vista_Rápida.querySelector('.Descripción_Modal').textContent = Descripción_Producto;
         Modal_Vista_Rápida.querySelector('.Precio_Modal').textContent = Precio_Producto;
         const contClasif = Modal_Vista_Rápida.querySelector('.Clasificación_Modal');
-        contClasif.innerHTML = estrellasHTML + ` <span>(${numReseñas} reseñas)</span>`;
+        contClasif.innerHTML = estrellasHTML + ` <span>(${numReseñas} Reseñas)</span>`;
         const caracteristicas = Modal_Vista_Rápida.querySelector('.Características_Producto');
         caracteristicas.innerHTML = `
             <div class="Característica">
@@ -408,11 +427,11 @@ document.addEventListener('DOMContentLoaded', function () {
         Productos.forEach(p => p.style.display = 'none');
 
         // Calcula el rango de productos a mostrar
-        const inicio = (Pagina_Actual - 1) * Productos_Por_Pagina;
-        const fin = Math.min(inicio + Productos_Por_Pagina, Productos_Filtrados.length);
+        const Inicio = (Pagina_Actual - 1) * Productos_Por_Pagina;
+        const fin = Math.min(Inicio + Productos_Por_Pagina, Productos_Filtrados.length);
 
         // Muestra solo los productos de la página actual
-        const productos_a_mostrar = Productos_Filtrados.slice(inicio, fin);
+        const productos_a_mostrar = Productos_Filtrados.slice(Inicio, fin);
 
         // Limpia el contenedor
         while (Contenedor.firstChild) {
@@ -420,9 +439,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Añade los productos ordenados al contenedor
-        productos_a_mostrar.forEach(producto => {
-            Contenedor.appendChild(producto);
-            producto.style.display = 'block';
+        productos_a_mostrar.forEach(Producto => {
+            Contenedor.appendChild(Producto);
+            Producto.style.display = 'block';
         });
 
         // 4) Reconfigura los botones de carrito y favoritos

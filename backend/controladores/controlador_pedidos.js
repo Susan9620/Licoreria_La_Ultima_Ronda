@@ -1,19 +1,16 @@
-const modeloPedidos = require('../modelos/modelo_pedidos');
+const Modelo_Pedidos = require('../modelos/modelo_pedidos');
 
-class ControladorPedidos {
+class Controlador_Pedidos {
   /**
-   * POST /api/pedidos
+   * POST /api/Pedidos
+   * Crear pedido con todos sus detalles
    */
-  async crearPedido(req, res) {
+  async Crear_Pedido(req, res) {
     try {
-      const ID_Usuario = req.usuario.id;
-
-      // 🔍 DEBUG: Ver qué llega en el body
-      console.log("📥 Datos recibidos en el backend:");
-      console.log("   - Body completo:", JSON.stringify(req.body, null, 2));
+      const ID_Usuario = req.Usuario.id;
 
       const {
-        Items: Items,
+        Items,
         Subtotal,
         Envío,
         Descuento,
@@ -24,43 +21,29 @@ class ControladorPedidos {
         Instrucciones_Envío
       } = req.body;
 
-      // 🔍 DEBUG: Verificar items específicamente
-      console.log("📋 Items recibidos:", Items);
-      if (Array.isArray(Items)) {
-        Items.forEach((item, index) => {
-          console.log(`📦 Item ${index + 1}:`);
-          console.log(`   - ID_Variante: ${item.ID_Variante} (Tipo: ${typeof item.ID_Variante})`);
-          console.log(`   - Cantidad: ${item.Cantidad}`);
-          console.log(`   - Precio_Unitario: ${item.Precio_Unitario}`);
-          console.log(`   - Subtotal: ${item.Subtotal}`);
-        });
-      }
-
       if (!Array.isArray(Items) || Items.length === 0) {
         return res.status(400).json({ Éxito: false, Mensaje: 'No hay ítems en el pedido' });
       }
 
-      // 🔍 Verificar que todos los items tengan ID_Variante válido
-      const itemsSinVariante = Items.filter(item =>
-        !item.ID_Variante ||
-        item.ID_Variante === null ||
-        item.ID_Variante === undefined ||
-        item.ID_Variante === "null" ||
-        item.ID_Variante === "undefined"
+      const Ítems_Sin_Variante = Items.filter(Item =>
+        !Item.ID_Variante ||
+        Item.ID_Variante === null ||
+        Item.ID_Variante === undefined ||
+        Item.ID_Variante === "null" ||
+        Item.ID_Variante === "undefined"
       );
 
-      if (itemsSinVariante.length > 0) {
-        console.error("❌ Items sin ID_Variante válido encontrados:", itemsSinVariante);
+      if (Ítems_Sin_Variante.length > 0) {
         return res.status(400).json({
           Éxito: false,
           Mensaje: 'Algunos items no tienen ID_Variante válido',
-          itemsProblematicos: itemsSinVariante
+          itemsProblematicos: Ítems_Sin_Variante
         });
       }
 
-      const { Número_Pedido, ID_Pedido } = await modeloPedidos.Crear_Con_Detalles({
+      const { Número_Pedido, ID_Pedido } = await Modelo_Pedidos.Crear_Con_Detalles({
         ID_Usuario,
-        Items: Items,
+        Items,
         Subtotal,
         Envío,
         Descuento,
@@ -82,12 +65,15 @@ class ControladorPedidos {
     }
   }
 
-  async obtenerPedidoPorId(req, res) {
+  /**
+   * Obtener información detallada de un pedido específico
+   */
+  async Obtener_Pedido_Por_ID(req, res) {
     try {
       const id = parseInt(req.params.id, 10);
       if (isNaN(id)) return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido' });
 
-      const Pedido = await modeloPedidos.Obtener_Por_ID(id);
+      const Pedido = await Modelo_Pedidos.Obtener_Por_ID(id);
       if (!Pedido) return res.status(404).json({ Éxito: false, Mensaje: 'Pedido no encontrado' });
 
       res.json({ Éxito: true, Datos: Pedido });
@@ -97,10 +83,13 @@ class ControladorPedidos {
     }
   }
 
-  async obtenerPedido(req, res) {
+  /**
+   * Obtener detalles de un pedido específico
+   */
+  async Obtener_Pedido(req, res) {
     try {
       const ID_Pedido = parseInt(req.params.id, 10);
-      const { Pedido, Items } = await modeloPedidos.Obtener_Con_Detalles(ID_Pedido);
+      const { Pedido, Items } = await Modelo_Pedidos.Obtener_Con_Detalles(ID_Pedido);
       return res.json({ Éxito: true, Datos: { Pedido, Items } });
     } catch (err) {
       console.error(err);
@@ -109,14 +98,14 @@ class ControladorPedidos {
   }
 
   /**
- * GET /api/pedidos/usuario
- * Devuelve todos los pedidos del usuario autenticado
+ * GET /api/Pedidos/Usuario
+ * Obtener pedidos del usuario autenticado
  */
-  async obtenerPedidosPorUsuario(req, res) {
+  async Obtener_Pedidos_Por_Usuario(req, res) {
     try {
-      const ID_Usuario = req.usuario.id;
-      const pedidos = await modeloPedidos.Obtener_Por_Usuario(ID_Usuario);
-      return res.json({ Éxito: true, Datos: pedidos });
+      const ID_Usuario = req.Usuario.id;
+      const Pedidos = await Modelo_Pedidos.Obtener_Por_Usuario(ID_Usuario);
+      return res.json({ Éxito: true, Datos: Pedidos });
     } catch (err) {
       console.error('Error al obtener historial de pedidos:', err);
       return res.status(500).json({ Éxito: false, Mensaje: 'Error al recuperar historial de pedidos' });
@@ -124,10 +113,10 @@ class ControladorPedidos {
   }
 
   /**
-   * PUT /api/admin/pedidos/:id/estado
-   * Cambia el Estado_Pedido de un pedido (solo Admin)
+   * PUT /api/Administrador/Pedidos/:id/Estado
+   * Cambiar estado de un pedido (solo Administrador)
    */
-  async cambiarEstado(req, res) {
+  async Cambiar_Estado(req, res) {
     try {
       const ID_Pedido = parseInt(req.params.id, 10);
       const { Nuevo_Estado } = req.body;
@@ -138,14 +127,14 @@ class ControladorPedidos {
       }
 
       // Validar estado
-      const estadosPermitidos = ['Pendiente', 'Pagado', 'Entregado', 'Cancelado'];
-      if (!estadosPermitidos.includes(Nuevo_Estado)) {
+      const Estados_Permitidos = ['Pendiente', 'Pagado', 'Entregado', 'Cancelado'];
+      if (!Estados_Permitidos.includes(Nuevo_Estado)) {
         return res.status(400).json({ Éxito: false, Mensaje: 'Estado inválido.' });
       }
 
       // Llamada al modelo
-      const filasAfectadas = await modeloPedidos.Actualizar_Estado(ID_Pedido, Nuevo_Estado);
-      if (filasAfectadas === 0) {
+      const Filas_Afectadas = await Modelo_Pedidos.Actualizar_Estado(ID_Pedido, Nuevo_Estado);
+      if (Filas_Afectadas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Pedido no encontrado.' });
       }
 
@@ -157,13 +146,13 @@ class ControladorPedidos {
   }
 
   /**
-   * GET /api/admin/pedidos
-   * Lista todos los pedidos (solo Admin)
+   * GET /api/Administrador/Pedidos
+   * Listar todos los pedidos (solo Administrador)
    */
   async Obtener_Todos(req, res) {
     try {
-      const pedidos = await modeloPedidos.Obtener_Todos();
-      return res.json({ Éxito: true, Datos: pedidos });
+      const Pedidos = await Modelo_Pedidos.Obtener_Todos();
+      return res.json({ Éxito: true, Datos: Pedidos });
     } catch (error) {
       console.error('Error al listar pedidos:', error);
       return res.status(500).json({ Éxito: false, Mensaje: 'Error interno del servidor.' });
@@ -171,4 +160,4 @@ class ControladorPedidos {
   }
 }
 
-module.exports = new ControladorPedidos();
+module.exports = new Controlador_Pedidos();

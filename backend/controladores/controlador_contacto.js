@@ -2,12 +2,12 @@ const Modelo_Contacto = require('../modelos/modelo_contacto');
 
 class Controlador_Contacto {
   /**
-   * POST /api/contacto
-   * Crear y guardar un nuevo mensaje
+   * POST /api/Contacto
+   * Crear y guardar un mensaje
    */
   async Crear(req, res) {
     try {
-      const ID_Usuario = req.usuario?.id || null;
+      const ID_Usuario = req.Usuario?.id || null;
       const { Mensaje } = req.body;
 
       if (!Mensaje || !Mensaje.trim()) {
@@ -23,7 +23,7 @@ class Controlador_Contacto {
   }
  
   /**
-   * GET /api/contacto
+   * GET /api/Contacto
    * Obtener todos los mensajes
    */
   async Listar(req, res) {

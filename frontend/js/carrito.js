@@ -69,10 +69,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 Clon_Producto.querySelector('.Producto_Carrito').dataset.id = Índice;
 
                 // Llenar datos del producto
+                const LOGO_PLACEHOLDER = 'https://res.cloudinary.com/dq4yyycio/image/upload/v1745784729/Logo_ixx6lt.png';
                 const Imagen_Elemento = Clon_Producto.querySelector('.Imagen_Producto_Carrito img');
                 if (Imagen_Elemento) {
-                    Imagen_Elemento.src = Elemento.Imagen || '';
+                    Imagen_Elemento.src = (Elemento.Imagen && Elemento.Imagen.trim() !== '') ? Elemento.Imagen : LOGO_PLACEHOLDER;
                     Imagen_Elemento.alt = Elemento.Nombre || 'Producto';
+                    Imagen_Elemento.onerror = function () {
+                        this.onerror = null;
+                        this.src = LOGO_PLACEHOLDER;
+                    };
                 }
 
                 const Nombre_Elemento = Clon_Producto.querySelector('.Nombre_Producto_Carrito');
@@ -591,12 +596,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const btnPagar = document.getElementById('Botón_Proceder_Pago');
         if (btnPagar) {
             // Deshabilitar inicialmente si no hay token
-            const token = localStorage.getItem('token');
-            btnPagar.disabled = !token;
+            const Token = localStorage.getItem('Token');
+            btnPagar.disabled = !Token;
 
             btnPagar.addEventListener('click', () => {
-                const token = localStorage.getItem('token');
-                if (!token) {
+                const Token = localStorage.getItem('Token');
+                if (!Token) {
                     // Sin token: no hace nada
                     return;
                 }

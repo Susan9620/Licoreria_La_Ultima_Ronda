@@ -44,7 +44,7 @@ class Modelo_Lista_Deseos {
    * @param {number} ID_Producto
    * @returns {Promise<Object>} - { id, Producto_ID }
    */
-  async agregar(ID_Usuario, ID_Producto) {
+  async Agregar(ID_Usuario, ID_Producto) {
     try {
       const Resultado = await pool.query(
         `

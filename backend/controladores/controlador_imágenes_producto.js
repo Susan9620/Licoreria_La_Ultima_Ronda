@@ -1,16 +1,17 @@
-const modeloImagenesProducto = require("../modelos/modelo_imágenes_producto")
+const Modelo_Imágenes_Producto = require("../modelos/modelo_imágenes_producto")
 
 /**
- * Obtener todas las imágenes de un producto específico
+ * GET /api/Imágenes/producto/:ID_Producto
+ * Obtener imágenes de un producto específico
  */
 const Obtener_Por_Producto = async (req, res) => {
   try {
     const { ID_Producto } = req.params
-    const imagenes = await modeloImagenesProducto.Obtener_Por_Producto(ID_Producto)
+    const Imágenes = await Modelo_Imágenes_Producto.Obtener_Por_Producto(ID_Producto)
 
     res.json({
       Éxito: true,
-      Datos: imagenes,
+      Datos: Imágenes,
       Mensaje: "Imágenes obtenidas exitosamente",
     })
   } catch (error) {
@@ -28,12 +29,13 @@ const Obtener_Por_Producto = async (req, res) => {
 }
 
 /**
- * Obtener la imagen principal de un producto
+ * GET /api/Imágenes/principal/:ID_Producto
+ * Obtener imagen principal de un producto
  */
-const obtenerPrincipal = async (req, res) => {
+const Obtener_Principal = async (req, res) => {
   try {
     const { ID_Producto } = req.params
-    const Imagen = await modeloImagenesProducto.obtenerPrincipal(ID_Producto)
+    const Imagen = await Modelo_Imágenes_Producto.Obtener_Principal(ID_Producto)
 
     if (!Imagen) {
       return res.status(404).json({
@@ -62,12 +64,12 @@ const obtenerPrincipal = async (req, res) => {
 }
 
 /**
- * POST /api/admin/imagenes
- * Crea una nueva imagen de producto (solo Admin)
+ * POST /api/Administrador/Imágenes
+ * Crear imagen de producto (solo Administrador)
  */
-const crearImagenProducto = async (req, res) => {
+const Crear_Imagen_Producto = async (req, res) => {
   try {
-    const id = await modeloImagenesProducto.Crear(req.body)
+    const id = await Modelo_Imágenes_Producto.Crear(req.body)
     return res.status(201).json({
       Éxito: true,
       Mensaje: "Imagen de producto creada correctamente",
@@ -80,16 +82,16 @@ const crearImagenProducto = async (req, res) => {
 }
 
 /**
- * PUT /api/admin/imagenes/:id
- * Actualiza una imagen de producto (solo Admin)
+ * PUT /api/Administrador/Imágenes/:id
+ * Actualiza una imagen de producto (solo Administrador)
  */
-const actualizarImagenProducto = async (req, res) => {
+const Actualizar_Imagen_Producto = async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10)
     if (isNaN(id)) {
       return res.status(400).json({ Éxito: false, Mensaje: "ID inválido." })
     }
-    const Filas = await modeloImagenesProducto.Actualizar(id, req.body)
+    const Filas = await Modelo_Imágenes_Producto.Actualizar(id, req.body)
     if (Filas === 0) {
       return res.status(404).json({ Éxito: false, Mensaje: "Imagen no encontrada." })
     }
@@ -101,16 +103,16 @@ const actualizarImagenProducto = async (req, res) => {
 }
 
 /**
- * DELETE /api/admin/imagenes/:id
- * Elimina una imagen de producto (solo Admin)
+ * DELETE /api/Administrador/Imágenes/:id
+ * Elimina una imagen de producto (solo Administrador)
  */
-const eliminarImagenProducto = async (req, res) => {
+const Eliminar_Imagen_Producto = async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10)
     if (isNaN(id)) {
       return res.status(400).json({ Éxito: false, Mensaje: "ID inválido." })
     }
-    const Filas = await modeloImagenesProducto.Eliminar(id)
+    const Filas = await Modelo_Imágenes_Producto.Eliminar(id)
     if (Filas === 0) {
       return res.status(404).json({ Éxito: false, Mensaje: "Imagen no encontrada." })
     }
@@ -123,8 +125,8 @@ const eliminarImagenProducto = async (req, res) => {
 
 module.exports = {
   Obtener_Por_Producto,
-  obtenerPrincipal,
-  crearImagenProducto,
-  actualizarImagenProducto,
-  eliminarImagenProducto
+  Obtener_Principal,
+  Crear_Imagen_Producto,
+  Actualizar_Imagen_Producto,
+  Eliminar_Imagen_Producto
 }

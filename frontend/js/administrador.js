@@ -23,8 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Helper: JWT en headers
     function authHeader() {
-        const token = localStorage.getItem('token');
-        return token ? { 'Authorization': 'Bearer ' + token } : {};
+        const Token = localStorage.getItem('Token');
+        return Token ? { 'Authorization': 'Bearer ' + Token } : {};
     }
 
     // Inicial + cambio de sección
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function renderPedidos() {
         content.innerHTML = '<p>Cargando pedidos…</p>';
         try {
-            const resp = await fetch(`${baseUrl}/api/admin/pedidos`, { headers: authHeader() });
+            const resp = await fetch(`${baseUrl}/api/Administrador/Pedidos`, { headers: authHeader() });
             const json = await resp.json();
             if (!resp.ok || !json.Éxito) throw new Error(json.Mensaje);
             const table = document.createElement('table');
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Detalle Pedido
     window.viewPedido = async (id) => {
         try {
-            const resp = await fetch(`${baseUrl}/api/admin/pedidos/${id}`, { headers: authHeader() });
+            const resp = await fetch(`${baseUrl}/api/Administrador/Pedidos/${id}`, { headers: authHeader() });
             const json = await resp.json();
             if (!resp.ok || !json.Éxito) throw new Error(json.Mensaje);
             const { Pedido, Items } = json.Datos;
@@ -108,15 +108,15 @@ document.addEventListener('DOMContentLoaded', () => {
             detFecha.textContent = new Date(Pedido.Fecha).toLocaleString();
             detTotal.textContent = parseFloat(Pedido.Total).toFixed(2);
             detEstado.value = Pedido.Estado_Pedido;
-            detProductos.innerHTML = Items.map(item => {
-                const nombre = item.Nombre_Variante
-                    ? `${item.Nombre_Producto} – ${item.Nombre_Variante}`
-                    : item.Nombre_Producto;
+            detProductos.innerHTML = Items.map(Item => {
+                const nombre = Item.Nombre_Variante
+                    ? `${Item.Nombre_Producto} – ${Item.Nombre_Variante}`
+                    : Item.Nombre_Producto;
                 return `
           <tr>
             <td>${nombre}</td>
-            <td>${item.Cantidad}</td>
-            <td>$${parseFloat(item.Precio_Unitario).toFixed(2)}</td>
+            <td>${Item.Cantidad}</td>
+            <td>$${parseFloat(Item.Precio_Unitario).toFixed(2)}</td>
           </tr>
         `;
             }).join('');
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const id = modalID.textContent;
         const Nuevo_Estado = detEstado.value;
         try {
-            const resp = await fetch(`${baseUrl}/api/admin/pedidos/${id}/estado`, {
+            const resp = await fetch(`${baseUrl}/api/Administrador/Pedidos/${id}/Estado`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json', ...authHeader() },
                 body: JSON.stringify({ Nuevo_Estado })
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function renderProductos() {
         content.innerHTML = '<p>Cargando productos…</p>';
         try {
-            const resp = await fetch(`${baseUrl}/api/admin/Productos`, { headers: authHeader() });
+            const resp = await fetch(`${baseUrl}/api/Administrador/Productos`, { headers: authHeader() });
             const json = await resp.json();
             if (!resp.ok || !json.Éxito) throw new Error(json.Mensaje);
             const table = document.createElement('table');
@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <td>${p.Activo ? 'Sí' : 'No'}</td>
               <td>
                 <button class="Botones Botón_Primario" onclick="viewProducto(${p.ID_Producto})">✏️</button>
-                <button class="Botones Botón_Secundario" onclick="eliminarProducto(${p.ID_Producto})">🗑️</button>
+                <button class="Botones Botón_Secundario" onclick="Eliminar_Producto(${p.ID_Producto})">🗑️</button>
               </td>
             </tr>
           `).join('')}
@@ -194,11 +194,11 @@ document.addEventListener('DOMContentLoaded', () => {
         ResetearModal_Producto();
         try {
             const resp = await fetch(`${baseUrl}/api/Productos/${id}`, { headers: authHeader() });
-            const { Datos: prod } = await resp.json();
-            document.getElementById('Nombre_Producto').value = prod.Nombre;
-            document.getElementById('Precio_Producto').value = prod.Precio;
-            document.getElementById('Categoría_Producto').value = prod.ID_Categoría;
-            document.getElementById('Activo_Producto').checked = prod.Activo === 1;
+            const { Datos: Producto_Variante } = await resp.json();
+            document.getElementById('Nombre_Producto').value = Producto_Variante.Nombre;
+            document.getElementById('Precio_Producto').value = Producto_Variante.Precio;
+            document.getElementById('Categoría_Producto').value = Producto_Variante.ID_Categoría;
+            document.getElementById('Activo_Producto').checked = Producto_Variante.Activo === 1;
             await cargarVariantes(id);
             await cargarImagenes(id);
             prodModal.classList.remove('Oculto');
@@ -232,13 +232,13 @@ document.addEventListener('DOMContentLoaded', () => {
         let res, json;
         try {
             if (modoProducto === 'Crear') {
-                res = await fetch(`${baseUrl}/api/admin/Productos`, {
+                res = await fetch(`${baseUrl}/api/Administrador/Productos`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeader() },
                     body: JSON.stringify(Datos)
                 });
                 json = await res.json(); idProductoActual = json.Datos.ID_Producto;
             } else {
-                await fetch(`${baseUrl}/api/admin/Productos/${idProductoActual}`, {
+                await fetch(`${baseUrl}/api/Administrador/Productos/${idProductoActual}`, {
                     method: 'PUT', headers: { 'Content-Type': 'application/json', ...authHeader() },
                     body: JSON.stringify(Datos)
                 });
@@ -256,9 +256,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    window.eliminarProducto = async (id) => {
+    window.Eliminar_Producto = async (id) => {
         if (!confirm('¿Seguro que quieres eliminar este producto?')) return;
-        await fetch(`${baseUrl}/api/admin/Productos/${id}`, { method: 'DELETE', headers: authHeader() });
+        await fetch(`${baseUrl}/api/Administrador/Productos/${id}`, { method: 'DELETE', headers: authHeader() });
         await renderProductos();
     };
 
@@ -272,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Variantes
     async function cargarVariantes(idProd) {
-        const { Datos } = await (await fetch(`${baseUrl}/api/variantes/producto/${idProd}`, { headers: authHeader() })).json();
+        const { Datos } = await (await fetch(`${baseUrl}/api/Variantes/Producto/${idProd}`, { headers: authHeader() })).json();
         const tbody = document.getElementById('Tabla_Variantes'); tbody.innerHTML = '';
         Datos.forEach(v => {
             const tr = document.createElement('tr');
@@ -300,31 +300,31 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('Botón_Nueva_Variante').onclick = agregarFilaVariante;
     async function procesarVariantes(idProd) {
         const Filas = [...document.getElementById('Tabla_Variantes').rows];
-        for (let fila of Filas) {
-            const idVar = fila.querySelector('.EliminarVariante').dataset.id;
+        for (let Fila of Filas) {
+            const idVar = Fila.querySelector('.EliminarVariante').dataset.id;
             const Datos = {
                 ID_Producto: idProd,
-                Nombre_Variante: fila.querySelector('input[name="Nombre_Variante"]').value,
-                SKU: fila.querySelector('input[name="SKU"]').value,
-                Precio: parseFloat(fila.querySelector('input[name="Precio"]').value) || 0,
+                Nombre_Variante: Fila.querySelector('input[name="Nombre_Variante"]').value,
+                SKU: Fila.querySelector('input[name="SKU"]').value,
+                Precio: parseFloat(Fila.querySelector('input[name="Precio"]').value) || 0,
                 Activo: 1
             };
             if (idVar) {
-                await fetch(`${baseUrl}/api/admin/variantes/${idVar}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(Datos) });
+                await fetch(`${baseUrl}/api/Administrador/Variantes/${idVar}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(Datos) });
             } else {
-                await fetch(`${baseUrl}/api/admin/variantes`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(Datos) });
+                await fetch(`${baseUrl}/api/Administrador/Variantes`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(Datos) });
             }
         }
     }
     async function eliminarVariante(id) {
         if (!confirm('¿Eliminar variante?')) return;
-        await fetch(`${baseUrl}/api/admin/variantes/${id}`, { method: 'DELETE', headers: authHeader() });
+        await fetch(`${baseUrl}/api/Administrador/Variantes/${id}`, { method: 'DELETE', headers: authHeader() });
         await cargarVariantes(idProductoActual);
     }
 
     // Imágenes (análogo a variantes)
     async function cargarImagenes(idProd) {
-        const { Datos } = await (await fetch(`${baseUrl}/api/imagenes/producto/${idProd}`, { headers: authHeader() })).json();
+        const { Datos } = await (await fetch(`${baseUrl}/api/Imágenes/Producto/${idProd}`, { headers: authHeader() })).json();
         const tbody = document.getElementById('Tabla_Imágenes'); tbody.innerHTML = '';
         Datos.forEach(img => {
             const tr = document.createElement('tr');
@@ -355,25 +355,25 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('Botón_Nueva_Imagen').onclick = agregarFilaImagen;
     async function procesarImagenes(idProd) {
         const Filas = [...document.getElementById('Tabla_Imágenes').rows];
-        for (let fila of Filas) {
-            const idImg = fila.querySelector('.EliminarImagen').dataset.id;
+        for (let Fila of Filas) {
+            const idImg = Fila.querySelector('.EliminarImagen').dataset.id;
             const Datos = {
                 ID_Producto: idProd,
-                URL: fila.querySelector('input[name="URL"]').value,
-                Alt: fila.querySelector('input[name="Alt"]').value,
-                Orden: parseInt(fila.querySelector('input[name="Orden"]').value, 10) || 0,
-                Predeterminada: fila.querySelector('input[name="Predeterminada"]').checked ? 1 : 0
+                URL: Fila.querySelector('input[name="URL"]').value,
+                Alt: Fila.querySelector('input[name="Alt"]').value,
+                Orden: parseInt(Fila.querySelector('input[name="Orden"]').value, 10) || 0,
+                Predeterminada: Fila.querySelector('input[name="Predeterminada"]').checked ? 1 : 0
             };
             if (idImg) {
-                await fetch(`${baseUrl}/api/admin/imagenes/${idImg}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(Datos) });
+                await fetch(`${baseUrl}/api/Administrador/Imágenes/${idImg}`, { method: 'PUT', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(Datos) });
             } else {
-                await fetch(`${baseUrl}/api/admin/imagenes`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(Datos) });
+                await fetch(`${baseUrl}/api/Administrador/Imágenes`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...authHeader() }, body: JSON.stringify(Datos) });
             }
         }
     }
     async function eliminarImagen(id) {
         if (!confirm('¿Eliminar imagen?')) return;
-        await fetch(`${baseUrl}/api/admin/imagenes/${id}`, { method: 'DELETE', headers: authHeader() });
+        await fetch(`${baseUrl}/api/Administrador/Imágenes/${id}`, { method: 'DELETE', headers: authHeader() });
         await cargarImagenes(idProductoActual);
     }
 

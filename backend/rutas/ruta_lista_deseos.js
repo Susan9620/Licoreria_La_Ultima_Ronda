@@ -1,28 +1,28 @@
 const express = require('express');
 const controladorListaDeseos = require('../controladores/controlador_lista_deseos');
-const { verificarToken } = require('../middleware/middleware_autenticación');
+const { Verificar_Token } = require('../middleware/middleware_autenticación');
 
-const router = express.Router();
+const Ruta = express.Router();
 
 /**
- * @route   GET /api/deseos
+ * @route   GET /api/Deseos
  * @desc    Obtener la lista de deseos del usuario autenticado
  * @access  Privado
  */
-router.get('/', verificarToken, controladorListaDeseos.obtenerLista);
+Ruta.get('/', Verificar_Token, controladorListaDeseos.Obtener_Lista);
 
 /**
- * @route   POST /api/deseos
+ * @route   POST /api/Deseos
  * @desc    Agregar un producto a la lista de deseos
  * @access  Privado
  */
-router.post('/', verificarToken, controladorListaDeseos.agregar);
+Ruta.post('/', Verificar_Token, controladorListaDeseos.Agregar);
 
 /**
- * @route   DELETE /api/deseos/:Producto_ID
+ * @route   DELETE /api/Deseos/:Producto_ID
  * @desc    Eliminar un producto de la lista de deseos
  * @access  Privado
  */
-router.delete('/:Producto_ID', verificarToken, controladorListaDeseos.Eliminar);
+Ruta.delete('/:Producto_ID', Verificar_Token, controladorListaDeseos.Eliminar);
 
-module.exports = router;
+module.exports = Ruta;

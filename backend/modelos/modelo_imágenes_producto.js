@@ -38,7 +38,7 @@ const Modelo_Imágenes_Producto = {
    * @param {number} ID_Producto
    * @returns {Promise<Object|null>}
    */
-  async obtenerPrincipal(ID_Producto) {
+  async Obtener_Principal(ID_Producto) {
     try {
       const Resultado = await pool.query(
         `SELECT
@@ -59,7 +59,7 @@ const Modelo_Imágenes_Producto = {
       );
       return Resultado.rows[0] || null;
     } catch (error) {
-      console.error("Error en modelo obtenerPrincipal:", error);
+      console.error("Error en modelo Obtener_Principal:", error);
       throw error;
     }
   },

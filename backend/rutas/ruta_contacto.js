@@ -1,11 +1,18 @@
 const express = require('express');
-const router = express.Router();
+const Ruta = express.Router();
 const Controlador_Contacto = require('../controladores/controlador_contacto');
-const { verificarToken } = require('../middleware/middleware_autenticación');
+const { Verificar_Token } = require('../middleware/middleware_autenticación');
 
-// Si quieres permitir envíos anónimos, comenta la línea de verificarToken
-router.post('/', verificarToken, Controlador_Contacto.Crear);
-// Opcional: sólo para admins o ver los mensajes
-router.get('/', verificarToken, Controlador_Contacto.Listar);
+/**
+ * @route   POST /api/Contacto
+ * @desc    Crear y guardar un mensaje
+ */
+Ruta.post('/', Verificar_Token, Controlador_Contacto.Crear);
 
-module.exports = router;
+/**
+ * @route   GET /api/Contacto
+ * @desc    Obtener todos los mensajes
+ */
+Ruta.get('/', Verificar_Token, Controlador_Contacto.Listar);
+
+module.exports = Ruta;

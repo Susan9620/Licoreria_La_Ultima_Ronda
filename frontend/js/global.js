@@ -43,7 +43,7 @@ function setupLogoutModalEvents() {
 
     // 2.3) confirmar
     document.getElementById('Confirmar_Cierre_Sesión')?.addEventListener('click', () => {
-        localStorage.removeItem('token');
+        localStorage.removeItem('Token');
         localStorage.removeItem('carrito');
         localStorage.removeItem('listaDeseos');
         cerrarModalLogout();
@@ -57,7 +57,7 @@ document.body.addEventListener('click', function (e) {
         cerrarModalLogout();
     }
     else if (e.target.id === 'Confirmar_Cierre_Sesión') {
-        localStorage.removeItem('token');
+        localStorage.removeItem('Token');
         localStorage.removeItem('carrito');
         localStorage.removeItem('listaDeseos');
         cerrarModalLogout();
@@ -84,8 +84,8 @@ function cerrarModalLogout() {
  * @returns {boolean}
  */
 function requireAuth() {
-    const token = localStorage.getItem('token');
-    if (!token) {
+    const Token = localStorage.getItem('Token');
+    if (!Token) {
         abrirModalLogin();
         return false;
     }
@@ -419,10 +419,10 @@ const Carrito = {
                     'Producto';
 
                 // 5) Variante actual (detalle.js)
-                const variante = typeof obtenerVarianteActual === 'function'
+                const Variante = typeof obtenerVarianteActual === 'function'
                     ? obtenerVarianteActual()
                     : null;
-                const Nombre_Variante = variante?.Nombre_Variante || '';
+                const Nombre_Variante = Variante?.Nombre_Variante || '';
 
                 // 6) Nombre completo
                 const nombreCompleto = Nombre_Variante
@@ -676,7 +676,7 @@ const Carrito = {
 // Inicializar carrito cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', async function () {
     // 0) Obtener token
-    const tuJwt = localStorage.getItem('token');
+    const tuJwt = localStorage.getItem('Token');
     const menuUsuario = document.querySelector('.Menú_Usuario');
     const nombreElem = document.querySelector('.Nombre_Usuario');
     const emailElem = document.querySelector('.Email_Usuario');
@@ -689,7 +689,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (menuUsuario) menuUsuario.style.display = '';
         // 1) Cargar datos del perfil
         try {
-            const resp = await fetch(`${baseUrl}/api/usuarios/me`, {
+            const resp = await fetch(`${baseUrl}/api/Usuarios/me`, {
                 headers: { 'Authorization': `Bearer ${tuJwt}` }
             });
             const json = await resp.json();
@@ -730,7 +730,7 @@ window.Carrito = Carrito;
 
 //---------------------------------------Funciones para la Lista de Deseos---------------------------------------
 
-const tuJwt = localStorage.getItem('token');
+const tuJwt = localStorage.getItem('Token');
 console.log('JWT cargado:', tuJwt);
 
 const Lista_Deseos = {
@@ -738,19 +738,19 @@ const Lista_Deseos = {
 
     Inicializar: async function () {
         try {
-            const resp = await fetch(`${baseUrl}/api/deseos`, {
+            const resp = await fetch(`${baseUrl}/api/Deseos`, {
                 headers: { 'Authorization': 'Bearer ' + tuJwt }
             });
             const json = await resp.json();
 
             if (json.Éxito) {
-                const Datos = json.Datos;  // array de variantes
+                const Datos = json.Datos;
 
                 // 1) Agrupar variantes por Producto_ID
-                const grupos = Datos.reduce((acc, item) => {
-                    const pid = item.Producto_ID;
+                const grupos = Datos.reduce((acc, Item) => {
+                    const pid = Item.Producto_ID;
                     if (!acc[pid]) acc[pid] = [];
-                    acc[pid].push(item);
+                    acc[pid].push(Item);
                     return acc;
                 }, {});
 
@@ -795,7 +795,7 @@ const Lista_Deseos = {
 
             if (!existe) {
                 // Añadir a BD
-                await fetch(`${baseUrl}/api/deseos`, {
+                await fetch(`${baseUrl}/api/Deseos`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -807,7 +807,7 @@ const Lista_Deseos = {
                 Lista_Deseos.Artículos.push({ ID: ID, Nombre: nombre, Imagen: Imagen, Precio: precio });
             } else {
                 // Eliminar de BD
-                await fetch(`${baseUrl}/api/deseos/${ID}`, {
+                await fetch(`${baseUrl}/api/Deseos/${ID}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': 'Bearer ' + tuJwt
@@ -842,7 +842,7 @@ const Lista_Deseos = {
             if (id) {
                 const btnFav = tarjeta.querySelector('.Botón_Favorito');
                 if (btnFav) {
-                    const estaEnFavoritos = Lista_Deseos.Artículos.some(item => item.ID == id);
+                    const estaEnFavoritos = Lista_Deseos.Artículos.some(Item => Item.ID == id);
                     if (estaEnFavoritos) {
                         btnFav.classList.add('Activo');
                     } else {
@@ -871,29 +871,29 @@ const Lista_Deseos = {
             // Por cada elemento, clona y rellena template si existe
             const template = document.getElementById('Plantilla_Elemento_Deseo');
             if (template) {
-                Lista_Deseos.Artículos.forEach((item, idx) => {
+                Lista_Deseos.Artículos.forEach((Item, idx) => {
                     const tpl = template.content.cloneNode(true);
                     const root = tpl.querySelector('.Elemento_Lista_Deseos');
                     root.dataset.index = idx;
-                    tpl.querySelector('.Imagen_Lista_Deseos img').src = item.Imagen;
-                    tpl.querySelector('.Imagen_Lista_Deseos img').alt = item.Nombre;
-                    tpl.querySelector('h3').textContent = item.Nombre;
-                    tpl.querySelector('.Precio_Lista_Deseos').textContent = item.Precio;
+                    tpl.querySelector('.Imagen_Lista_Deseos img').src = Item.Imagen;
+                    tpl.querySelector('.Imagen_Lista_Deseos img').alt = Item.Nombre;
+                    tpl.querySelector('h3').textContent = Item.Nombre;
+                    tpl.querySelector('.Precio_Lista_Deseos').textContent = Item.Precio;
                     Elementos_Lista_Deseos.appendChild(tpl);
                 });
             } else {
                 // Si no hay template, crear elementos manualmente
-                Lista_Deseos.Artículos.forEach((item, idx) => {
+                Lista_Deseos.Artículos.forEach((Item, idx) => {
                     const div = document.createElement('div');
                     div.className = 'Elemento_Lista_Deseos';
                     div.dataset.index = idx;
                     div.innerHTML = `
                         <div class="Imagen_Lista_Deseos">
-                            <img src="${item.Imagen}" alt="${item.Nombre}">
+                            <img src="${Item.Imagen}" alt="${Item.Nombre}">
                         </div>
                         <div class="Info_Lista_Deseos">
-                            <h3>${item.Nombre}</h3>
-                            <div class="Precio_Lista_Deseos">${item.Precio}</div>
+                            <h3>${Item.Nombre}</h3>
+                            <div class="Precio_Lista_Deseos">${Item.Precio}</div>
                             <button class="Agregar_Carrito">Añadir al Carrito</button>
                         </div>
                         <button class="Eliminar_Deseo">
@@ -920,19 +920,19 @@ const Lista_Deseos = {
                     const elemento = btnEliminar.closest('.Elemento_Lista_Deseos');
                     const idx = parseInt(elemento.dataset.index, 10);
                     if (!isNaN(idx) && idx >= 0 && idx < Lista_Deseos.Artículos.length) {
-                        const item = Lista_Deseos.Artículos[idx];          // aquí tus props: item.ID, item.Nombre, etc.
-                        const token = localStorage.getItem('token');
-                        const url = `${baseUrl}/api/deseos/${item.ID}`;     // <— usa item.ID, no Producto_ID
+                        const Item = Lista_Deseos.Artículos[idx];
+                        const Token = localStorage.getItem('Token');
+                        const url = `${baseUrl}/api/Deseos/${Item.ID}`;
                         console.log('🗑️ Llamando a DELETE en:', url);
 
                         try {
                             const resp = await fetch(url, {
                                 method: 'DELETE',
-                                headers: { 'Authorization': `Bearer ${token}` }
+                                headers: { 'Authorization': `Bearer ${Token}` }
                             });
                             console.log('🗒️ Status:', resp.status);
 
-                            const body = await resp.json();                   // parsea como JSON
+                            const body = await resp.json();
                             console.log('🗒️ Body:', body);
 
                             // comprueba tanto el status HTTP como tu campo "Éxito"
@@ -941,7 +941,7 @@ const Lista_Deseos = {
                             }
 
                             // si todo OK, elimina localmente y refresca UI
-                            Lista_Deseos.Artículos = Lista_Deseos.Artículos.filter(x => x.ID !== item.ID);
+                            Lista_Deseos.Artículos = Lista_Deseos.Artículos.filter(x => x.ID !== Item.ID);
                             Lista_Deseos.Guardar_Artículos();
                             Lista_Deseos.Actualizar_Contador();
                             Lista_Deseos.Actualizar_UI();
@@ -959,8 +959,8 @@ const Lista_Deseos = {
                     const elemento = btnAgregar.closest('.Elemento_Lista_Deseos');
                     const idx = parseInt(elemento.dataset.index, 10);
                     if (!isNaN(idx) && idx >= 0 && idx < Lista_Deseos.Artículos.length) {
-                        const item = Lista_Deseos.Artículos[idx];
-                        window.Carrito.Agregar_Elemento(item.Nombre, item.Precio, item.Imagen, 1);
+                        const Item = Lista_Deseos.Artículos[idx];
+                        window.Carrito.Agregar_Elemento(Item.Nombre, Item.Precio, Item.Imagen, 1);
                     }
                 }
             });
@@ -1046,7 +1046,7 @@ const Historial = {
         console.log('Añadiendo al historial:', nombre, id);
 
         // Quita duplicados por ID
-        const idx = this.Productos.findIndex(item => item.ID === id);
+        const idx = this.Productos.findIndex(Item => Item.ID === id);
         if (idx !== -1) this.Productos.splice(idx, 1);
 
         // Inserta al frente
@@ -1077,31 +1077,31 @@ const Historial = {
 
         // 3) Reconstruir fragmento
         const frag = document.createDocumentFragment();
-        this.Productos.forEach(item => {
+        this.Productos.forEach(Item => {
             const card = document.createElement('div');
             card.className = 'Producto_Historial';
             card.innerHTML = `
       <div class="Imagen_Historial">
-        <img src="${item.Imagen}" alt="${item.Nombre}" loading="lazy">
+        <img src="${Item.Imagen}" alt="${Item.Nombre}" loading="lazy">
       </div>
       <div class="Información_Historial">
-        <h3 title="${item.Nombre}">${item.Nombre}</h3>
-        <div class="Precio_Historial">${item.Precio}</div>
+        <h3 title="${Item.Nombre}">${Item.Nombre}</h3>
+        <div class="Precio_Historial">${Item.Precio}</div>
       </div>`;
 
             // 4) Click abre el modal SIEMPRE (no redirige)
             card.addEventListener('click', () => {
                 // 1) intenta abrir con la tarjeta si existe
-                const selector = `.Tarjeta_Producto[data-id="${item.ID}"]`;
+                const selector = `.Tarjeta_Producto[data-id="${Item.ID}"]`;
                 const origen = document.querySelector(selector);
 
                 if (origen && window.Abrir_Modal) {
                     return window.Abrir_Modal(origen);
                 }
 
-                // 2) si no está en el DOM, abrimos modal con los datos de item
+                // 2) si no está en el DOM, abrimos modal con los datos de Item
                 if (window.Abrir_ModalDesdeHistorial) {
-                    return window.Abrir_ModalDesdeHistorial(item);
+                    return window.Abrir_ModalDesdeHistorial(Item);
                 }
             });
 
@@ -1278,8 +1278,8 @@ window.Configuración_Historial = {
  * Cargar datos del usuario desde la API
  */
 async function Cargar_Datos_Usuario_Global() {
-    const token = localStorage.getItem('token');
-    if (!token) {
+    const Token = localStorage.getItem('Token');
+    if (!Token) {
         window.Historial_Global.Datos_Usuario = {
             Nombre_Completo: 'Cliente',
             Correo_Electrónico: 'No disponible',
@@ -1289,8 +1289,8 @@ async function Cargar_Datos_Usuario_Global() {
     }
 
     try {
-        const resp = await fetch(`${baseUrl}/api/usuarios/me`, {
-            headers: { 'Authorization': `Bearer ${token}` }
+        const resp = await fetch(`${baseUrl}/api/Usuarios/me`, {
+            headers: { 'Authorization': `Bearer ${Token}` }
         });
         const json = await resp.json();
 
@@ -1317,15 +1317,15 @@ async function Cargar_Datos_Usuario_Global() {
  * Cargar historial de pedidos desde la API
  */
 async function Cargar_Historial_Pedidos_Global() {
-    const token = localStorage.getItem('token');
-    if (!token) {
+    const Token = localStorage.getItem('Token');
+    if (!Token) {
         console.warn('No hay token para cargar historial');
         return false;
     }
 
     try {
-        const resp = await fetch(`${baseUrl}/api/pedidos/usuario`, {
-            headers: { 'Authorization': 'Bearer ' + token }
+        const resp = await fetch(`${baseUrl}/api/Pedidos/usuario`, {
+            headers: { 'Authorization': 'Bearer ' + Token }
         });
         const json = await resp.json();
 
@@ -1371,9 +1371,9 @@ function Renderizar_Historial_Global() {
                </button>`
             : '';  // cadena vacía en caso contrario
 
-        const fila = document.createElement('div');
-        fila.className = 'Fila_Tabla';
-        fila.innerHTML = `
+        const Fila = document.createElement('div');
+        Fila.className = 'Fila_Tabla';
+        Fila.innerHTML = `
             <div class="Celda_Tabla">${idOrden}</div>
             <div class="Celda_Tabla">${fechaFormateada}</div>
             <div class="Celda_Tabla">$${totalVal.toFixed(2)}</div>
@@ -1387,7 +1387,7 @@ function Renderizar_Historial_Global() {
             </div>
         `;
 
-        tabla.appendChild(fila);
+        tabla.appendChild(Fila);
     });
 }
 
@@ -1410,9 +1410,9 @@ async function Ver_Factura_Global(ID_Pedido) {
 
         // Si no tiene items, cargarlos desde la API
         if (!Array.isArray(Pedido.Items) || Pedido.Items.length === 0) {
-            const token = localStorage.getItem('token');
-            const resp = await fetch(`${baseUrl}/api/pedidos/${ID_Pedido}`, {
-                headers: { 'Authorization': `Bearer ${token}` }
+            const Token = localStorage.getItem('Token');
+            const resp = await fetch(`${baseUrl}/api/Pedidos/${ID_Pedido}`, {
+                headers: { 'Authorization': `Bearer ${Token}` }
             });
             const json = await resp.json();
 
@@ -1472,23 +1472,23 @@ function Actualizar_Modal_Factura_Global(Pedido) {
     const tablaItems = document.getElementById('Factura_Artículos');
     if (tablaItems && Pedido.Items) {
         tablaItems.innerHTML = '';
-        Pedido.Items.forEach(item => {
-            const precio = parseFloat(item.Precio_Unitario) || 0;
-            const subtotalProducto = precio * item.Cantidad;
+        Pedido.Items.forEach(Item => {
+            const precio = parseFloat(Item.Precio_Unitario) || 0;
+            const subtotalProducto = precio * Item.Cantidad;
 
             // si existe variante, la concatenamos
-            const nombre = item.Nombre_Variante
-                ? `${item.Nombre_Producto} – ${item.Nombre_Variante}`
-                : item.Nombre_Producto;
+            const nombre = Item.Nombre_Variante
+                ? `${Item.Nombre_Producto} – ${Item.Nombre_Variante}`
+                : Item.Nombre_Producto;
 
-            const fila = document.createElement('tr');
-            fila.innerHTML = `
+            const Fila = document.createElement('tr');
+            Fila.innerHTML = `
               <td>${nombre}</td>
-              <td>${item.Cantidad}</td>
+              <td>${Item.Cantidad}</td>
               <td>$${precio.toFixed(2)}</td>
               <td>$${subtotalProducto.toFixed(2)}</td>
             `;
-            tablaItems.appendChild(fila);
+            tablaItems.appendChild(Fila);
         });
     }
 
@@ -1682,11 +1682,11 @@ document.addEventListener('DOMContentLoaded', () => {
 // ========================================
 
 /**
- * Actualiza el menú de usuario (mostrar/ocultar + nombre/email)
+ * Actualiza el menú de usuario
  * y re-inicializa Carrito, ListaDeseos e Historial
  */
 async function actualizarUsuarioLogueado() {
-    const tuJwt = localStorage.getItem('token');
+    const tuJwt = localStorage.getItem('Token');
     const menuUsuario = document.querySelector('.Menú_Usuario');
     const nombreElem = document.querySelector('.Nombre_Usuario');
     const emailElem = document.querySelector('.Email_Usuario');
@@ -1699,7 +1699,7 @@ async function actualizarUsuarioLogueado() {
     if (menuUsuario) menuUsuario.style.display = '';
 
     try {
-        const resp = await fetch(`${baseUrl}/api/usuarios/me`, {
+        const resp = await fetch(`${baseUrl}/api/Usuarios/me`, {
             headers: { 'Authorization': `Bearer ${tuJwt}` }
         });
         const json = await resp.json();
@@ -1712,8 +1712,8 @@ async function actualizarUsuarioLogueado() {
         // Mostrar opción de Administrador solo si existe el contenedor
         if (menuUsuario) {
             try {
-                const payload = JSON.parse(atob(tuJwt.split('.')[1]));
-                if (payload.rol === 'Administrador') {
+                const Carga_Datos = JSON.parse(atob(tuJwt.split('.')[1]));
+                if (Carga_Datos.Rol === 'Administrador') {
                     const menuItems = menuUsuario.querySelector('.Items_Menú');
                     if (menuItems && !document.getElementById('AdminMenuItem')) {
                         const li = document.createElement('li');
@@ -1755,7 +1755,7 @@ window.Historial_Funciones = {
 // Auto-login al cargar la página si ya hay token
 // ——————————————————————————————————————————————
 document.addEventListener('DOMContentLoaded', () => {
-    if (localStorage.getItem('token')) {
+    if (localStorage.getItem('Token')) {
         console.log('🔁 Token detectado al cargar → llamando a actualizarUsuarioLogueado()');
         actualizarUsuarioLogueado();
     }

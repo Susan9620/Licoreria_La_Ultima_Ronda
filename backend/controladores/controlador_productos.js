@@ -1,25 +1,22 @@
-const modeloProductos = require('../modelos/modelo_productos');
-const modeloReseñas = require('../modelos/modelo_reseñas');
+const Modelo_Productos = require('../modelos/modelo_productos');
+const Modelo_Reseñas = require('../modelos/modelo_reseñas');
 
-/**
- * Controlador para gestionar productos (destacados y todos)
- */
-class ControladorProductos {
+
+class Controlador_Productos {
   /**
-   * Obtiene todos los productos marcados como destacados
-   * @param {Object} req - Objeto de solicitud Express
-   * @param {Object} res - Objeto de respuesta Express
+   * Obtener productos marcados como destacados
+   * @param {Object} req
+   * @param {Object} res
    */
   async Obtener_Productos_Destacados(req, res) {
     try {
-      // Obtener el límite del parámetro de consulta o usar el valor predeterminado
       const Límite = req.query.Límite ? parseInt(req.query.Límite) : 4;
-      const productos = await modeloProductos.Obtener_Productos_Destacados(Límite);
+      const Productos = await Modelo_Productos.Obtener_Productos_Destacados(Límite);
 
       res.status(200).json({
         Éxito: true,
         Mensaje: 'Productos destacados obtenidos correctamente',
-        Datos: productos
+        Datos: Productos
       });
     } catch (error) {
       console.error('Error en controlador de productos destacados:', error);
@@ -32,16 +29,16 @@ class ControladorProductos {
   }
 
   /**
-     * GET /api/productos/all
-     * Obtiene todos los productos activos
+     * GET /api/Productos/all
+     * Obtener productos activos
      */
   async Obtener_Todos(req, res) {
     try {
-      const productos = await modeloProductos.Obtener_Todos();
+      const Productos = await Modelo_Productos.Obtener_Todos();
       res.status(200).json({
         Éxito: true,
         Mensaje: 'Todos los productos obtenidos correctamente',
-        Datos: productos
+        Datos: Productos
       });
     } catch (error) {
       console.error('Error en controlador de todos los productos:', error);
@@ -54,15 +51,15 @@ class ControladorProductos {
   }
 
   /**
-   * GET /api/productos/:id
-   * Devuelve un producto por su ID
+   * GET /api/Productos/:id
+   * Obtener producto por su ID
    */
   async Obtener_Por_ID(req, res) {
     try {
       const { id } = req.params;
-      const producto = await modeloProductos.Obtener_Por_ID(id);
+      const Producto = await Modelo_Productos.Obtener_Por_ID(id);
 
-      if (!producto) {
+      if (!Producto) {
         return res.status(404).json({
           Éxito: false,
           Mensaje: 'Producto no encontrado'
@@ -72,7 +69,7 @@ class ControladorProductos {
       res.status(200).json({
         Éxito: true,
         Mensaje: 'Producto obtenido correctamente',
-        Datos: producto
+        Datos: Producto
       });
     } catch (error) {
       console.error('Error en controlador de producto por ID:', error);
@@ -85,31 +82,31 @@ class ControladorProductos {
   }
 
   /**
-   * GET /api/productos/:id/compradosjuntos
-   * Devuelve hasta 4 productos que suelen comprarse junto a la variante predeterminada
+   * GET /api/Productos/:id/Comprados_Juntos
+   * Obtener productos que suelen comprarse junto a la variante predeterminada
    */
-  async obtenerCompradosJuntos(req, res) {
+  async Obtener_Comprados_Juntos(req, res) {
     try {
       const ID_Producto = parseInt(req.params.id, 10);
       if (isNaN(ID_Producto)) {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID de producto inválido' });
       }
 
-      // 1) Obtener el producto y su variante predeterminada
-      const prod = await modeloProductos.Obtener_Por_ID(ID_Producto);
-      if (!prod || !prod.ID_Variante) {
+      // Obtener el producto y su variante predeterminada
+      const Producto_Variante = await Modelo_Productos.Obtener_Por_ID(ID_Producto);
+      if (!Producto_Variante || !Producto_Variante.ID_Variante) {
         return res
           .status(404)
           .json({ Éxito: false, Mensaje: 'Producto o variante predeterminada no encontrada' });
       }
-      const idVariantePred = prod.ID_Variante;
+      const ID_Variante_Predetarminada = Producto_Variante.ID_Variante;
 
-      // 2) Llamar al modelo para obtener los “comprados juntos”
-      const Filas = await modeloProductos.Obtener_Productos_Comprados_Juntos(idVariantePred, 4);
+      // Llamar al modelo para obtener los productos “comprados juntos”
+      const Filas = await Modelo_Productos.Obtener_Productos_Comprados_Juntos(ID_Variante_Predetarminada, 4);
 
       return res.json({ Éxito: true, Datos: Filas });
     } catch (error) {
-      console.error('Error en obtenerCompradosJuntos:', error);
+      console.error('Error en Obtener_Comprados_Juntos:', error);
       return res.status(500).json({
         Éxito: false,
         Mensaje: 'Error al obtener productos comprados juntos'
@@ -118,30 +115,30 @@ class ControladorProductos {
   }
 
   /**
-   * POST /api/productos/:id/calificar
-   * Inserta una valoración en la tabla RESEÑAS y actualiza la calificación media y total de reseñas en PRODUCTOS.
+   * POST /api/Productos/:id/calificar
+   * Insertar una valoración y actualizar la calificación media y total de reseñas
    */
   async calificarProducto(req, res) {
     try {
       const ID_Producto = parseInt(req.params.id, 10);
-      const { calificacion } = req.body;
+      const { Calificación } = req.body;
 
-      if (isNaN(ID_Producto) || typeof calificacion !== 'number' || calificacion < 1 || calificacion > 5) {
+      if (isNaN(ID_Producto) || typeof Calificación !== 'number' || Calificación < 1 || Calificación > 5) {
         return res.status(400).json({ Éxito: false, Mensaje: 'Parámetros inválidos' });
       }
 
-      // ¡Aquí!: extrae el usuario YA VERIFICADO
-      const ID_Usuario = req.usuario?.id;
+      // Extraer el usuario verificado
+      const ID_Usuario = req.Usuario?.id;
       if (!ID_Usuario) {
         return res.status(401).json({ Éxito: false, Mensaje: 'Usuario no autenticado' });
       }
 
-      // 1) Insertar la reseña
-      await modeloReseñas.Insertar_Reseñas({ ID_Producto, ID_Usuario, Valoración: calificacion });
+      // Insertar la reseña
+      await Modelo_Reseñas.Insertar_Reseñas({ ID_Producto, ID_Usuario, Valoración: Calificación });
 
-      // 2) Recalcular y 3) actualizar
-      const { Promedio, Total } = await modeloReseñas.Obtener_Promedio_Y_Total(ID_Producto);
-      await modeloProductos.Actualizar_Calificación_Y_Total(ID_Producto, Promedio, Total);
+      // Recalcular y actualizar
+      const { Promedio, Total } = await Modelo_Reseñas.Obtener_Promedio_Y_Total(ID_Producto);
+      await Modelo_Productos.Actualizar_Calificación_Y_Total(ID_Producto, Promedio, Total);
 
       return res.status(200).json({
         Éxito: true,
@@ -155,16 +152,15 @@ class ControladorProductos {
   }
 
   /**
- * GET /api/productos/:id/calificacion
- * Devuelve la valoración que este usuario dio (o null si no valoró)
+ * GET /api/Productos/:id/Calificación
+ * Obtener la valoración del usuario
  */
   async Obtener_Calificación_Usuario(req, res) {
     try {
       const ID_Producto = parseInt(req.params.id, 10);
-      const ID_Usuario = req.usuario.id;
-      const fila = await modeloReseñas.Obtener_Calificación_Usuario(ID_Producto, ID_Usuario);
-      // fila puede ser { Valoración: 4 } o undefined
-      return res.json({ Éxito: true, Datos: fila ? fila.Valoración : null });
+      const ID_Usuario = req.Usuario.id;
+      const Fila = await Modelo_Reseñas.Obtener_Calificación_Usuario(ID_Producto, ID_Usuario);
+      return res.json({ Éxito: true, Datos: Fila ? Fila.Valoración : null });
     } catch (error) {
       console.error('Error en Obtener_Calificación_Usuario:', error);
       return res.status(500).json({ Éxito: false, Mensaje: 'Error al obtener calificación' });
@@ -172,34 +168,33 @@ class ControladorProductos {
   }
 
   /**
- * POST /api/admin/productos
- * Crea un nuevo producto (solo Admin)
+ * POST /api/Administrador/Productos
+ * Crear nuevo producto (solo Administrador)
  */
-  async crearProducto(req, res) {
+  async Crear_Producto(req, res) {
     try {
       const Datos = req.body;
-      const nuevoId = await modeloProductos.Crear(Datos);
+      const Nuevo_ID = await Modelo_Productos.Crear(Datos);
       return res.status(201).json({
         Éxito: true,
         Mensaje: 'Producto creado correctamente',
-        Datos: { ID_Producto: nuevoId }
+        Datos: { ID_Producto: Nuevo_ID }
       });
     } catch (error) {
       console.error('Error al crear producto:', error);
-      // Temporal: enviamos el mensaje real al cliente para depurar
       return res.status(500).json({ Éxito: false, Mensaje: error.message });
     }
   }
 
   /**
-   * PUT /api/admin/productos/:id
-   * Actualiza un producto existente (solo Admin)
+   * PUT /api/Administrador/Productos/:id
+   * Actualizar producto existente (solo Administrador)
    */
-  async actualizarProducto(req, res) {
+  async Actualizar_Producto(req, res) {
     try {
       const id = parseInt(req.params.id, 10);
       const Cambios = req.body;
-      const Filas = await modeloProductos.Actualizar(id, Cambios);
+      const Filas = await Modelo_Productos.Actualizar(id, Cambios);
       if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Producto no encontrado.' });
       }
@@ -211,13 +206,13 @@ class ControladorProductos {
   }
 
   /**
-   * DELETE /api/admin/productos/:id
-   * Elimina un producto (solo Admin)
+   * DELETE /api/Administrador/Productos/:id
+   * Eliminar producto (solo Administrador)
    */
-  async eliminarProducto(req, res) {
+  async Eliminar_Producto(req, res) {
     try {
       const id = parseInt(req.params.id, 10);
-      const Filas = await modeloProductos.Eliminar(id);
+      const Filas = await Modelo_Productos.Eliminar(id);
       if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Producto no encontrado.' });
       }
@@ -229,4 +224,4 @@ class ControladorProductos {
   }
 }
 
-module.exports = new ControladorProductos();
+module.exports = new Controlador_Productos();

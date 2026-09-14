@@ -1,4 +1,6 @@
-const API_BASE = 'https://licoreria-la-ultima-ronda.onrender.com';
+const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? ''
+    : 'https://licoreria-la-ultima-ronda.onrender.com';
 
 // Objeto principal para el manejo del checkout
 const Checkout = {
@@ -352,26 +354,26 @@ const Checkout = {
         const Productos = await this.cargarTodosLosProductos();
 
         const resultados = await Promise.all(
-            window.Carrito.Artículos.map(async item => {
+            window.Carrito.Artículos.map(async Item => {
                 // 1) Separamos “Producto – Variante” si existe
-                const [nombreBase, Nombre_Variante] = item.Nombre.split(' – ').map(s => s.trim());
+                const [nombreBase, Nombre_Variante] = Item.Nombre.split(' – ').map(s => s.trim());
 
                 // 2) Buscamos el producto por su nombre base
-                let prod = Productos.find(p => p.Nombre === nombreBase);
-                if (!prod) {
+                let Producto_Variante = Productos.find(p => p.Nombre === nombreBase);
+                if (!Producto_Variante) {
                     console.warn(`Producto no encontrado en catálogo: "${nombreBase}"`);
                     return null;
                 }
 
                 // 3) Obtenemos la lista de variantes
-                const resVar = await fetch(`${API_BASE}/api/variantes/producto/${prod.ID_Producto}`);
+                const resVar = await fetch(`${API_BASE}/api/Variantes/Producto/${Producto_Variante.ID_Producto}`);
                 const varJson = await resVar.json();
-                const variantes = Array.isArray(varJson.Datos) ? varJson.Datos : [];
+                const Variantes = Array.isArray(varJson.Datos) ? varJson.Datos : [];
 
                 // 4) Intentamos emparejar la variante por nombre, o fallback a la predeterminada
-                let varPred = variantes.find(v => v.Nombre_Variante === Nombre_Variante)
-                    || variantes.find(v => v.Predeterminada)
-                    || variantes[0]
+                let varPred = Variantes.find(v => v.Nombre_Variante === Nombre_Variante)
+                    || Variantes.find(v => v.Predeterminada)
+                    || Variantes[0]
                     || null;
 
                 if (!varPred) {
@@ -382,9 +384,9 @@ const Checkout = {
                 // 5) Devolvemos el objeto con ID_Variante garantizado
                 return {
                     ID_Variante: varPred.ID_Variante_Producto,
-                    Cantidad: item.Cantidad,
-                    Precio_Unitario: item.Precio,
-                    Subtotal: +(item.Precio * item.Cantidad).toFixed(2)
+                    Cantidad: Item.Cantidad,
+                    Precio_Unitario: Item.Precio,
+                    Subtotal: +(Item.Precio * Item.Cantidad).toFixed(2)
                 };
             })
         );
@@ -424,7 +426,7 @@ const Checkout = {
                 + (Subtotal - Descuento) * 0.15  // más IVA 15%
             ).toFixed(2);
 
-            const payload = {
+            const Carga_Datos = {
                 Items,              // tu array de { ID_Variante, Cantidad, Precio_Unitario, Subtotal }
                 Subtotal,           // número
                 Envío,              // número
@@ -437,19 +439,19 @@ const Checkout = {
             };
 
             // 4.4) Enviar el pedido con JWT en Authorization
-            const token = localStorage.getItem('token');
-            if (!token) {
+            const Token = localStorage.getItem('Token');
+            if (!Token) {
                 throw new Error('No estás autenticada. Por favor inicia sesión.');
             }
-            // 👇 Depuración: muestra el payload que vamos a enviar
-            console.log('📤 Payload pedido a enviar:', JSON.stringify(payload, null, 2));
-            const res = await fetch(`${API_BASE}/api/pedidos`, {
+            // 👇 Depuración: muestra la carga de datos que vamos a enviar
+            console.log('📤 Payload pedido a enviar:', JSON.stringify(Carga_Datos, null, 2));
+            const res = await fetch(`${API_BASE}/api/Pedidos`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+                    'Authorization': `Bearer ${Token}`
                 },
-                body: JSON.stringify(payload)
+                body: JSON.stringify(Carga_Datos)
             });
             // 1) Parseamos la respuesta JSON
             const json = await res.json();

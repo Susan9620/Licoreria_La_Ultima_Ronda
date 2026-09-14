@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+const JWT = require('jsonwebtoken');
 require('dotenv').config();
 
 /**
@@ -21,8 +21,8 @@ const verificarToken = (req, res, next) => {
     }
 
     // Verificar formato del token (Bearer token)
-    const token = tokenHeader.split(' ')[1];
-    if (!token) {
+    const Token = tokenHeader.split(' ')[1];
+    if (!Token) {
       return res.status(401).json({ 
         error: 'Acceso denegado',
         Mensaje: 'Formato de token inválido'
@@ -30,8 +30,8 @@ const verificarToken = (req, res, next) => {
     }
 
     // Verificar que el token sea válido
-    const verificado = jwt.verify(token, process.env.JWT_SECRET);
-    req.usuario = verificado;
+    const verificado = JWT.verify(Token, process.env.JWT_SECRET);
+    req.Usuario = verificado;
     next();
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
@@ -54,8 +54,8 @@ const verificarToken = (req, res, next) => {
  * @param {Function} next - Función para continuar al siguiente middleware
  */
 const esAdministrador = (req, res, next) => {
-  console.log('🔒 esAdministrador — payload de token:', req.usuario);
-  if (req.usuario && req.usuario.rol === 'Administrador') {
+  console.log('🔒 esAdministrador — Carga de Datos de token:', req.Usuario);
+  if (req.Usuario && req.Usuario.Rol === 'Administrador') {
     return next();
   }
   return res.status(403).json({ 
@@ -73,7 +73,7 @@ const esAdministrador = (req, res, next) => {
 const esPropietarioOAdmin = (req, res, next) => {
   const Usuario_ID = parseInt(req.params.id) || parseInt(req.body.id_usuario);
   
-  if (req.usuario && (req.usuario.id === Usuario_ID || req.usuario.rol === 'Administrador')) {
+  if (req.Usuario && (req.Usuario.id === Usuario_ID || req.Usuario.Rol === 'Administrador')) {
     next();
   } else {
     return res.status(403).json({ 
@@ -85,29 +85,33 @@ const esPropietarioOAdmin = (req, res, next) => {
 
 /**
  * Genera un token JWT para el usuario autenticado
- * @param {Object} usuario - Datos del usuario a incluir en el token
+ * @param {Object} Usuario - Datos del usuario a incluir en el token
  * @returns {String} - Token JWT
  */
-const generarToken = (usuario) => {
-  // Crear el payload con los datos mínimos necesarios
-  const payload = {
-    id: usuario.ID_Usuario,
-    nombre: usuario.Nombre_Completo,
-    Correo: usuario.Correo_Electrónico,
-    rol: usuario.Rol
+const generarToken = (Usuario) => {
+  // Crear la carga de datos con los datos mínimos necesarios
+  const Carga_Datos = {
+    id: Usuario.ID_Usuario,
+    nombre: Usuario.Nombre_Completo,
+    Correo: Usuario.Correo_Electrónico,
+    Rol: Usuario.Rol
   };
 
   // Generar y retornar el token
-  return jwt.sign(
-    payload,
+  return JWT.sign(
+    Carga_Datos,
     process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN || '24h' }
+    { Expira_En: process.env.JWT_EXPIRES_IN || '24h' }
   );
 };
 
 module.exports = {
   verificarToken,
+  Verificar_Token: verificarToken,
   esAdministrador,
+  Es_Administrador: esAdministrador,
   esPropietarioOAdmin,
-  generarToken
+  Es_Propietario_O_Admin: esPropietarioOAdmin,
+  generarToken,
+  Generar_Token: generarToken
 };

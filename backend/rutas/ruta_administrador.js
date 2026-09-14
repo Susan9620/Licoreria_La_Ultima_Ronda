@@ -1,74 +1,77 @@
 const express = require('express');
-const { verificarToken, esAdministrador } = require('../middleware/middleware_autenticación');
-const ControladorPedidos = require('../controladores/controlador_pedidos');
-const ControladorProductos = require('../controladores/controlador_productos');
-const ControladorImagenesProducto = require('../controladores/controlador_imágenes_producto');
+const { Verificar_Token, Es_Administrador } = require('../middleware/middleware_autenticación');
+const Controlador_Pedidos = require('../controladores/controlador_pedidos');
+const Controlador_Productos = require('../controladores/controlador_productos');
+const Controlador_Imágenes_Producto = require('../controladores/controlador_imágenes_producto');
 const Controlador_Categorías = require('../controladores/controlador_categorías');
 const ControladorCarrusel = require('../controladores/controlador_imágenes_carrusel');
-const ControladorUsuarios = require('../controladores/controlador_usuarios');
-const ControladorPromociones = require('../controladores/controlador_promociones');
+const Controlador_Usuarios = require('../controladores/controlador_usuarios');
+const Controlador_Promociones = require('../controladores/controlador_promociones');
 
-const router = express.Router();
+const Ruta = express.Router();
 
-// Aplica autenticación y solo permite Administradores
-router.use(verificarToken, esAdministrador);
+// Aplicar autenticación y solo permitir Administradores
+Ruta.use(Verificar_Token, Es_Administrador);
 
 // PEDIDOS
-// Obtener un pedido con detalles
-router.get('/pedidos/:id', ControladorPedidos.obtenerPedido);
+/**
+ * @route   POST /api/Contacto
+ * @desc    Obtener un pedido con detalles
+ */
+Ruta.get('/Pedidos/:id', Controlador_Pedidos.Obtener_Pedido);
 // Cambiar estado de un pedido
-router.put('/pedidos/:id/estado', ControladorPedidos.cambiarEstado);
+Ruta.put('/Pedidos/:id/Estado', Controlador_Pedidos.Cambiar_Estado);
 // Listar todos los pedidos
-router.get('/pedidos', ControladorPedidos.Obtener_Todos);
+Ruta.get('/Pedidos', Controlador_Pedidos.Obtener_Todos);
 
 // PRODUCTOS
-// Listar todos los productos (solo Admin)
-router.get('/Productos', ControladorProductos.Obtener_Todos);
+// Listar todos los productos (solo Administrador)
+Ruta.get('/Productos', Controlador_Productos.Obtener_Todos);
 // Crear producto
-router.post('/Productos', ControladorProductos.crearProducto);
+Ruta.post('/Productos', Controlador_Productos.Crear_Producto);
 // Actualizar producto
-router.put('/Productos/:id', ControladorProductos.actualizarProducto);
+Ruta.put('/Productos/:id', Controlador_Productos.Actualizar_Producto);
 // Eliminar producto
-router.delete('/Productos/:id', ControladorProductos.eliminarProducto);
+Ruta.delete('/Productos/:id', Controlador_Productos.Eliminar_Producto);
 
 // IMÁGENES DE PRODUCTO
 // Crear imagen de producto
-router.post('/imagenes', ControladorImagenesProducto.crearImagenProducto);
+Ruta.post('/Imágenes', Controlador_Imágenes_Producto.Crear_Imagen_Producto);
 // Actualizar imagen de producto
-router.put('/imagenes/:id', ControladorImagenesProducto.actualizarImagenProducto);
+Ruta.put('/Imágenes/:id', Controlador_Imágenes_Producto.Actualizar_Imagen_Producto);
 // Eliminar imagen de producto
-router.delete('/imagenes/:id', ControladorImagenesProducto.eliminarImagenProducto);
+Ruta.delete('/Imágenes/:id', Controlador_Imágenes_Producto.Eliminar_Imagen_Producto);
 
 // CATEGORÍAS
 // Crear categoría
-router.post('/Categorías', Controlador_Categorías.Crear_Categoría);
+Ruta.post('/Categorías', Controlador_Categorías.Crear_Categoría);
 // Actualizar categoría
-router.put('/Categorías/:id', Controlador_Categorías.Actualizar_Categoría);
+Ruta.put('/Categorías/:id', Controlador_Categorías.Actualizar_Categoría);
 // Eliminar categoría
-router.delete('/Categorías/:id', Controlador_Categorías.Eliminar_Categoría);
+Ruta.delete('/Categorías/:id', Controlador_Categorías.Eliminar_Categoría);
 
 // CARRUSEL
 // Crear imagen de carrusel
-router.post('/carrusel',    ControladorCarrusel.crearImagenCarrusel);
+Ruta.post('/Carrusel',    ControladorCarrusel.Crear_Imagen_Carrusel);
 // Actualizar imagen de carrusel
-router.put('/carrusel/:id', ControladorCarrusel.actualizarImagenCarrusel);
+Ruta.put('/Carrusel/:id', ControladorCarrusel.Actualizar_Imagen_Carrusel);
 // Eliminar imagen de carrusel
-router.delete('/carrusel/:id', ControladorCarrusel.eliminarImagenCarrusel);
+Ruta.delete('/Carrusel/:id', ControladorCarrusel.Eliminar_Imagen_Carrusel);
 
 // USUARIOS
 // Crear usuario
-router.post('/usuarios', ControladorUsuarios.crearUsuario);
+Ruta.post('/Usuarios', Controlador_Usuarios.Crear_Usuario);
 // Actualizar usuario
-router.put('/usuarios/:id', ControladorUsuarios.actualizarUsuario);
+Ruta.put('/Usuarios/:id', Controlador_Usuarios.Actualizar_Usuario);
 // Eliminar usuario
-router.delete('/usuarios/:id', ControladorUsuarios.eliminarUsuario);
+Ruta.delete('/Usuarios/:id', Controlador_Usuarios.Eliminar_Usuario);
 
 // PROMOCIONES
 // Crear promoción
-router.post('/promociones', ControladorPromociones.crearPromocion);
+Ruta.post('/Promociones', Controlador_Promociones.Crear_Promoción);
 // Actualizar promoción
-router.put('/promociones/:id', ControladorPromociones.actualizarPromocion);
+Ruta.put('/Promociones/:id', Controlador_Promociones.Actualizar_Promoción);
 // Eliminar promoción
-router.delete('/promociones/:id', ControladorPromociones.eliminarPromocion);
+Ruta.delete('/Promociones/:id', Controlador_Promociones.Eliminar_Promoción);
 
-module.exports = router;
+module.exports = Ruta;

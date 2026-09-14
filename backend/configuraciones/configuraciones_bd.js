@@ -18,6 +18,9 @@ if (process.env.NODE_ENV === 'development') {
   console.log(`   Base de datos: ${dbName}`);
 }
 
+// Determinar si usar SSL (solo si se especifica en DB_SSL o si no es localhost en producción)
+const useSSL = process.env.DB_SSL === 'true' || (process.env.NODE_ENV === 'production' && dbHost !== 'localhost' && dbHost !== '127.0.0.1');
+
 // Crear pool de conexiones Postgres
 const pool = new Pool({
   host:     dbHost,
@@ -25,7 +28,7 @@ const pool = new Pool({
   user:     dbUser,
   password: dbPassword,
   database: dbName,
-  ssl:      { rejectUnauthorized: false }
+  ...(useSSL ? { ssl: { rejectUnauthorized: false } } : {})
 });
 
 async function testConnection() {

@@ -1,3 +1,7 @@
+const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? ''
+    : 'https://licoreria-la-ultima-ronda.onrender.com';
+
 document.addEventListener('DOMContentLoaded', function () {
     console.log("Inicializando scripts de login...");
 
@@ -26,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const Correo_Electrónico = Modal.querySelector('#Correo_Electrónico').value.trim();
                 const Contraseña = Modal.querySelector('#Contraseña').value;
                 try {
-                    const resp = await fetch(`${API_BASE}/api/usuarios/register`, {
+                    const resp = await fetch(`${API_BASE}/api/Usuarios/Registro`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ Nombre_Completo, Correo_Electrónico, Contraseña })
@@ -54,19 +58,19 @@ document.addEventListener('DOMContentLoaded', function () {
             formLogin.addEventListener('submit', async e => {
                 e.preventDefault();
                 const Correo = formLogin.querySelector('input[name="Usuario"], input[name="Correo_Electrónico"]').value;
-                const contraseña = formLogin.querySelector('input[name="Contraseña"]').value;
+                const Contraseña = formLogin.querySelector('input[name="Contraseña"]').value;
                 try {
-                    const resp = await fetch(`${API_BASE}/api/usuarios/login`, {
+                    const resp = await fetch(`${API_BASE}/api/Usuarios/Login`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ Correo_Electrónico: Correo, Contraseña: contraseña })
+                        body: JSON.stringify({ Correo_Electrónico: Correo, Contraseña: Contraseña })
                     });
                     const json = await resp.json();
                     if (!json.Éxito) throw new Error(json.Mensaje);
                     console.log("Respuesta del login:", json);
-                    localStorage.setItem('token', json.token);
-                    console.log("Token guardado en localStorage:", localStorage.getItem('token'));
-                    window.tuJwt = json.token;
+                    localStorage.setItem('Token', json.Token);
+                    console.log("Token guardado en localStorage:", localStorage.getItem('Token'));
+                    window.tuJwt = json.Token;
                     Modal.classList.remove('show');
                     Mostrar_Notificación('Sesión iniciada ✅', 'Éxito');
                     console.log('→ Antes de actualizarUsuarioLogueado, window.actualizarUsuarioLogueado =', window.actualizarUsuarioLogueado);

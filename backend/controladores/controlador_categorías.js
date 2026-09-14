@@ -24,8 +24,8 @@ class Controlador_Categorías {
   }
 
   /**
-   * POST /api/admin/Categorías
-   * Crear una nueva categoría (solo Admin)
+   * POST /api/Administrador/Categorías
+   * Crear una nueva categoría (solo Administrador)
    */
   async Crear_Categoría(req, res) {
     try {
@@ -43,8 +43,8 @@ class Controlador_Categorías {
   }
 
   /**
-   * PUT /api/admin/Categorías/:id
-   * Actualizar una categoría existente (solo Admin)
+   * PUT /api/Administrador/Categorías/:id
+   * Actualizar una categoría existente (solo Administrador)
    */
   async Actualizar_Categoría(req, res) {
     try {
@@ -62,8 +62,8 @@ class Controlador_Categorías {
   }
 
   /**
-   * DELETE /api/admin/Categorías/:id
-   * Eliminar una categoría (solo Admin)
+   * DELETE /api/Administrador/Categorías/:id
+   * Eliminar categoría (solo Administrador)
    */
   async Eliminar_Categoría(req, res) {
     try {

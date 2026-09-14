@@ -5,9 +5,9 @@
  * @param {Function} next - Función para continuar al siguiente middleware
  */
 const notFoundHandler = (req, res, next) => {
-  const Error = new Error(`Ruta no encontrada: ${req.originalUrl}`);
+  const error = new Error(`Ruta no encontrada: ${req.originalUrl}`);
   res.status(404);
-  next(Error);
+  next(error);
 };
 
 /**

@@ -1,4 +1,6 @@
-const API_BASE = 'https://licoreria-la-ultima-ronda.onrender.com';
+const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? ''
+    : 'https://licoreria-la-ultima-ronda.onrender.com';
 
 // Objeto principal para la página de confirmación y gestión de pedidos
 const Gestión_Pedidos = {
@@ -53,8 +55,8 @@ const Gestión_Pedidos = {
 
     // Cargar datos del usuario de la sesión
     Cargar_Datos_Sesión: async function () {
-        const token = localStorage.getItem('token');
-        if (!token) {
+        const Token = localStorage.getItem('Token');
+        if (!Token) {
             this.Estado.Datos_Sesión = {
                 Nombre_Completo: 'Cliente',
                 Correo_Electrónico: 'No disponible',
@@ -64,8 +66,8 @@ const Gestión_Pedidos = {
         }
 
         try {
-            const resp = await fetch(`${API_BASE}/api/usuarios/me`, {
-                headers: { 'Authorization': `Bearer ${token}` }
+            const resp = await fetch(`${API_BASE}/api/Usuarios/me`, {
+                headers: { 'Authorization': `Bearer ${Token}` }
             });
             const json = await resp.json();
             if (resp.ok && json.Éxito) {
@@ -94,23 +96,23 @@ const Gestión_Pedidos = {
     async Cargar_Pedido_Actual() {
         const params = new URLSearchParams(window.location.search);
         const ID_Pedido = params.get('ID_Pedido');
-        const token = localStorage.getItem('token');
+        const Token = localStorage.getItem('Token');
 
-        console.log('⏳ Cargar_Pedido_Actual → ID_Pedido:', ID_Pedido, '— token existe? →', !!token);
+        console.log('⏳ Cargar_Pedido_Actual → ID_Pedido:', ID_Pedido, '— Token existe? →', !!Token);
 
-        if (!ID_Pedido || !token) {
+        if (!ID_Pedido || !Token) {
             // si no hay ID o token, redirigimos al login o home
             return window.location.href = '/html/login.html';
         }
 
         try {
-            const resp = await fetch(`${API_BASE}/api/pedidos/${ID_Pedido}`, {
+            const resp = await fetch(`${API_BASE}/api/Pedidos/${ID_Pedido}`, {
                 method: 'GET',
                 headers: {
-                    'Authorization': 'Bearer ' + token
+                    'Authorization': 'Bearer ' + Token
                 }
             });
-            console.log('📡 Fetch /api/pedidos/:', resp.status);
+            console.log('📡 Fetch /api/Pedidos/:', resp.status);
 
             const json = await resp.json();
             if (!json.Éxito) throw new Error('Pedido no exitoso');
@@ -232,28 +234,28 @@ const Gestión_Pedidos = {
         const cont = document.getElementById('Lista_Productos');
         cont.innerHTML = '';
 
-        Pedido.Items.forEach(item => {
-            const urlImg = item.URL_Imagen || '/imagenes/producto-placeholder.jpg';
-            const baseName = item.Nombre_Producto;
+        Pedido.Items.forEach(Item => {
+            const urlImg = Item.URL_Imagen || '/Imágenes/Producto-placeholder.jpg';
+            const baseName = Item.Nombre_Producto;
             // ❗️ Este campo debe venir de tu API; aquí probamos distintos nombres
-            const variante = item.volumen        // si en tu modelo así se llama
-                || item.Nombre_Variante // o con esta clave
-                || item.variante       // o así
+            const Variante = Item.volumen        // si en tu modelo así se llama
+                || Item.Nombre_Variante // o con esta clave
+                || Item.Variante       // o así
                 || '';
             // Si hay variante, la concatenamos
-            const nombre = variante
-                ? `${baseName} – ${variante}`
+            const nombre = Variante
+                ? `${baseName} – ${Variante}`
                 : baseName;
 
-            const Cantidad = item.Cantidad;
-            const precio = parseFloat(item.Precio_Unitario) || 0;
+            const Cantidad = Item.Cantidad;
+            const precio = parseFloat(Item.Precio_Unitario) || 0;
 
             const el = document.createElement('div');
             el.className = 'Producto_Elemento';
             el.innerHTML = `
                 <div class="Imagen_Producto">
                     <img src="${urlImg}" alt="${nombre}"
-                        onerror="this.src='/imagenes/producto-placeholder.jpg'">
+                        onerror="this.src='/Imágenes/Producto-placeholder.jpg'">
                 </div>
                 <div class="Información_Producto">
                     <div class="Nombre_Producto">${nombre}</div>
@@ -305,12 +307,12 @@ const Gestión_Pedidos = {
 
     // Cargar historial de pedidos REAL desde el backend
     async Cargar_Historial_Pedidos() {
-        const token = localStorage.getItem('token');
-        if (!token) return;  // sin token no podemos
+        const Token = localStorage.getItem('Token');
+        if (!Token) return;  // sin token no podemos
 
         try {
-            const resp = await fetch(`${API_BASE}/api/pedidos/usuario`, {
-                headers: { 'Authorization': 'Bearer ' + token }
+            const resp = await fetch(`${API_BASE}/api/Pedidos/usuario`, {
+                headers: { 'Authorization': 'Bearer ' + Token }
             });
             const json = await resp.json();
 
@@ -350,9 +352,9 @@ const Gestión_Pedidos = {
                    </button>`
                 : '';  // cadena vacía si no debe verse
 
-            const fila = document.createElement('div');
-            fila.className = 'Fila_Tabla';
-            fila.innerHTML = `
+            const Fila = document.createElement('div');
+            Fila.className = 'Fila_Tabla';
+            Fila.innerHTML = `
               <div class="Celda_Tabla">${idOrden}</div>
               <div class="Celda_Tabla">${fechaFormateada}</div>
               <div class="Celda_Tabla">$${totalVal.toFixed(2)}</div>
@@ -366,7 +368,7 @@ const Gestión_Pedidos = {
               </div>
             `;
 
-            tabla.appendChild(fila);
+            tabla.appendChild(Fila);
         });
     },
 
@@ -438,23 +440,23 @@ const Gestión_Pedidos = {
         // Productos (Items)
         const tabla = document.getElementById('Factura_Artículos');
         tabla.innerHTML = '';
-        p.Items.forEach(item => {
-            const precio = parseFloat(item.Precio_Unitario) || 0;
-            const subtotalProducto = precio * item.Cantidad;
+        p.Items.forEach(Item => {
+            const precio = parseFloat(Item.Precio_Unitario) || 0;
+            const subtotalProducto = precio * Item.Cantidad;
 
             // Aquí concatenamos variante si existe
-            const nombre = item.Nombre_Variante
-                ? `${item.Nombre_Producto} – ${item.Nombre_Variante}`
-                : item.Nombre_Producto;
+            const nombre = Item.Nombre_Variante
+                ? `${Item.Nombre_Producto} – ${Item.Nombre_Variante}`
+                : Item.Nombre_Producto;
 
-            const fila = document.createElement('tr');
-            fila.innerHTML = `
+            const Fila = document.createElement('tr');
+            Fila.innerHTML = `
               <td>${nombre}</td>
-              <td>${item.Cantidad}</td>
+              <td>${Item.Cantidad}</td>
               <td>$${precio.toFixed(2)}</td>
               <td>$${subtotalProducto.toFixed(2)}</td>
             `;
-            tabla.appendChild(fila);
+            tabla.appendChild(Fila);
         });
 
         // Cálculos de totales
@@ -499,9 +501,9 @@ const Gestión_Pedidos = {
 
             // 3) Si no trae Items, cargarlos desde la API
             if (!Array.isArray(p.Items) || p.Items.length === 0) {
-                const token = localStorage.getItem('token');
-                const resp = await fetch(`${API_BASE}/api/pedidos/${orden}`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                const Token = localStorage.getItem('Token');
+                const resp = await fetch(`${API_BASE}/api/Pedidos/${orden}`, {
+                    headers: { 'Authorization': `Bearer ${Token}` }
                 });
                 const json = await resp.json();
                 if (!resp.ok || !json.Éxito) {

@@ -1,44 +1,44 @@
 const express = require('express');
 const controladorProductos = require('../controladores/controlador_productos');
-const { verificarToken } = require('../middleware/middleware_autenticación');
+const { Verificar_Token } = require('../middleware/middleware_autenticación');
 
-const router = express.Router();
+const Ruta = express.Router();
 
 /**
  * @route   GET /api/Productos
  * @desc    Obtener productos destacados
  */
-router.get('/', controladorProductos.Obtener_Productos_Destacados);
+Ruta.get('/', controladorProductos.Obtener_Productos_Destacados);
 
 /**
  * @route   GET /api/Productos/all
  * @desc    Obtener todos los productos activos
  */
-router.get('/all', controladorProductos.Obtener_Todos);
+Ruta.get('/all', controladorProductos.Obtener_Todos);
 
 /**
- * @route   GET /api/Productos/:id/compradosjuntos
+ * @route   GET /api/Productos/:id/Comprados_Juntos
  * @desc    Obtener hasta 4 productos comprados junto a la variante predeterminada
  */
-router.get('/:id/compradosjuntos', controladorProductos.obtenerCompradosJuntos);
+Ruta.get('/:id/Comprados_Juntos', controladorProductos.Obtener_Comprados_Juntos);
 
 /**
  * @route   POST /api/Productos/:id/calificar
  * @desc    Registrar una nueva valoración para el producto
  */
-router.post('/:id/calificar', verificarToken, controladorProductos.calificarProducto);
+Ruta.post('/:id/calificar', Verificar_Token, controladorProductos.calificarProducto);
 
 /**
- * @route   GET /api/Productos/:id/calificacion
+ * @route   GET /api/Productos/:id/Calificación
  * @desc    Obtener la valoración del usuario
  */
-router.get('/:id/calificacion', verificarToken, controladorProductos.Obtener_Calificación_Usuario);
+Ruta.get('/:id/Calificación', Verificar_Token, controladorProductos.Obtener_Calificación_Usuario);
 
 
 /**
  * @route   GET /api/Productos/:id
  * @desc    Obtener un producto por su ID
  */
-router.get('/:id', controladorProductos.Obtener_Por_ID);
+Ruta.get('/:id', controladorProductos.Obtener_Por_ID);
 
-module.exports = router;
+module.exports = Ruta;

@@ -1,22 +1,19 @@
-const modeloImagenesCarrusel = require('../modelos/modelo_imágenes_carrusel');
+const Modelo_Imágenes_Carrusel = require('../modelos/modelo_imágenes_carrusel');
 
-/**
- * Controlador para gestionar las imágenes del carrusel
- */
-class ControladorImagenesCarrusel {
+class Controlador_Imágenes_Carrusel {
   /**
-   * Obtiene todas las imágenes activas del carrusel
-   * @param {Object} req - Objeto de solicitud Express
-   * @param {Object} res - Objeto de respuesta Express
+   * Obtener imágenes activas del carrusel
+   * @param {Object} req
+   * @param {Object} res
    */
   async Obtener_Imágenes_Carrusel(req, res) {
     try {
-      const imagenes = await modeloImagenesCarrusel.Obtener_Imágenes_Carrusel();
+      const Imágenes = await Modelo_Imágenes_Carrusel.Obtener_Imágenes_Carrusel();
 
       res.status(200).json({
         Éxito: true,
         Mensaje: 'Imágenes del carrusel obtenidas correctamente',
-        Datos: imagenes
+        Datos: Imágenes
       });
     } catch (error) {
       console.error('Error en controlador de imágenes carrusel:', error);
@@ -29,9 +26,9 @@ class ControladorImagenesCarrusel {
   }
 
   /**
-   * Obtiene una imagen específica del carrusel por su ID
-   * @param {Object} req - Objeto de solicitud Express
-   * @param {Object} res - Objeto de respuesta Express
+   * Obtener imagen específica del carrusel por su ID
+   * @param {Object} req
+   * @param {Object} res
    */
   async Obtener_Imagen_ID(req, res) {
     try {
@@ -44,7 +41,7 @@ class ControladorImagenesCarrusel {
         });
       }
 
-      const Imagen = await modeloImagenesCarrusel.Obtener_Imagen_ID(id);
+      const Imagen = await Modelo_Imágenes_Carrusel.Obtener_Imagen_ID(id);
 
       if (!Imagen) {
         return res.status(404).json({
@@ -68,9 +65,9 @@ class ControladorImagenesCarrusel {
     }
   }
 
-  async crearImagenCarrusel(req, res) {
+  async Crear_Imagen_Carrusel(req, res) {
     try {
-      const id = await modeloImagenesCarrusel.Crear(req.body);
+      const id = await Modelo_Imágenes_Carrusel.Crear(req.body);
       return res.status(201).json({
         Éxito: true,
         Mensaje: 'Imagen de carrusel creada correctamente',
@@ -83,17 +80,17 @@ class ControladorImagenesCarrusel {
   }
 
   /**
-   * PUT /api/admin/carrusel/:id
-   * Actualiza una imagen de carrusel (solo Admin)
+   * PUT /api/Administrador/Carrusel/:id
+   * Actualizar imagen de carrusel (solo Administrador)
    */
-  async actualizarImagenCarrusel(req, res) {
+  async Actualizar_Imagen_Carrusel(req, res) {
     try {
       const id = parseInt(req.params.id, 10);
       if (isNaN(id)) {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
 
-      const Filas = await modeloImagenesCarrusel.Actualizar(id, req.body);
+      const Filas = await Modelo_Imágenes_Carrusel.Actualizar(id, req.body);
       if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Imagen no encontrada.' });
       }
@@ -106,17 +103,17 @@ class ControladorImagenesCarrusel {
   }
 
   /**
-   * DELETE /api/admin/carrusel/:id
-   * Elimina una imagen de carrusel (solo Admin)
+   * DELETE /api/Administrador/Carrusel/:id
+   * Eliminar imagen de carrusel (solo Administrador)
    */
-  async eliminarImagenCarrusel(req, res) {
+  async Eliminar_Imagen_Carrusel(req, res) {
     try {
       const id = parseInt(req.params.id, 10);
       if (isNaN(id)) {
         return res.status(400).json({ Éxito: false, Mensaje: 'ID inválido.' });
       }
 
-      const Filas = await modeloImagenesCarrusel.Eliminar(id);
+      const Filas = await Modelo_Imágenes_Carrusel.Eliminar(id);
       if (Filas === 0) {
         return res.status(404).json({ Éxito: false, Mensaje: 'Imagen no encontrada.' });
       }
@@ -129,4 +126,4 @@ class ControladorImagenesCarrusel {
   }
 }
 
-module.exports = new ControladorImagenesCarrusel();
+module.exports = new Controlador_Imágenes_Carrusel();

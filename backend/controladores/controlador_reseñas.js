@@ -1,10 +1,10 @@
-const modeloReseñas = require('../modelos/modelo_reseñas');
-const modeloProductos = require('../modelos/modelo_productos');
+const Modelo_Reseñas = require('../modelos/modelo_reseñas');
+const Modelo_Productos = require('../modelos/modelo_productos');
 
-class ControladorReseñas {
+class Controlador_Reseñas {
   /**
-   * POST /api/reseñas/:ID_Producto
-   * Inserta una nueva reseña y actualiza la calificación del producto.
+   * POST /api/Reseñas/:ID_Producto
+   * Insertar nueva reseña y actualizar calificación del producto
    */
   async Insertar_Reseñas(req, res) {
     try {
@@ -23,20 +23,20 @@ class ControladorReseñas {
         });
       }
 
-      // 1) Insertar la reseña en la tabla RESEÑAS
-      await modeloReseñas.Insertar_Reseñas({
+      // Insertar reseña
+      await Modelo_Reseñas.Insertar_Reseñas({
         ID_Producto,
         ID_Usuario,
         Valoración,
       });
 
-      // 2) Recalcular promedio y total de reseñas para ese producto
-      const { Promedio, Total } = await modeloReseñas.Obtener_Promedio_Y_Total(
+      // Recalcular promedio y total de Reseñas para ese producto
+      const { Promedio, Total } = await Modelo_Reseñas.Obtener_Promedio_Y_Total(
         ID_Producto
       );
 
-      // 3) Actualizar ese producto en su propia tabla (PRODUCTOS)
-      await modeloProductos.Actualizar_Calificación_Y_Total(
+      // Actualizar producto
+      await Modelo_Productos.Actualizar_Calificación_Y_Total(
         ID_Producto,
         Promedio,
         Total
@@ -57,8 +57,8 @@ class ControladorReseñas {
   }
 
   /**
-   * GET /api/reseñas/:ID_Producto
-   * Obtiene todas las reseñas de un producto (opcional).
+   * GET /api/Reseñas/:ID_Producto
+   * Obtener reseñas de un producto
    */
   async Obtener_Reseñas_Por_Producto(req, res) {
     try {
@@ -70,12 +70,12 @@ class ControladorReseñas {
         });
       }
 
-      const reseñas = await modeloReseñas.Obtener_Reseñas_Por_Producto(
+      const Reseñas = await Modelo_Reseñas.Obtener_Reseñas_Por_Producto(
         ID_Producto
       );
       return res.status(200).json({
         Éxito: true,
-        Datos: reseñas,
+        Datos: Reseñas,
         Mensaje: 'Reseñas obtenidas correctamente',
       });
     } catch (error) {
@@ -88,4 +88,4 @@ class ControladorReseñas {
   }
 }
 
-module.exports = new ControladorReseñas();
+module.exports = new Controlador_Reseñas();

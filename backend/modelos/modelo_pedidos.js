@@ -247,7 +247,7 @@ class Modelo_Pedidos {
   }
 
   /**
-   * Devolver todos los pedidos (solo administrador)
+   * Devolver todos los pedidos (solo Administrador)
    * @returns {Promise<Array>}
    */
   async Obtener_Todos() {

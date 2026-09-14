@@ -1,19 +1,19 @@
 const express = require('express');
 const ctrl = require('../controladores/controlador_usuarios');
-const { verificarToken } = require('../middleware/middleware_autenticación');
-const router = express.Router();
+const { Verificar_Token } = require('../middleware/middleware_autenticación');
+const Ruta = express.Router();
 
-router.post('/register', ctrl.register);
-router.post('/login',    ctrl.login);
+Ruta.post('/Registro', ctrl.Registro);
+Ruta.post('/Login',    ctrl.Login);
 
 // Listar todos los usuarios
-router.get('/',           ctrl.Listar);
+Ruta.get('/',           ctrl.Listar);
 
 // PERFIL del usuario logueado
-router.get(
+Ruta.get(
   '/me',
-  verificarToken,  // valida JWT y pone req.usuario.id
-  ctrl.perfil     // aquí usamos directamente tu método perfil
+  Verificar_Token,  // valida JWT y pone req.usuario.id
+  ctrl.Perfil     // aquí usamos directamente tu método perfil
 );
 
-module.exports = router;
+module.exports = Ruta;

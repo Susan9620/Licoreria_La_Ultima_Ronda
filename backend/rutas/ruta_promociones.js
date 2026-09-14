@@ -1,13 +1,13 @@
 const express = require('express');
 const controladorPromociones = require('../controladores/controlador_promociones');
 
-const router = express.Router();
+const Ruta = express.Router();
 
 /**
- * @route   GET /api/promociones
+ * @route   GET /api/Promociones
  * @desc    Obtener todas las promociones activas y vigentes
  * @access  Público
  */
-router.get('/', controladorPromociones.obtenerPromociones);
+Ruta.get('/', controladorPromociones.Obtener_Promociones);
 
-module.exports = router;
+module.exports = Ruta;

@@ -1,63 +1,125 @@
-const API_BASE = 'https://licoreria-la-ultima-ronda.onrender.com';
+const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? ''
+    : 'https://licoreria-la-ultima-ronda.onrender.com';
+
+const CARRUSEL_DEFAULT = [
+    {
+        Título: 'LOS MEJORES LICORES',
+        Subtítulo: 'Descubre nuestra selecta variedad de bebidas nacionales e importadas',
+        URL_Imagen: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?q=80&w=1600&auto=format&fit=crop',
+        Enlace_Principal: '/html/productos.html'
+    },
+    {
+        Título: 'GRANIZADOS Y CÓCTELES',
+        Subtítulo: 'Refrescantes combinaciones preparadas al instante para tus mejores momentos',
+        URL_Imagen: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?q=80&w=1600&auto=format&fit=crop',
+        Enlace_Principal: '/html/productos.html?Filtro=Granizados'
+    },
+    {
+        Título: 'DELIVERY RÁPIDO Y SEGURO',
+        Subtítulo: 'Tus bebidas favoritas en la puerta de tu casa en minutos',
+        URL_Imagen: 'https://images.unsplash.com/photo-1563227812-0ea4c22e6cc8?q=80&w=1600&auto=format&fit=crop',
+        Enlace_Principal: '/html/index.html#Delivery'
+    }
+];
+
+const CATEGORIAS_DEFAULT = [
+    {
+        Nombre: 'Licores',
+        Descripción: 'Whiskys, rones, vodkas, tequilas, vinos y cervezas.',
+        Ícono: 'fas fa-wine-bottle'
+    },
+    {
+        Nombre: 'Granizados',
+        Descripción: 'Bebidas granizadas con o sin licor, con sabores frutales.',
+        Ícono: 'fas fa-cocktail'
+    },
+    {
+        Nombre: 'Postres',
+        Descripción: 'Deliciosos postres con toques de licor para acompañar.',
+        Ícono: 'fas fa-birthday-cake'
+    },
+    {
+        Nombre: 'Packs y Regalos',
+        Descripción: 'Combos especiales para celebraciones y fechas festivas.',
+        Ícono: 'fas fa-gift'
+    }
+];
+
+const PROMOCIONES_DEFAULT = [
+    {
+        Título: '2x1 en Granizados',
+        Descripción: 'Todos los jueves aprovecha nuestra promo 2x1 en todos los sabores de granizados artesanales.'
+    },
+    {
+        Título: 'Combo Fiesta Fin de Semana',
+        Descripción: 'Llévate 1 Botella de Ron + 2 Refrescos + Hielo a precio especial de promoción.'
+    }
+];
 
 document.addEventListener('DOMContentLoaded', async function () {
     try {
         // Mostrar indicador de carga
         mostrarCargando();
+        let datosCargados = false;
 
-        // Obtener todos los datos necesarios para la página de inicio
-        const respuesta = await fetch(`${API_BASE}/api/inicio`);
-        if (!respuesta.ok) {
-            throw new Error(`Error de servidor: ${respuesta.status}`);
+        try {
+            // Obtener todos los datos necesarios para la página de inicio
+            const respuesta = await fetch(`${API_BASE}/api/Inicio`);
+            if (respuesta.ok) {
+                const Datos = await respuesta.json();
+                console.log('Respuesta completa:', Datos);
+
+                if (Datos.Éxito) {
+                    Inicializar_Carrusel(Datos.Carrusel && Datos.Carrusel.length > 0 ? Datos.Carrusel : CARRUSEL_DEFAULT);
+                    Inicializar_Video_Destacado();
+                    Inicializar_Categorías(Datos.Categorías && Datos.Categorías.length > 0 ? Datos.Categorías : CATEGORIAS_DEFAULT);
+                    datosCargados = true;
+                }
+            }
+        } catch (apiErr) {
+            console.warn('No se pudo conectar al endpoint /api/Inicio, cargando datos por defecto:', apiErr);
         }
 
-        const Datos = await respuesta.json();
+        if (!datosCargados) {
+            Inicializar_Carrusel(CARRUSEL_DEFAULT);
+            Inicializar_Video_Destacado();
+            Inicializar_Categorías(CATEGORIAS_DEFAULT);
+        }
+
+        // Cargar promociones desde el API o fallback
+        try {
+            const respPromo = await fetch(`${API_BASE}/api/Promociones`);
+            if (respPromo.ok) {
+                const promJson = await respPromo.json();
+                if (promJson.Éxito && promJson.Datos && promJson.Datos.length > 0) {
+                    Inicializar_Promociones(promJson.Datos);
+                } else {
+                    Inicializar_Promociones(PROMOCIONES_DEFAULT);
+                }
+            } else {
+                Inicializar_Promociones(PROMOCIONES_DEFAULT);
+            }
+        } catch (e) {
+            Inicializar_Promociones(PROMOCIONES_DEFAULT);
+        }
 
         // Ocultar indicador de carga
         ocultarCargando();
-
-        console.log('Respuesta completa:', Datos);
-
-        if (Datos.Éxito) {
-            // Inicializar componentes con los datos recibidos
-            Inicializar_Carrusel(Datos.carrusel);
-
-            /*
-            // Filtrar la primera aparición de cada producto (ID_Producto)
-            const destacadosUnicos = Datos.productosDestacados.filter((prod, i, arr) =>
-                arr.findIndex(p => p.ID_Producto === prod.ID_Producto) === i
-            );
-            Inicializar_Productos_Destacados(destacadosUnicos);
-            */
-
-            Inicializar_Video_Destacado();
-            console.log('Categorías recibidas:', Datos.Categorías);
-            Inicializar_Categorías(Datos.Categorías);
-
-            // Cargar promociones desde el API
-            const respPromo = await fetch(`${API_BASE}/api/promociones`);
-            const promJson = await respPromo.json();
-            console.log('Promociones recibidas:', promJson.Datos);
-            if (promJson.Éxito) {
-                Inicializar_Promociones(promJson.Datos);
-            }
-        }
-        else {
-            console.error('Error en la respuesta del servidor:', Datos.Mensaje);
-            Mostrar_Error(Datos.Mensaje || 'Error al cargar los datos.');
-        }
     } catch (error) {
         console.error('Error al cargar la página de inicio:', error);
         ocultarCargando();
-        Mostrar_Error('No se pudieron cargar los datos. Por favor, intente nuevamente más tarde.');
+        Inicializar_Carrusel(CARRUSEL_DEFAULT);
+        Inicializar_Video_Destacado();
+        Inicializar_Categorías(CATEGORIAS_DEFAULT);
+        Inicializar_Promociones(PROMOCIONES_DEFAULT);
     }
 });
 
 // Función para inicializar el carrusel con datos dinámicos
 function Inicializar_Carrusel(Datos_carrusel) {
     if (!Datos_carrusel || Datos_carrusel.length === 0) {
-        console.warn('No hay imágenes disponibles para el carrusel');
-        return;
+        Datos_carrusel = CARRUSEL_DEFAULT;
     }
 
     // Contenedor de las imágenes del carrusel
@@ -247,17 +309,17 @@ function Inicializar_Productos_Destacados(Productos) {
     contenedor_productos.innerHTML = '';
 
     // Crear elementos para cada producto destacado
-    Productos.forEach(producto => {
+    Productos.forEach(Producto => {
         // Crear tarjeta de producto
         const tarjeta_producto = document.createElement('div');
         tarjeta_producto.className = 'Tarjeta_Producto';
-        tarjeta_producto.setAttribute('data-category', producto.Categoría);
+        tarjeta_producto.setAttribute('data-category', Producto.Categoría);
 
         // Determinar si tiene precio de oferta
         // 1) Parsear precios a número
-        const precio = parseFloat(producto.Precio);
-        const precioOferta = producto.Precio_Oferta != null
-            ? parseFloat(producto.Precio_Oferta)
+        const precio = parseFloat(Producto.Precio);
+        const precioOferta = Producto.Precio_Oferta != null
+            ? parseFloat(Producto.Precio_Oferta)
             : null;
 
         // 2) Calcular si tiene oferta
@@ -270,7 +332,7 @@ function Inicializar_Productos_Destacados(Productos) {
             : '';
 
         // Si tiene etiqueta de oferta y no está especificada, asignarla
-        let etiqueta = producto.Etiqueta;
+        let etiqueta = Producto.Etiqueta;
         if (tiene_oferta && !etiqueta) {
             etiqueta = 'Oferta';
         }
@@ -284,22 +346,22 @@ function Inicializar_Productos_Destacados(Productos) {
         }
 
         // Generar HTML para la calificación
-        const estrellas_html = Generar_Estrellas(producto.Calificación || 0);
+        const estrellas_html = Generar_Estrellas(Producto.Calificación || 0);
 
         // Estructura de la tarjeta
         tarjeta_producto.innerHTML = `
             <div class="Imagen_Producto">
                 ${etiqueta_html}
-                <img src="${producto.Imagen_URL}" alt="${producto.Nombre}">
+                <img src="${Producto.Imagen_URL}" alt="${Producto.Nombre}">
                 <div class="Sombra_Producto">
-                    <button class="Botón_Añadir_Al_Carrito" data-id="${producto.ID_Producto}" data-variante="${producto.ID_Variante_Producto}">
+                    <button class="Botón_Añadir_Al_Carrito" data-id="${Producto.ID_Producto}" data-variante="${Producto.ID_Variante_Producto}">
                         <i class="fas fa-shopping-cart"></i> Agregar
                     </button>
                 </div>
             </div>
             <div class="Información_Producto">
-                <h3>${producto.Nombre}</h3>
-                <p>${producto.Descripción_Corta || ''}</p>
+                <h3>${Producto.Nombre}</h3>
+                <p>${Producto.Descripción_Corta || ''}</p>
                 <div class="Pie_Producto">
                     <span class="Precio">${precio_anterior}$${precio_mostrar.toFixed(2)}</span>
                     <div class="Calificación_Usuario">
@@ -561,8 +623,8 @@ function Agregar_Al_Carrito(ID_Producto, ID_Variante, Cantidad) {
     let Carrito = JSON.parse(localStorage.getItem('carrito')) || [];
 
     // Verificar si el producto ya está en el carrito
-    const Índice_Producto = Carrito.findIndex(item =>
-        item.ID_Producto == ID_Producto && item.ID_Variante == ID_Variante
+    const Índice_Producto = Carrito.findIndex(Item =>
+        Item.ID_Producto == ID_Producto && Item.ID_Variante == ID_Variante
     );
 
     if (Índice_Producto !== -1) {
@@ -590,7 +652,7 @@ function Agregar_Al_Carrito(ID_Producto, ID_Variante, Cantidad) {
 // Función para actualizar el contador de productos en el carrito
 function Actualizar_Contador_Carrito() {
     const Carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-    const Total_Items = Carrito.reduce((Total, item) => Total + item.Cantidad, 0);
+    const Total_Items = Carrito.reduce((Total, Item) => Total + Item.Cantidad, 0);
 
     // Actualizar el contador en el ícono del carrito en el encabezado
     const Contador_Carrito = document.querySelector('.Contador_Carrito');
@@ -636,11 +698,11 @@ document.getElementById('Formulario_Contacto').addEventListener('submit', async 
   }
 
   try {
-    const token = localStorage.getItem('token');
+    const Token = localStorage.getItem('Token');
     const headers = { 'Content-Type': 'application/json' };
-    if (token) headers['Authorization'] = 'Bearer ' + token;
+    if (Token) headers['Authorization'] = 'Bearer ' + Token;
 
-    const resp = await fetch(`${API_BASE}/api/contacto`, {
+    const resp = await fetch(`${API_BASE}/api/Contacto`, {
       method: 'POST',
       headers,
       body: JSON.stringify({ Mensaje: txt })
