@@ -73,22 +73,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     window.tuJwt = json.Token;
                     Modal.classList.remove('show');
                     Mostrar_Notificación('Sesión iniciada ✅', 'Éxito');
-                    console.log('→ Antes de actualizarUsuarioLogueado, window.actualizarUsuarioLogueado =', window.actualizarUsuarioLogueado);
                     try {
-                        console.log('→ Llamando a actualizarUsuarioLogueado()…');
-                        await window.actualizarUsuarioLogueado();
-                        console.log('→ actualizarUsuarioLogueado() completada ✅');
-                        window.location.reload();
-                        // Re-inicializa carrito, lista de deseos e historial en caliente
-                        await Promise.all([
-                            window.Carrito.Inicializar(),
-                            window.Lista_Deseos.Inicializar(),
-                            window.Historial?.Inicializar()  // si tienes Historial 
-                        ]);
-                        console.log('→ Carrito, deseos e historial recargados ✅');
+                        if (typeof window.actualizarUsuarioLogueado === 'function') {
+                            await window.actualizarUsuarioLogueado();
+                        }
                     } catch (err) {
-                        console.error('‼️ Error en actualizarUsuarioLogueado():', err);
+                        console.warn('Advertencia en actualizarUsuarioLogueado():', err);
                     }
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 400);
                 } catch (err) {
                     console.error('Login fallido:', err);
                     Mostrar_Notificación(err.message || 'Error al iniciar sesión', 'Error');

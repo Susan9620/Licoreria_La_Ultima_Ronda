@@ -234,6 +234,29 @@ async function seedDatabase() {
     }
     await pool.query(`SELECT setval(pg_get_serial_sequence('"PROMOCIONES"', 'ID_Promoción'), COALESCE(max("ID_Promoción"), 1)) FROM "PROMOCIONES"`);
 
+    // 7. Usuarios por defecto (Admin y Cliente)
+    await pool.query(`SELECT setval(pg_get_serial_sequence('"USUARIOS"', 'ID_Usuario'), COALESCE(max("ID_Usuario"), 1)) FROM "USUARIOS"`);
+    const Bcrypt = require('bcryptjs');
+    const defaultPassword = await Bcrypt.hash('12345678', 10);
+    const userAdminExists = await pool.query('SELECT "ID_Usuario" FROM "USUARIOS" WHERE "Correo_Electrónico" = $1', ['susan.aguilar@espoch.edu.ec']);
+    if (userAdminExists.rows.length === 0) {
+      await pool.query(
+        `INSERT INTO "USUARIOS" ("Nombre_Completo", "Correo_Electrónico", "Contraseña", "Rol", "Teléfono", "Activo")
+         VALUES ($1, $2, $3, $4, $5, $6)`,
+        ['Susan Aguilar', 'susan.aguilar@espoch.edu.ec', defaultPassword, 'Administrador', '0984796539', true]
+      );
+    }
+
+    const testUserExists = await pool.query('SELECT "ID_Usuario" FROM "USUARIOS" WHERE "Correo_Electrónico" = $1', ['cliente@ejemplo.com']);
+    if (testUserExists.rows.length === 0) {
+      await pool.query(
+        `INSERT INTO "USUARIOS" ("Nombre_Completo", "Correo_Electrónico", "Contraseña", "Rol", "Teléfono", "Activo")
+         VALUES ($1, $2, $3, $4, $5, $6)`,
+        ['Cliente Demo', 'cliente@ejemplo.com', defaultPassword, 'Cliente', '0999999999', true]
+      );
+    }
+    await pool.query(`SELECT setval(pg_get_serial_sequence('"USUARIOS"', 'ID_Usuario'), COALESCE(max("ID_Usuario"), 1)) FROM "USUARIOS"`);
+
     console.log('✅ Base de datos poblada / verificada exitosamente.');
   } catch (err) {
     console.error('Error durante la inicialización de la base de datos:', err);
