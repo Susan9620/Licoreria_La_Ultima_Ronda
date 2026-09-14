@@ -1718,6 +1718,7 @@ async function actualizarUsuarioLogueado() {
 
     if (menuUsuario) menuUsuario.style.display = '';
 
+    let rolUsuario = 'Cliente';
     try {
         const resp = await fetch(`${baseUrl}/api/Usuarios/me`, {
             headers: { 'Authorization': `Bearer ${tuJwt}` }
@@ -1726,31 +1727,36 @@ async function actualizarUsuarioLogueado() {
         if (resp.ok && json.Éxito) {
             if (nombreElem) nombreElem.textContent = json.Datos.Nombre_Completo;
             if (emailElem) emailElem.textContent = json.Datos.Correo_Electrónico;
-        } else {
-            throw new Error(json.Mensaje || 'Error al cargar perfil');
-        }
-        // Mostrar opción de Administrador solo si existe el contenedor
-        if (menuUsuario) {
-            try {
-                const Carga_Datos = JSON.parse(atob(tuJwt.split('.')[1]));
-                if (Carga_Datos.Rol === 'Administrador') {
-                    const menuItems = menuUsuario.querySelector('.Items_Menú');
-                    if (menuItems && !document.getElementById('AdminMenuItem')) {
-                        const li = document.createElement('li');
-                        li.className = 'Item_Menú';
-                        li.id = 'AdminMenuItem';
-                        li.innerHTML = `<a href="/html/administrador.html"> 
-                            <i class="fas fa-user-shield"></i> Administrador 
-                          </a>`;
-                        menuItems.appendChild(li);
-                    }
-                }
-            } catch (e) {
-                console.error('Error al comprobar rol de usuario:', e);
-            }
+            if (json.Datos.Rol) rolUsuario = json.Datos.Rol;
         }
     } catch (e) {
-        console.error('Perfil:', e);
+        console.warn('Perfil:', e);
+    }
+
+    // Comprobar rol de usuario desde el token JWT también
+    try {
+        const payloadStr = tuJwt.split('.')[1];
+        const Carga_Datos = JSON.parse(decodeURIComponent(escape(atob(payloadStr))));
+        if (Carga_Datos.Rol) rolUsuario = Carga_Datos.Rol;
+    } catch (e) {
+        try {
+            const Carga_Datos = JSON.parse(atob(tuJwt.split('.')[1]));
+            if (Carga_Datos.Rol) rolUsuario = Carga_Datos.Rol;
+        } catch (e2) {}
+    }
+
+    // Mostrar opción de Administrador si corresponde
+    if (rolUsuario === 'Administrador' && menuUsuario) {
+        const menuItems = menuUsuario.querySelector('.Items_Menú');
+        if (menuItems && !document.getElementById('AdminMenuItem')) {
+            const li = document.createElement('li');
+            li.className = 'Item_Menú';
+            li.id = 'AdminMenuItem';
+            li.innerHTML = `<a href="/html/administrador.html" style="color: #f1c40f; font-weight: 600;"> 
+                <i class="fas fa-user-shield"></i> Panel Administrador 
+              </a>`;
+            menuItems.insertBefore(li, menuItems.firstChild);
+        }
     }
 
     await Carrito.Inicializar();

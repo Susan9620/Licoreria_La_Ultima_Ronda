@@ -93,11 +93,11 @@ class Controlador_Usuarios {
           .status(404)
           .json({ Éxito: false, Mensaje: 'Usuario no encontrado' });
       }
-      // Extraer solo los campos públicos 
-      const { Nombre_Completo, Correo_Electrónico, Teléfono } = Usuario;
+      // Extraer los campos del usuario
+      const { Nombre_Completo, Correo_Electrónico, Teléfono, Rol } = Usuario;
       res.json({
         Éxito: true,
-        Datos: { Nombre_Completo, Correo_Electrónico, Teléfono }
+        Datos: { Nombre_Completo, Correo_Electrónico, Teléfono, Rol: Rol || req.Usuario.Rol || 'Cliente' }
       });
     } catch (err) {
       console.error('Error al obtener perfil:', err);
