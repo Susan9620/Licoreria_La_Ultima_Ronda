@@ -10,9 +10,9 @@ const http = require('http');
 
 // Obtener puerto del entorno o usar el predeterminado
 const PORT = process.env.PORT || 5000;
-const HOST = process.env.HOST || 'localhost';
+const HOST = process.env.HOST || '0.0.0.0';
 
-// Mostrar variables de entorno cargadas (solo en desarrollo)
+// Mostrar variables de entorno cargadas
 console.log(`🔧 Variables de entorno cargadas: NODE_ENV=${process.env.NODE_ENV || 'no definido'}`);
 
 // Crear servidor HTTP
@@ -32,8 +32,8 @@ server.on('error', (error) => {
 server.listen(PORT, HOST, () => {
   console.log(`
 🍹 API de Licorería corriendo en:
-📡 http://${HOST}:${PORT}/
-🌐 Entorno: ${process.env.NODE_ENV}
+📡 http://${HOST === '0.0.0.0' ? 'localhost' : HOST}:${PORT}/
+🌐 Entorno: ${process.env.NODE_ENV || 'development'}
 ⏱️ ${new Date().toLocaleString()}
   `);
 });
