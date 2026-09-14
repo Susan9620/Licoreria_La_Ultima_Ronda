@@ -1,4 +1,8 @@
 const { pool } = require('../configuraciones/configuraciones_bd');
+let datosIniciales = null;
+try {
+  datosIniciales = require('../semillas/datos_iniciales.json');
+} catch (e) {}
 
 class Modelo_Promociones {
   /**
@@ -22,10 +26,19 @@ class Modelo_Promociones {
           AND ("Fecha_Fin"    IS NULL OR "Fecha_Fin"    >= CURRENT_DATE)
         ORDER BY "Fecha_Inicio" DESC
       `);
-      return Resultado.rows;
+      if (Resultado.rows && Resultado.rows.length > 0) {
+        return Resultado.rows;
+      }
+      if (datosIniciales?.promociones) {
+        return datosIniciales.promociones;
+      }
+      return [];
     } catch (error) {
-      console.error('Error al obtener promociones:', error);
-      throw new Error('Error al obtener las promociones');
+      console.warn('⚠️ Error al obtener promociones de BD, usando datos de respaldo:', error.message);
+      if (datosIniciales?.promociones) {
+        return datosIniciales.promociones;
+      }
+      return [];
     }
   }
 

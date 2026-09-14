@@ -135,7 +135,7 @@ class Modelo_Productos {
       if (datosIniciales?.catalogoCompleto) {
         return datosIniciales.catalogoCompleto;
       }
-      throw new Error('Error al obtener todos los productos');
+      return [];
     }
   }
 

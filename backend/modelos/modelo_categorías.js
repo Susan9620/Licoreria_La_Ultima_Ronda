@@ -1,4 +1,8 @@
 const { pool } = require('../configuraciones/configuraciones_bd');
+let datosIniciales = null;
+try {
+  datosIniciales = require('../semillas/datos_iniciales.json');
+} catch (e) {}
 
 class Modelo_Categorías {
   /**
@@ -21,10 +25,19 @@ class Modelo_Categorías {
        ORDER BY 
          "Nombre" ASC`
       );
-      return Categorías.rows;
+      if (Categorías.rows && Categorías.rows.length > 0) {
+        return Categorías.rows;
+      }
+      if (datosIniciales?.categorias) {
+        return datosIniciales.categorias.filter(c => c.Activo);
+      }
+      return [];
     } catch (error) {
-      console.error('Error al obtener categorías:', error);
-      throw new Error('Error al obtener las categorías');
+      console.warn('⚠️ Error al obtener categorías de BD, usando datos de respaldo:', error.message);
+      if (datosIniciales?.categorias) {
+        return datosIniciales.categorias.filter(c => c.Activo);
+      }
+      return [];
     }
   }
 

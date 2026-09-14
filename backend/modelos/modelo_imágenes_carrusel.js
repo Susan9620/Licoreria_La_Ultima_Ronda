@@ -1,4 +1,8 @@
 const { pool } = require('../configuraciones/configuraciones_bd');
+let datosIniciales = null;
+try {
+  datosIniciales = require('../semillas/datos_iniciales.json');
+} catch (e) {}
 
 class Modelo_Imágenes_Carrusel {
   /**
@@ -22,10 +26,19 @@ class Modelo_Imágenes_Carrusel {
         ORDER BY 
           "Orden" ASC
       `);
-      return Resultado.rows;
+      if (Resultado.rows && Resultado.rows.length > 0) {
+        return Resultado.rows;
+      }
+      if (datosIniciales?.carrusel) {
+        return datosIniciales.carrusel.filter(c => c.Activo);
+      }
+      return [];
     } catch (error) {
-      console.error('Error al obtener imágenes del carrusel:', error);
-      throw new Error('Error al obtener las imágenes del carrusel');
+      console.warn('⚠️ Error al obtener imágenes del carrusel de BD, usando datos de respaldo:', error.message);
+      if (datosIniciales?.carrusel) {
+        return datosIniciales.carrusel.filter(c => c.Activo);
+      }
+      return [];
     }
   }
 
