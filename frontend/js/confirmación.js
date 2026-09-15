@@ -1,4 +1,4 @@
-const API_BASE = '';
+var API_BASE = window.API_BASE || '';
 
 // Objeto principal para la página de confirmación y gestión de pedidos
 const Gestión_Pedidos = {

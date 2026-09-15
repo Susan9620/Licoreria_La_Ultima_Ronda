@@ -1,4 +1,4 @@
-const API_BASE = '';
+var API_BASE = window.API_BASE || '';
 
 // Objeto principal para el manejo del checkout
 const Checkout = {

@@ -1,4 +1,4 @@
-const API_BASE = '';
+var API_BASE = window.API_BASE || '';
 
 console.log("Inicializando scripts de login con delegación global...");
 

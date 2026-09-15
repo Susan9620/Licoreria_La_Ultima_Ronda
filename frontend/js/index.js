@@ -1,4 +1,4 @@
-const API_BASE = '';
+var API_BASE = window.API_BASE || '';
 
 const CARRUSEL_DEFAULT = [
     {

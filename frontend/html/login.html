@@ -9,7 +9,7 @@
         <input type="checkbox" id="Interruptor_Login">
         <!-- Registro -->
         <div class="Registro">
-            <form id="Formulario_Registro">
+            <form id="Formulario_Registro" onsubmit="return false;">
                 <label for="Interruptor_Login">Registro</label>
                 <input type="text" id="Nombre_Completo" placeholder="Nombre completo" autocomplete="on" required>
                 <input type="email" id="Correo_Electrónico" placeholder="Correo_Electrónico" autocomplete="on" required>
@@ -34,7 +34,7 @@
 
         <!-- Inicio de Sesión -->
         <div class="Inicio_Sesión">
-            <form id="Formulario_Inicio_Sesión">
+            <form id="Formulario_Inicio_Sesión" onsubmit="return false;">
                 <label for="Interruptor_Login">Iniciar Sesión</label>
                 <input type="text" name="Usuario" placeholder="Usuario" autocomplete="on" required>
                 <input type="password" name="Contraseña" placeholder="Contraseña" autocomplete="on" required

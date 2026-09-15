@@ -1,4 +1,4 @@
-const API_BASE = '';
+var API_BASE = window.API_BASE || '';
 
 /**
  * Devuelve HTML con estrellas llenas, medias o vacías según la calificación (0–5).

@@ -1,5 +1,8 @@
 // global.js
-const baseUrl = '';
+window.API_BASE = window.API_BASE || '';
+window.baseUrl = window.baseUrl || '';
+var API_BASE = window.API_BASE;
+var baseUrl = window.baseUrl;
 
 // Garantizar que tuJwt y window.tuJwt lean siempre de localStorage
 try {
@@ -28,7 +31,7 @@ function asegurarModalLogin() {
                 <button type="button" class="Cerrar_Modal" aria-label="Cerrar" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 26px; color: #fff; cursor: pointer; z-index: 20;">&times;</button>
                 <input type="checkbox" id="Interruptor_Login">
                 <div class="Registro">
-                    <form id="Formulario_Registro">
+                    <form id="Formulario_Registro" onsubmit="return false;">
                         <label for="Interruptor_Login">Registro</label>
                         <input type="text" id="Nombre_Completo" placeholder="Nombre completo" autocomplete="on" required>
                         <input type="email" id="Correo_Electrónico" placeholder="Correo Electrónico" autocomplete="on" required>
@@ -45,7 +48,7 @@ function asegurarModalLogin() {
                     </form>
                 </div>
                 <div class="Inicio_Sesión">
-                    <form id="Formulario_Inicio_Sesión">
+                    <form id="Formulario_Inicio_Sesión" onsubmit="return false;">
                         <label for="Interruptor_Login">Iniciar Sesión</label>
                         <input type="text" name="Usuario" placeholder="Correo Electrónico" autocomplete="on" required>
                         <input type="password" name="Contraseña" placeholder="Contraseña" autocomplete="on" required>
