@@ -1,6 +1,4 @@
-const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-    ? ''
-    : 'https://licoreria-la-ultima-ronda.onrender.com';
+const API_BASE = '';
 
 /**
  * Devuelve HTML con estrellas llenas, medias o vacías según la calificación (0–5).

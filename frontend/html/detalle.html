@@ -17,18 +17,6 @@
 </head>
 
 <body>
-    <!-- Inyección de Formulario de Registro/Inicio de Sesión -->
-    <div id="Contenedor_Login"></div>
-    <script>
-        fetch('/html/login.html')
-            .then(r => r.text())
-            .then(html => {
-                document.getElementById('Contenedor_Login').innerHTML = html;
-                if (window.Configurar_Eventos_Modal) Configurar_Eventos_Modal();
-            })
-            .catch(console.error);
-    </script>
-
     <header>
         <nav class="Navbar">
             <div class="Menú_Oculto" id="Menú_Oculto">

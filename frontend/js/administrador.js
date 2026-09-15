@@ -1,6 +1,43 @@
 document.addEventListener('DOMContentLoaded', () => {
     const select = document.getElementById('Select_Administrador');
     const content = document.getElementById('Contenido_Administrador');
+
+    // Helper: verificar si es admin
+    function esAdminAutenticado() {
+        const Token = localStorage.getItem('Token');
+        if (!Token) return false;
+        try {
+            const payload = JSON.parse(decodeURIComponent(escape(atob(Token.split('.')[1]))));
+            return payload.Rol === 'Administrador';
+        } catch (e) {
+            try {
+                const payload = JSON.parse(atob(Token.split('.')[1]));
+                return payload.Rol === 'Administrador';
+            } catch (e2) {
+                return false;
+            }
+        }
+    }
+
+    if (!esAdminAutenticado()) {
+        if (content) {
+            content.innerHTML = `
+                <div style="text-align: center; padding: 3rem 1rem;">
+                    <i class="fas fa-user-shield" style="font-size: 3.5rem; color: #f1c40f; margin-bottom: 1rem; display: block;"></i>
+                    <h2 style="margin-bottom: 0.8rem;">Acceso al Panel de Administrador</h2>
+                    <p style="color: var(--Texto_Secundario, #ccc); margin-bottom: 1.5rem;">Debes iniciar sesión con una cuenta con permisos de Administrador para acceder a este panel.</p>
+                    <button class="Botones Botón_Primario" style="padding: 0.8rem 2rem; cursor: pointer; border-radius: 8px;" onclick="if(typeof abrirModalLogin === 'function') abrirModalLogin();">
+                        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión como Administrador
+                    </button>
+                </div>
+            `;
+        }
+        if (typeof abrirModalLogin === 'function') {
+            setTimeout(abrirModalLogin, 200);
+        }
+        return;
+    }
+
     // ---------------- Pedidos ----------------
     const modal = document.getElementById('Modal_Pedido');
     const cerrarModal = document.getElementById('Cerrar_Modal_Pedido');
@@ -29,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Inicial + cambio de sección
     async function loadSection(sect) {
+        if (!content) return;
         content.innerHTML = '';
         if (sect === 'Pedidos') {
             await renderPedidos();
@@ -36,8 +74,10 @@ document.addEventListener('DOMContentLoaded', () => {
             await renderProductos();
         }
     }
-    select.addEventListener('change', () => loadSection(select.value));
-    loadSection(select.value);
+    if (select) {
+        select.addEventListener('change', () => loadSection(select.value));
+        loadSection(select.value);
+    }
 
     // ------------- Render Pedidos -------------
     // ------------- Carga categorías para el formulario de Productos -------------

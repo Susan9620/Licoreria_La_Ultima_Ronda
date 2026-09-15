@@ -1,7 +1,5 @@
 // global.js
-const baseUrl = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-    ? ''
-    : 'https://licoreria-la-ultima-ronda.onrender.com';
+const baseUrl = '';
 
 // Garantizar que tuJwt y window.tuJwt lean siempre de localStorage
 try {
@@ -22,7 +20,69 @@ try {
 // —————————————————————————————————————————————————————————
 // 1) INYECCIÓN DEL MODAL Y REGISTRO DE EVENTOS AL CARGAR EL DOM
 // —————————————————————————————————————————————————————————
+function asegurarModalLogin() {
+    if (!document.getElementById('Modal_Login') && !document.getElementById('Registro_Modal')) {
+        document.body.insertAdjacentHTML('beforeend', `
+        <div class="Modal_Login" id="Modal_Login">
+            <div class="Contenido_Registro" style="position: relative;">
+                <button type="button" class="Cerrar_Modal" aria-label="Cerrar" style="position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 26px; color: #fff; cursor: pointer; z-index: 20;">&times;</button>
+                <input type="checkbox" id="Interruptor_Login">
+                <div class="Registro">
+                    <form id="Formulario_Registro">
+                        <label for="Interruptor_Login">Registro</label>
+                        <input type="text" id="Nombre_Completo" placeholder="Nombre completo" autocomplete="on" required>
+                        <input type="email" id="Correo_Electrónico" placeholder="Correo Electrónico" autocomplete="on" required>
+                        <div class="Fila_Formulario" id="Fila_Contraseña">
+                            <input type="password" id="Contraseña" placeholder="Contraseña" autocomplete="on" required pattern=".{6,}" title="La contraseña debe tener al menos 6 caracteres">
+                            <input type="password" id="Confirmar_Contraseña" placeholder="Confirmar contraseña" autocomplete="on" required pattern=".{6,}">
+                            <span id="Mensaje_Contraseña"></span>
+                        </div>
+                        <div class="Fila_Formulario">
+                            <input type="text" id="Fecha_Nacimiento" placeholder="Fecha nacimiento (dd/mm/aaaa)" pattern="^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/([0-9]{4})$" title="Formato válido: dd/mm/aaaa" autocomplete="on">
+                            <input type="tel" id="Telefono" placeholder="Número de Teléfono" maxlength="10">
+                        </div>
+                        <button type="submit" class="Botón_Registrarse">Registrarse</button>
+                    </form>
+                </div>
+                <div class="Inicio_Sesión">
+                    <form id="Formulario_Inicio_Sesión">
+                        <label for="Interruptor_Login">Iniciar Sesión</label>
+                        <input type="text" name="Usuario" placeholder="Correo Electrónico" autocomplete="on" required>
+                        <input type="password" name="Contraseña" placeholder="Contraseña" autocomplete="on" required>
+                        <button type="submit" class="Botón_Iniciar_Sesión">Iniciar Sesión</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        `);
+    }
+    if (window.Configurar_Eventos_Modal) {
+        window.Configurar_Eventos_Modal();
+    }
+}
+
+function abrirModalLogin() {
+    asegurarModalLogin();
+    const modal = document.getElementById('Modal_Login') || document.getElementById('Registro_Modal');
+    if (modal) {
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+}
+window.abrirModalLogin = abrirModalLogin;
+
+function cerrarModalLogin() {
+    const modal = document.getElementById('Modal_Login') || document.getElementById('Registro_Modal');
+    if (modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+}
+window.cerrarModalLogin = cerrarModalLogin;
+
 document.addEventListener('DOMContentLoaded', () => {
+    asegurarModalLogin();
+
     // 1.1) Inyectar el modal si no existe
     if (!document.getElementById('Modal_Confirmación_Logout')) {
         document.body.insertAdjacentHTML('beforeend', `
@@ -82,6 +142,8 @@ document.body.addEventListener('click', function (e) {
         localStorage.removeItem('listaDeseos');
         cerrarModalLogout();
         window.location.href = '/html/index.html';
+    } else if (e.target.classList.contains('Cerrar_Modal') || e.target.closest('.Cerrar_Modal')) {
+        cerrarModalLogin();
     }
 });
 
@@ -217,16 +279,21 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Menú desplegable
+    // Menú desplegable y Login
     const Ícono_Usuario = document.getElementById('Ícono_Usuario');
     const Menú_Desplegable_Usuario = document.getElementById('Menú_Desplegable_Usuario');
     const menuUsuario = document.querySelector('.Menú_Usuario');
 
-    // Toggle del menú 
-    if (Ícono_Usuario && menuUsuario) {
+    // Clic en ícono de usuario
+    if (Ícono_Usuario) {
         Ícono_Usuario.addEventListener('click', function (e) {
             e.stopPropagation();
-            menuUsuario.classList.toggle('activo');
+            const tuJwt = localStorage.getItem('Token');
+            if (!tuJwt) {
+                abrirModalLogin();
+            } else {
+                if (menuUsuario) menuUsuario.classList.toggle('activo');
+            }
         });
     }
 
@@ -693,40 +760,10 @@ const Carrito = {
     }
 };
 
-// Inicializar carrito cuando el DOM esté cargado
+// Inicializar carrito y usuario cuando el DOM esté cargado
 document.addEventListener('DOMContentLoaded', async function () {
-    // 0) Obtener token
-    const tuJwt = localStorage.getItem('Token');
-    const menuUsuario = document.querySelector('.Menú_Usuario');
-    const nombreElem = document.querySelector('.Nombre_Usuario');
-    const emailElem = document.querySelector('.Email_Usuario');
-
-    if (!tuJwt) {
-        // Si no hay token, ocultar todo el menú de usuario
-        if (menuUsuario) menuUsuario.style.display = 'none';
-    } else {
-        // Si hay token, asegurarse de que el menú esté visible
-        if (menuUsuario) menuUsuario.style.display = '';
-        // 1) Cargar datos del perfil
-        try {
-            const resp = await fetch(`${baseUrl}/api/Usuarios/me`, {
-                headers: { 'Authorization': `Bearer ${tuJwt}` }
-            });
-            const json = await resp.json();
-            if (resp.ok && json.Éxito) {
-                if (nombreElem) nombreElem.textContent = json.Datos.Nombre_Completo;
-                if (emailElem) emailElem.textContent = json.Datos.Correo_Electrónico;
-            } else {
-                throw new Error(json.Mensaje || 'Error al cargar perfil');
-            }
-        } catch (e) {
-            console.error('Perfil:', e);
-        }
-    }
-    console.log('DOM cargado, inicializando Carrito, Lista_Deseos e Historial...');
-    await Carrito.Inicializar();
-    await Lista_Deseos.Inicializar();
-    Historial.Inicializar();
+    console.log('DOM cargado, actualizando sesión e inicializando componentes...');
+    await actualizarUsuarioLogueado();
 
     // ── Eventos abrir/cerrar panel de Lista de Deseos ──
     const btnAbrir = document.querySelector('.Botón_Lista_Deseos');
@@ -1712,56 +1749,88 @@ async function actualizarUsuarioLogueado() {
     const emailElem = document.querySelector('.Email_Usuario');
 
     if (!tuJwt) {
-        if (menuUsuario) menuUsuario.style.display = 'none';
+        if (nombreElem) nombreElem.textContent = 'Iniciar Sesión';
+        if (emailElem) emailElem.textContent = 'Haz clic para identificarte';
+        const adminItem = document.getElementById('AdminMenuItem');
+        if (adminItem) adminItem.remove();
+        if (window.Carrito && typeof window.Carrito.Inicializar === 'function') {
+            await window.Carrito.Inicializar();
+        }
         return;
     }
 
-    if (menuUsuario) menuUsuario.style.display = '';
-
     let rolUsuario = 'Cliente';
+    let nombreUsuario = '';
+    let emailUsuario = '';
+
+    // 1) Leer rápidamente de la carga del token JWT
+    try {
+        const payloadStr = tuJwt.split('.')[1];
+        const Carga_Datos = JSON.parse(decodeURIComponent(escape(atob(payloadStr))));
+        if (Carga_Datos.Rol) rolUsuario = Carga_Datos.Rol;
+        if (Carga_Datos.Email || Carga_Datos.Correo) emailUsuario = Carga_Datos.Email || Carga_Datos.Correo;
+        if (Carga_Datos.nombre) nombreUsuario = Carga_Datos.nombre;
+    } catch (e) {
+        try {
+            const Carga_Datos = JSON.parse(atob(tuJwt.split('.')[1]));
+            if (Carga_Datos.Rol) rolUsuario = Carga_Datos.Rol;
+            if (Carga_Datos.Email || Carga_Datos.Correo) emailUsuario = Carga_Datos.Email || Carga_Datos.Correo;
+            if (Carga_Datos.nombre) nombreUsuario = Carga_Datos.nombre;
+        } catch (e2) {}
+    }
+
+    if (nombreElem && nombreUsuario) nombreElem.textContent = nombreUsuario;
+    if (emailElem && emailUsuario) emailElem.textContent = emailUsuario;
+
+    // 2) Validar y obtener datos completos del backend
     try {
         const resp = await fetch(`${baseUrl}/api/Usuarios/me`, {
             headers: { 'Authorization': `Bearer ${tuJwt}` }
         });
         const json = await resp.json();
-        if (resp.ok && json.Éxito) {
+        if (resp.ok && json.Éxito && json.Datos) {
             if (nombreElem) nombreElem.textContent = json.Datos.Nombre_Completo;
             if (emailElem) emailElem.textContent = json.Datos.Correo_Electrónico;
             if (json.Datos.Rol) rolUsuario = json.Datos.Rol;
+        } else if (resp.status === 401 || resp.status === 403) {
+            console.warn('Sesión expirada o token inválido en backend');
+            localStorage.removeItem('Token');
+            if (nombreElem) nombreElem.textContent = 'Iniciar Sesión';
+            if (emailElem) emailElem.textContent = 'Haz clic para identificarte';
+            const adminItem = document.getElementById('AdminMenuItem');
+            if (adminItem) adminItem.remove();
+            return;
         }
     } catch (e) {
-        console.warn('Perfil:', e);
+        console.warn('Aviso al verificar perfil en backend:', e);
     }
 
-    // Comprobar rol de usuario desde el token JWT también
-    try {
-        const payloadStr = tuJwt.split('.')[1];
-        const Carga_Datos = JSON.parse(decodeURIComponent(escape(atob(payloadStr))));
-        if (Carga_Datos.Rol) rolUsuario = Carga_Datos.Rol;
-    } catch (e) {
-        try {
-            const Carga_Datos = JSON.parse(atob(tuJwt.split('.')[1]));
-            if (Carga_Datos.Rol) rolUsuario = Carga_Datos.Rol;
-        } catch (e2) {}
-    }
-
-    // Mostrar opción de Administrador si corresponde
+    // 3) Mostrar opción de Administrador si corresponde
     if (rolUsuario === 'Administrador' && menuUsuario) {
         const menuItems = menuUsuario.querySelector('.Items_Menú');
         if (menuItems && !document.getElementById('AdminMenuItem')) {
             const li = document.createElement('li');
             li.className = 'Item_Menú';
             li.id = 'AdminMenuItem';
-            li.innerHTML = `<a href="/html/administrador.html" style="color: #f1c40f; font-weight: 600;"> 
+            li.innerHTML = `<a href="/html/administrador.html" style="color: #f1c40f; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;"> 
                 <i class="fas fa-user-shield"></i> Panel Administrador 
               </a>`;
             menuItems.insertBefore(li, menuItems.firstChild);
         }
+    } else {
+        const adminItem = document.getElementById('AdminMenuItem');
+        if (adminItem) adminItem.remove();
     }
 
-    await Carrito.Inicializar();
-    await Lista_Deseos.Inicializar();
-    Historial.Inicializar();
+    if (window.Carrito && typeof window.Carrito.Inicializar === 'function') {
+        await window.Carrito.Inicializar();
+    }
+    if (typeof Lista_Deseos !== 'undefined' && typeof Lista_Deseos.Inicializar === 'function') {
+        await Lista_Deseos.Inicializar();
+    }
+    if (typeof Historial !== 'undefined' && typeof Historial.Inicializar === 'function') {
+        Historial.Inicializar();
+    }
 }
 
 // Hacemos la función accesible globalmente
@@ -1776,13 +1845,3 @@ window.Historial_Funciones = {
     cerrarModal: Cerrar_Modal_Factura_Global,
     imprimirFactura: Imprimir_Factura_Global
 };
-
-// ——————————————————————————————————————————————
-// Auto-login al cargar la página si ya hay token
-// ——————————————————————————————————————————————
-document.addEventListener('DOMContentLoaded', () => {
-    if (localStorage.getItem('Token')) {
-        console.log('🔁 Token detectado al cargar → llamando a actualizarUsuarioLogueado()');
-        actualizarUsuarioLogueado();
-    }
-});

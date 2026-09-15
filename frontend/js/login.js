@@ -1,6 +1,4 @@
-const API_BASE = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-    ? ''
-    : 'https://licoreria-la-ultima-ronda.onrender.com';
+const API_BASE = '';
 
 console.log("Inicializando scripts de login con delegación global...");
 
@@ -11,12 +9,20 @@ window.Configurar_Eventos_Modal = function () {
 
     // 1) Cerrar modal al hacer clic fuera
     window.addEventListener('click', e => {
-        if (e.target === Modal) Modal.classList.remove('show');
+        if (e.target === Modal) {
+            Modal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
     });
 
     // 2) Botón de cierre interno
     const btnCerrar = Modal.querySelector('.Cerrar_Modal');
-    if (btnCerrar) btnCerrar.addEventListener('click', () => Modal.classList.remove('show'));
+    if (btnCerrar) {
+        btnCerrar.addEventListener('click', () => {
+            Modal.classList.remove('show');
+            document.body.style.overflow = '';
+        });
+    }
 };
 
 // Delegación global de submit para Login y Registro
@@ -71,7 +77,10 @@ document.addEventListener('submit', async function (e) {
 
             // Cerrar modal
             const Modal = document.getElementById('Modal_Login') || document.getElementById('Registro_Modal');
-            if (Modal) Modal.classList.remove('show');
+            if (Modal) {
+                Modal.classList.remove('show');
+                document.body.style.overflow = '';
+            }
 
             if (typeof Mostrar_Notificación === 'function') {
                 Mostrar_Notificación('¡Sesión iniciada con éxito! ✅', 'Éxito');

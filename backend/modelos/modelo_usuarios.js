@@ -88,7 +88,8 @@ class Modelo_Usuarios {
            "ID_Usuario",
            "Nombre_Completo",
            "Correo_Electrónico",
-           "Teléfono"
+           "Teléfono",
+           "Rol"
          FROM "USUARIOS"
         WHERE "ID_Usuario" = $1
           AND "Activo" = TRUE
